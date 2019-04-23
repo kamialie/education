@@ -1,0 +1,65 @@
+1) Drag game assets to Assets folder in project window
+
+2) Organize everything
+	> GameManager object - overall "brain" of the game
+
+3) Create first instance
+	> material that is a normal map trigger message in unity to treate it as normal map - press Fix now
+
+4) Working with GameObjs
+	> move object to hierarchy to put it in the scene (standart objects are labeled in black, blue - GameObj is an instance of a model or it is connected to other objects with a Prefab, brown - objects lost the prefab connection)
+	> press alt then triangle on the left of an object in hierarchy to expands all of its levels
+
+5) Working with Prefabs (best comparison - sandforms)
+	> instance of Prefab can be customized, then either be saved to existing Prefabs or resetted to original
+	> create Prefab - drag GameObj from Hierarchy into the Project window (icon in Hierarchy turns completely blue - means workign with Prefab instance
+	> Inspector window buttons:
+		- open - lets you open prefab and edit it (focus only on prefab); click back arrow in Hierarchy to go back to normal editing
+		- select - locates the Prefab in Project window
+		- overrides - when changes are made to a Prefab changes can be appleid to other Prefabs, be reverted or left as is
+
+6) Controlling the camera
+	> 3D games use perspective projection, while 2D - orthographic (least ignores the depth)
+
+7) Introducing physics
+	> if GameObj doesn't have a RigidBody component, it's considered a static collider (Unity assumes object will stand still)
+	> add component in Inspector menu (buttom part) - Add Component->Physics->RigidBody
+	> select Is Kinematic
+	> Colliders are displayed in the Scene view using green lines
+	> Add Component->Physics->Sphere Collider - cillider appears in the Scene view
+
+8) Arming the Cannons
+	> Add Component->Scripts->Ion Cannon
+	> Bullet:
+		- Sphere object in Hierarchy
+		- scale to 0.47 (radius)
+		- add RigidBody component (Kinematic and Gravity unchecked)
+		- add Buller script (simply drag to Gameobj in Hierarchy)
+		- drag to Prefab
+	> Add Buller Prefab to bullet field of Spaceship object (Ion cannon script field)
+
+9) Putting the Debris in space debris
+	> drag rock_d_05.obj to models folder
+	> Mesh Renderer in Game Object child draws the object on the screen
+	> Shader - program in C-like language to render texture in object (GPU)
+	> Project window->Create->material
+	> configure metallic and smoothless properties, redering mode to fade, drag texture to albedo field
+	> drag to object on the scene to apply
+	> add Debris script
+	> add Screen Wrap script, drag child object (rockLP001) to element field of script
+	> create spawn point:
+		- Hierarchy->Create->Create Empty
+		- spawn on the same plane - drag Debris to make a child of missile_R_O (reference to center of model), transform coordinates are now relative to its parent
+		- drag back to Hierarchy
+
+10) Putting all together
+	> create empty GameObj, name it GameManager, Add component->Scripts->GameManager
+	> GameManager uses Debris field to decide what objects to spawn - drag asteroid prefab to Debris field
+	> Specify GameManager to spawn asteroids in Debris GameObj - drag Debris GameObj from Hierarchy to the Screen Debris field
+	
+
+
+
+-) Add motion (C# script)
+	> add already ready script - select GameObj in Hierarchy, Component(menu bar)->Scripts->Ship Controller
+	> Screen Wrap script - will keep object in screen limits. Renderers field takes an array of Skinned Mesh Renderers (geometry that creates a model). If renderer isn't onscreen, it will teleport the GameObj to another position based on move

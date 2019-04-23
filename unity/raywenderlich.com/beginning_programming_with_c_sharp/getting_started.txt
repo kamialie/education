@@ -1,0 +1,62 @@
+1) output of compliler is assemly, can be designated as:
+
+    > dll - dynamically linked library, can only be used by other programs
+    > exe - only by end user
+
+2) Simple program:
+
+    using System; //include
+
+    namespace Beginning_CSharp //work in namespace
+    {
+        class Program // create a class
+        {
+            static void Main(string[] args)
+            {
+                Console.WriteLine("Hello world!"); // call WriteLine method
+            }
+        }
+    }
+
+3) Variables:
+    > string name = "hello";
+    > char letter = 'a';
+    > bool isFun = true;
+    > int number = 5; // from -2 to 2 billion
+    > uint number = 30; // unsigned that is from 0 to 4 billion
+    > long number = 9L; // bigger range
+    > byte number = 30; // 0 to 255
+    > double pi = 3.1;
+    > doulbe x = 30.0; // 64 bit floaing number
+    > float x = 30.0f; // 32 bit floaing number, need to cast to float explicitely
+    > decimal x = 30.0M; // 128 bit
+    > var x = 30; // var is replaced by corresponding type (defaults?)
+    > camel case for names
+    > var message = String.Empty; // create empty string
+
+4) Snippets:
+    > cw + double tab button - Console.WriteLine
+
+5) Output example
+    var total = 500;
+    Console.WriteLine("total is " + total);
+
+6) Casting - only necessary for lower to higher bit casting
+    byte age = 30;
+    int oAge = age;
+    bye youngAge = (byte) oldAge; //casting
+    float temp = 30.2f; /shortcut casting
+
+7) Operators
+    > plus operator for strings - cancatination 
+    > var name = "Kamil";
+        Console.WriteLine($"hello {name}"); // string interpolation - adding together
+    > vat text = "text";
+        var amount = 5;
+        var lyrics = amount + " " + text; // amount is converted to string
+            or var lyrics = $"{amount} {text}";
+
+8) Nullable types
+    > string name = null; // must define a type
+    > int? amount = null; // numbers(value types) dont support null type by default (specify with ? sign)
+    > value or reference type;

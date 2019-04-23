@@ -1,0 +1,71 @@
+1) Enumerations - related group of constants
+    > group values together, example:
+        enum Directions {
+            north, east, south, west
+        }
+        var direction = Directions.west;
+
+        enum Damage {
+            normalDamage = 1;
+            doubleDamage = 2;
+            quadDamage = 4
+        }
+        var damage = (int) Damage.quadDamage * 10; // have to cast enumeration
+
+    > const int x = 1; // dont change the variable
+
+2) If Statements
+    > nothing new
+
+3) Ternary
+    > nothing new
+
+4) Switch Statements
+    > example:
+        switch (playerCount)
+        {
+            case 1:
+                message = "Ready Player One";
+                break ;
+            case 2:
+                message = "Ready Player Two";
+                break ;
+            case default:
+                message = "someone else";
+                break ;
+        }    
+
+5) Arrays
+    > string[] name = new string[3] {"kamil", "leha", "daniil"};
+    > or
+        int[] score = new int[3]; // can leave 3 as compiler will count itself
+        score[0] = 60;
+        score[1] = 30;
+        score[2] = 20;
+    > int[,] playerScores = new int[,] // creating multidimensional arrays
+        {
+            {30, 10, 20},
+            {40, 1, 5}
+        };
+    > names.Length - method to return total number of elements in the array
+
+6) For Loops
+    > example:
+        for (int i = 0; i < 10; i++)
+        {
+            //code
+        }
+
+7) Other Loops
+    > example:
+        var numbers = new int[] {0, 1, 2, 3}
+        foreach (var number in numbers)
+        {
+            Console.WriteLine(number);
+        }
+    > while loop
+    > do while loop, example:
+        do
+        {
+            Console.WriteLine(numbers);
+        } while (userInput != "stop");

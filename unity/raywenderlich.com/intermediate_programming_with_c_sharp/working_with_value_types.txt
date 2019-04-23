@@ -1,0 +1,13 @@
+Value types - ints, bool, double, float...
+
+1) Structs
+    > example:
+        struct City // generally name starts with capital letter
+        {
+            public string Name; // public key work - anyone can access
+            public int Size; // capital case - let anyone know field is public
+            public string Location;
+        }
+        var myCity = new City();
+        myCity.Name = "NY" // access field(member, property) of a structure, by default are private
+        
