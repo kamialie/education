@@ -1,0 +1,23 @@
+1) every Gameobj comes with built-in components:
+    > Transform - holds position, rotation and scale of Gameobj
+    > Box Collider - collider in the shape of cube to detect collisions
+    > Mesh filter - mesh data with is used ti show a 3D model
+
+2) create C# script
+    > Project window->C# script
+    > derived from the base class MonoBehavior
+    > most common methods:
+        - Start() - will get called once right before script gets its first update
+        - Update() - gets fired every frame
+        - OnDestroy() - gets called right before Gameobj gets destroyed
+        - OnCollisionEnter() - when collider or rigidbody of current Gameobj touches another collider(rigidbody)
+        - https://docs.unity3d.com/ScriptReference/MonoBehaviour.html
+
+3) movement script
+    > initialize fields in Start method
+    > FixedUpdate() is frame independent and should be used when workig with Rigidbodies. Will be fired at a constant interval
+    > loop checks if any of the input keys were pressed
+    > if key is pressed:
+        get the direction for the pressed key, multiply by acceleration and number of seconds it took to complete the last frame - produces a direction vector
+    > general rule when you perform an action on every (fixed) frame, you need to multiply by Time.deltaTime
+    

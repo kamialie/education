@@ -5,4 +5,7 @@
 
 3) popular format for models - FBX, textures - .PSD
     > Blender files (another file format for models) - contains source model data that can be edited inside Blender and take effect immediatly unlike FBX (need to download explicitely https://www.blender.org/download/)
+
+4) assests can be combined in a bundle called Unity package (for example buy in Unity store)
+    > Assests->Import Package->Custom Package->choose package in file system - import a package
     
