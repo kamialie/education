@@ -1,0 +1,14 @@
+1) Alt + Cmd key on any tools selected allows to move around (like Q was selected)
+2) in flight mode (right mouse-click) WASDQE are used to move around
+3) Alt + left-mouse-click - rotate around focus point (under cursor)
+4) Alt + right-mouse-click - zoom in/out
+5) select object, place cursor in scene view, press f to move and focus on object
+6) if object is a children of another parent object in hierarchy , its transform values are relative to the parent object's transform values
+    All rotations, transformations, etc are therefore applied to both children and parent objectsi (when parent is modified)
+7) 2 column layout on project window sets first column as favourites
+8) if added a tag in inspector menu, scripts can access those with
+    player = GameObject.FindWithTag("Player);
+9) Layers:
+    add new layer;
+    go to Culling mask field and select layers to be seen
+    also can choose what layers to be shown in editor (top right corner)

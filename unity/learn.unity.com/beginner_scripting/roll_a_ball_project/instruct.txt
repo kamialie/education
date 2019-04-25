@@ -1,0 +1,7 @@
+1) select word->press Cmd plus '->opens unity documentation(web)
+2) any dynamic objects should have RigidBody component; objects without it are considered
+    static (Unity calucalted the volume of those and stores in cache as performance
+    optimization; if static object do move Unity has to recalculate all static colliders
+    and update static collider cache)
+3) RigidBody kinematic component means object is moved through its transform
+4) build the game - File->Build Settings
