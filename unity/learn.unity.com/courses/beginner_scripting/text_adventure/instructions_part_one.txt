@@ -1,0 +1,34 @@
+1) ScriptableObjects (class)
+    > not attached to GameObjects
+    > can be used to store data or execute code
+
+2) List
+    > represents a stringly typed list of objects that can be accessed by index, provides methods to search, sor, and manipulate lists
+    > does not need to ahve a size declared when declared. As new elements are added, list get longer
+    > type of list must be specific with <>, example:
+        List<Transform> someTransforms = new List<Transform> ();
+
+3) System.Serializable (attribute)
+    > lets you embed a class with sub properties in the inspector
+    > can use this to display variables in the imspector similar to how a Vector3 shows up in the inspector: the name and a triagnle to expand its properties
+    > to do this need to create a class that derives from System.Object and give it the Serializable attribute
+    > remove MonoBehaviour class inheritance form the class
+
+4) Dictionary
+    > an associative array, map, symbol table, or dictionary is an abstract data type composed of a collection of (key, value) pairs, such that each possible key appears at most once in a collection
+    > example:
+        Dictionary<string, GameObject> myDictionary;
+        GameObject player1 = myDictionary["Player 1"];
+    > can not be Serializable
+
+5) Inheritance
+    > lets you create new classes that reuse, extend, and modify the behavior that is defined in other class
+    > class whose members are inherited is called base class
+    > class that inherits those members is called derived class
+
+6) Abstract modifier indicates that the thing being modified has a missing or incomplete implementation
+    > use in class declaratin to indicate that a class is intended only to be a base class for other classes
+    > members marked as abstract, or included in an abstract calss, must be implementated by classes that derive from the abstract class
+    > override modifier is requiere to extend or modify the abstract or virtual implementation of an inherited method, property, event, etc.
+    > example:
+        
