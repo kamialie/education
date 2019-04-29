@@ -1,6 +1,7 @@
 1) ScriptableObjects (class)
     > not attached to GameObjects
     > can be used to store data or execute code
+    > more info: "Overthrowing The MonoBehaviour Tyranny In A Glorious ScriptableObject Revolution" by Richard Fine
 
 2) List
     > represents a stringly typed list of objects that can be accessed by index, provides methods to search, sor, and manipulate lists
@@ -31,4 +32,11 @@
     > members marked as abstract, or included in an abstract calss, must be implementated by classes that derive from the abstract class
     > override modifier is requiere to extend or modify the abstract or virtual implementation of an inherited method, property, event, etc.
     > example:
-        
+
+7) Delegation pattern
+    > an object handles a request by delegating a second object (the delegate)
+    > in TextAdventure we will delagate behavior to ScriptableObject assets called InputActions including 'go, examine, take, use' and 'inventory'
+    
+8) EvenSystem
+    > whenever UI is included EvenSystem object in created - it handles all actions like button, mouse clicks, etc
+    > for example Input field is listing to return event
