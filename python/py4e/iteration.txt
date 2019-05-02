@@ -1,0 +1,5 @@
+definite loops using for:
+    > for x in set:
+        pass
+    > x is iteration variable that corresponds to each element in a list 'set'
+    > "is" and "is not" operators - require equality in both type and value

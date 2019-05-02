@@ -1,16 +1,16 @@
-> use type() function to identify literal or variable type 
+use type() function to identify literal or variable type 
 
-> operators:
+operators:
     ** - exponentiation
     // - integer division
     / - float division
     + - cancatinate strings
     * - multiply content of a string
 
-> input
-    inp = input("message")
+input
+  inp = input("message")
 
-> conversions
+conversions
     int(inp) - converts inp to integer
 
-> comments start with '#'
+comments start with '#'

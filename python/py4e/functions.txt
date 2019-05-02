@@ -1,0 +1,34 @@
+built-in functions:
+    > max()- max value in sequence
+    > min() - min value in sequence
+    > len() - length of sequence
+
+type conversion functions:
+    > int('32') - from string to int
+    > int('hello') - produces error
+    > int(-2.3) - result is -2 (just chops off the fraction part)
+    > float()
+    > string()
+
+math functions:
+    > import math - creates a module object (functions and variables)
+    > math.log10(1) - to access function in module use dot notation
+    > math.pi - access variable in module
+
+random number:
+    > import random - random function is located in the random module
+    > random.random() - returns random float between 0.0 and 1.0
+        (including 0.0 not 1.0)
+    > random.randint(low, high) - returns random int between low and hight
+        including both
+    > random.choice(t) - choose random element from sequence
+        (f.e. t = [1, 2, 3])
+
+adding new functions:
+    > def function(parameters):
+        pass
+    > defining a function creates a variable with the same name, variable has
+        type 'function'
+
+void functions:
+    > void function returns special value None, it has its own type, NoneType    
