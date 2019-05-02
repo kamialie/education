@@ -1,7 +1,7 @@
-> string slices
-    s = 'Monty Python'
-    s[0:5] - returns Monty. Ommiting first or last index makes slicing to start
+string slices
+    > s = 'Monty Python'
+        s[0:5] - returns Monty. Ommiting first or last index makes slicing to start
         from the beginning or go till the end. If the first index is greater
         than or equal to the second the result is an empty string
-    in operator takes two strings and return True or False if first string
+    > in operator takes two strings and return True or False if first string
         appears as substring in the second
