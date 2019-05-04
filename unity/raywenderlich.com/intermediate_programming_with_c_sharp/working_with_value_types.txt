@@ -93,3 +93,59 @@ Value types - ints, bool, double, float...
         }
 
             private int _damage; // backing value (ask about it?)
+    > challenge
+        struct Car
+        {
+            public string Name;
+            public EngineType Engine;
+            public string Color;
+            public double Speed
+            {
+                get
+                {
+                    Console.WriteLine(_speed);
+                    return _speed;
+                }
+                set
+                {
+                    _speed = value;
+                    Console.WriteLine();
+                }
+            }
+        }
+
+5) Constructors
+    > example
+        struct Point
+        {
+            int x;
+            int y;
+
+            public Point(int x, int y) // constructor
+            {
+                this.x = x;
+                this.y = y;
+            }
+        }
+    > another example
+        struct NPC
+        {
+            public string Name {get; set; } // properties
+            public int Health {get; set; }
+
+            public NPC(string name, int health) // initial constructor
+            {
+                Name = name;
+                Health = health;
+            }
+
+            public NPC(sring name) : this(name, 100) // calling another constructor in constructor - constructor chaining
+            {
+                
+            }
+        }
+
+6) Namespaces
+    > to access variables in nameplace
+        - Namespace_one.variable - use fully qualified name with there is a conflict
+        - using Namespace_one - access variables in another namespace

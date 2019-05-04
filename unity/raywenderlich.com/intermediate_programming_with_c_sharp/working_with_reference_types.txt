@@ -1,0 +1,137 @@
+1) Classes
+    > gets created in heap
+    > objects get freed by gargage collector
+    > nullable type(?) - container that wraps around value type
+        f.e. int? a
+    > example
+
+2) Inheritance
+    > class A : class B - class A inherits from class B
+    > access modifiers:
+        - public - visible to everyone
+        - internal - accessible to anyone in the current assemly (exe, dll)
+        - protected internal - limit access to current assembly or derived class
+        - protected - access to containing class and derived classes
+        - private protected - only available to subclasses
+        - private - only accessible to containing class
+    > instance variables and classes have a default private access modifier
+
+3) Overloading
+    > can define a method with the same name but different parameters in one class
+    > f.e.
+        class Calculator
+        {
+            public void Add(int x, int y)
+            {
+                Console.WriteLine(x + y);
+            }
+            public void Add(int[] numbers)
+            {
+                var total = 0;
+                foreach (int number in numbers)
+                {
+                    total += number;
+                }
+                Console.WriteLine(total);
+            }
+        }
+
+4) Overriding
+    > keywords - virtual, override, base
+    > f.e.
+        class WordTransform
+        {
+            public virtual string Transform(string word) // vurtual keyword lets children modify method
+            {
+                return word;
+            }
+        }
+
+        class Reverser : WordTransform
+        {
+            public override string Transform(string word) // override set new method in current class over parent's
+            {
+                var newWord = String.Epmty;
+                for (var i = 0; i < word.Length; i++)
+                {
+                    int letterIndex = (word.Length - 1) - i;
+                    newWord += word[letterIndex];
+                }
+                return newWord;
+            }
+        }
+
+        class UppercaseReverser : Reverser
+        {
+            public override string Transform(string word)
+            {
+                var newWord = base.Transform(word): // base keyword to access parent one level up
+                return newWord.ToUppper();
+            }
+        }
+        
+5) Abstract
+    > when you want to create a class to be a template for other classes
+    > cant create instance of an abstract class
+    > f.e.
+        abstract class WordTransform // template class
+        {
+            abstract string Transform(string word); // abstract method means children have to implement this method with override
+        }
+
+6) Class constructors
+    > when no constructor is added, the default one is created automatically:
+        When constructor is added, the default one is overwritten
+    > top level parent's constructor is called first, all the way to the bottom class constructor
+    > f.e.
+        class UppercaseReverser: Reverser
+        {
+            public UppercaseReverser(string word) : base(word) {} // calling parent's constructor
+        }
+
+7) Static
+    > class level method or variable, that is accessed from the class,
+        not an object(instance) of the class
+    > f.e.
+        class StringUnilities
+        {
+            public static int ReverseCount{ get; private set; } // class variable, is used for method call counts in this particular example
+            
+            public static string Reverse(string word) // method can be called without object being intanciated
+            {
+                StringUnilities.ReverseCount += 1;
+                var newWord = String.Empty;
+                for (var i = 0; i < word.Length; i++)
+                {
+                    int letterIndex = (word.Length - 1) - i;
+                    newWord += word[letterIndex];
+                }
+                return newWord;
+            }
+        }
+    > common mistake is to access instance variable from a static method - gets an error, since instance variable is only created when object is created
+
+8) Interfaces
+    > keyword - interface
+    > defines a contract that object must implement
+    > interface name must start with capital 'I'
+    > interfaces are public
+    > f.e.
+        interface ISaveable
+        {
+            void Save();
+        }
+
+        class Sample : ISaveable // now class has to implement methods and attributes defined in interface
+        {
+            ...
+        }
+    > if class inherits and has a contract with an interface specify each after comma
+      f.e.
+        class Sample : Parent, ISaveable
+        {
+            ...
+        }
+
+9) Polymorphism
+    > 

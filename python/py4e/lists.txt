@@ -32,7 +32,8 @@ list methods
 
 lists and string
     > list(str) - function, returns a list that is converted from a string
-    > str.split() - method, returns a list of words
+    > str.split() - method, returns a list of words, default delimiter is
+        whitespaces
     > delimiter = ' '
       delimiter.join(list) - string method, returns a joined list as a string;
         invoked on a delimiter

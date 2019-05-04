@@ -19,7 +19,7 @@ int main(void)
     fun(str);
     printf("after - %s\n", str);
     printf("before - %s\n", s);
-    fun(s);
+    fun_2(s);
     printf("after - %s\n", s);
     return (0);
 }
