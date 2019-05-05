@@ -134,4 +134,40 @@
         }
 
 9) Polymorphism
-    > 
+    > type specifier tells us how object is going to interact in a program,
+        that is which methods and properties are going to be available, f.e.:
+            var myDragon = new Dragon();
+            Dragon myDragon = new Dragon();
+            object myDragon = new Dragon();
+    > Dragon theSameDragon = (Dragon) myDragon; - object casting
+    > different type object may be gathered to a interface list, program obly
+        cares about interface method to be availabe in an object, f.e.:
+        var gameObjects = new ISaveable[]
+        {
+            myDragon, sword, npb
+        };
+        foreach (ISaveable item in gameObjects)
+        {
+            item.Save();
+        }
+    > f.e.
+        class Reverser : ITransformer, Imovement
+        {
+            public string Word {get; set; }
+
+            string ITransformer.Transform(string word)
+            {
+                //bla bla
+                return Word;
+            }
+
+            public string Transform(string word)
+            {
+                return "Some string";
+            }
+        }
+    > Reverser reverser = new Reverse(); - has access to all methods in
+        Reverser class, in example above - to second Transform method
+      ITransformer reverser = new Reverse(); - has access to all methods in
+        ITransformer interface, in example above - to first Transform method
+      object reverser = new Reverse(); - has access only to object methods

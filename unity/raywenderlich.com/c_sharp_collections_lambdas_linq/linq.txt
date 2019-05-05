@@ -1,0 +1,68 @@
+1) language integrated query - linq
+
+2) Query vs. Method syntax
+    > query:
+        from employee in employees where
+            employee.LastName == "Howard"
+            select employee
+    > method:
+        employees.Where(e => e.LastName == "Howard")
+
+3) Query syntax
+    > start with variable
+    > then from [range]
+    > then in [collection](must implement IEnumarable or IQuerable interface)
+    > then where clause
+    > finally select used as return
+    > optional: orderby
+    > actor, movie classes in materials
+    > f.e.
+        var after1980Movies = from movie in movies
+                                where movie.ReleaseData > 1980
+                                select movie;
+    > gameReview program for challenge
+
+4) Method syntax
+    > var names =
+        students.Where(s => s.FirstName == "Adams");
+
+5) Deferred execution
+    > mostly runs when results are accessed
+
+6) extra?
+    > code Documentation
+        built-in
+    > preprocessor directives
+        #if UNITY_DOS
+            smth
+        #endif
+    > method parameters
+        ref, in, out keywords
+    > subscripting
+        add index(s) to your own class
+    > attributes
+        [TestMethod]
+        public class PersonUnitTest
+        {
+            
+        }
+    > operator overloading
+        Vector2 playerPosition = new Vector2(10, 20);
+        Vector2 speed = new Vector2(0, 100);
+        Vector2 position = playerPosition * speed;
+    > error catching
+        try
+        {
+            //open file
+        }
+        catch (exception e)
+        {
+            //handle errors
+        }
+    > extensions
+        be able to add code to a class even if source code isnt available (are static)
+    > object equality
+    > tasks
+        f.e.:
+        Task<int> myTask = MyOperation();
+        int result = await myTask;

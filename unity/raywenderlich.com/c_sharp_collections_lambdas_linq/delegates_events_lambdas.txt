@@ -1,0 +1,44 @@
+1) Delegates
+    > keyword - delegate
+    > like function pointer in C
+    > example in delegates_video_example folder
+    > good habit to clear out delegates after you are done with them
+
+2) Anonymous delegate
+    > example in delegates_video_example folder
+
+3) Func and Action
+    > delegate construct provided by .NET that allows to create a delegate
+        without providing it's type
+    > Action - delegate that returns nothing; generic Action type should match delegate type; if no parameters needed, simply ignore
+        Action<int string> Printer  = delegate (int number, string msg)
+        {
+            for (int i=0; i < number; i++)
+            {
+                Print(msg);
+            }
+        }
+    > Func - delegate that returns smth, last generic type is the return type of delegate
+        Func<int int> Multiplier = delegate(int number)
+        {
+            return number * number;
+        }
+
+4) Events
+    > keyword - event
+
+5) Lambda
+    > => lambda operator
+    > f.e.
+        (int x) =>
+        {
+            return x + 1;
+        };
+    > started with:
+        Func<int, int> lambda = (int x) =>
+        {
+            return x + 1;
+        };
+    > to:
+        Func<int, int> lambda = x => x + 1;
+    > Predicate argument - means lambda is needed

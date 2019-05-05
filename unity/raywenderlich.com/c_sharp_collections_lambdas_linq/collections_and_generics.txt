@@ -1,0 +1,95 @@
+1) Lists (in System.Collections.Generic)
+    > create a generic list (safe type)
+        var myList = new List<string>(); or
+        List<string> myList = new List<string>();
+    > methods:
+        myList.Add("Ray");
+        myList.Insert(0, "Ray");
+       myList[0]
+       myList.Revome("Ted");
+
+2) Object and collections initialization
+   > list creating and initialization at the same time (constructor is called
+       right after initialization, then Add methods behind the scenes)
+       var list = new List<bool>()
+       {
+           true, false, false, true
+       };
+   > objects can be created and initialize fields and properties the same way
+
+3) Dictionaries
+    > creation and initialization of a dictionary, f.e.:
+        var myDict = new Dictionary<string,Player>()
+        {
+            ["fred@adsf.com] = new Player(),
+            ["ted@cheese.com] = new Player()
+        };
+    > read to dictionary
+        Player player = myDict ["some string"];
+    > need to check if null was returned (doesn't exist in dictionary)
+    > add to dictionary
+        myDict["some string"] = player;
+    > loop through dictionary
+        foreach (var key in myDict.Keys)
+        {
+            //do smth
+        }
+
+4) Other collection types
+    > linked list - like a list in C, each node has a reference to the next one
+    > hashset - unordered collection of unique values (hashset operations - 
+        find common ones, unique, sum, etc)
+    > queue - like a line (first in first out)
+    > stack - last in first out
+
+5) Coding to an interface
+    > f.e.
+        static void Main(string[] args)
+        {
+            ProcessName(names);
+            var names = new string[] {some string};
+        }
+        static void ProcessName(IEnumerable<string> names)
+        {
+            foreach (string name in names)
+            {
+                do smth
+            }
+        }
+    > in the code above using interface instead of exact type lets us pass any
+        type of collection to the method that implements that interface
+        (flexible code)
+
+6) Generic classes
+    > creatting a generic class, "T" is a convention, can specify any name, f.e.
+        class MyCollection<T> where T : class, IEnumerable // specify type to be a reference type and implement particular interface (constraints)
+        {
+            IList<T> items;
+
+            public MyCollection()
+            {
+                items = new List<T>();
+            }
+            public void AddItem(T item)
+            {
+                items.Add(item);
+            }
+        }
+
+7) Generic methods
+    > just like creating a generic class, f.e.
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                Console.WriteLine(Program.ConvertItem<int>(30.5));
+            }
+            public static T ConvertItem<T>(object item)
+            {
+                Type objectType = typeof(T);
+                return (T) Convert.ChangeType(item, objectType);
+            }
+        }
+
+8) Conclusion
+    > https://github.com/raywenderlich/swift-algorithm-club - data structures and algorithms
