@@ -1,0 +1,3 @@
+> combine behavior across multiple GameObjects into a single Component
+> Scriptable Objects allow artists to replace assets
+> think about classes you'd need to implement
