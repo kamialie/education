@@ -11,8 +11,10 @@ public class GameController : MonoBehaviour
     public Text timeRemainingDisplayText;
     public SimpleObjectPool answerButtonObjectPool;
     public Transform answerButtonParent;
+
     public GameObject questionDisplay;
     public GameObject roundEndDisplay;
+    public Text highScoreDisplay;
 
     private DataController dataController;
     private RoundData currentRoundData;
@@ -88,6 +90,8 @@ public class GameController : MonoBehaviour
     public void EndRound()
     {
         isRoundActive = false;
+        dataController.SubmitNewPlayerScore(playerScore);
+        highScoreDisplay.text = "Highest score: " + dataController.GetHighestPlayerScore().ToString();
         questionDisplay.SetActive(false);
         roundEndDisplay.SetActive(true);
     }
@@ -102,8 +106,7 @@ public class GameController : MonoBehaviour
     {
         timeRemainingDisplayText.text = "Time: " + Mathf.Round(timeRemaining).ToString();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (isRoundActive == true)
