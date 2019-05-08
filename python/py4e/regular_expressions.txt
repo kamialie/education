@@ -1,0 +1,8 @@
+https://en.wikipedia.org/wiki/Regular_expression
+https://docs.python.org/3/library/re.html
+
+regular expressions:
+    > must import re before using it
+    > search() function takes two parameters:
+        - pattern to match (string)
+        - string to check
