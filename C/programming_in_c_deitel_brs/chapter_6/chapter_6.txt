@@ -39,3 +39,7 @@
 6.7 Example: computing average, median... using arrays
 
 6.8 Search in arrays
+    > binary_search_example.c
+
+6.9 Arrays inside arrays
+    > 
