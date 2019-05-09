@@ -42,4 +42,25 @@
     > binary_search_example.c
 
 6.9 Arrays inside arrays
-    > 
+    > can be declated and instantiated at the same time:
+        int b[2][2] = {{1, 2} , {3, 4}}
+        if not enough inital values were passed, the rest initialized to zero
+    > more initialization examples:
+        int array1[2][3] = {{1, 2, 3}, {4, 5, 6}} // initializes all values
+        int array2[2][3] = {1, 2, 3, 4, 5, 6} // first initialized first array
+            then second, the rest to zeros
+        int array3[2][3] = {{1, 2}, {4}} // initializes 2 values in first array
+            rest to zeros, one values in second rest to zeros
+    > when passing as a parameter index sizes starting from second must be
+        explicitely stated(thus compiler knows how to get to element that is
+        bypass number of blocks):
+        print_array(int array[][3]);
+    > passing array argument with one index (while its array inside array) will
+        pass one of the inside arrays, since elements of outer arrar are
+        addresses:
+        grades[STUDENST][CLASSES];
+        average(int grades[student]);
+    > in C it is possible to have pointers outside array
+    > good habit to initialize array with static, so it doesnt get destroyed
+        on every exit from that function (static array are initialized with zeros
+        if not explicitely initialized - only once)
