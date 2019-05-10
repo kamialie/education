@@ -1,2 +1,46 @@
 7.2 Pointer declaration and initialization
-    >
+    > int *count_ptr;
+    > must be initialized when declared or by assignment operation:
+        - zero - almost same as NULL, but also gets corresponding type
+        - NULL - defined in stdio.h and couple other header files
+        - address
+
+7.3 Pointer operations
+    > y_ptr = &y;
+    > ampersand operand must be a variable - cant be constant, expression or
+        variable declared with register modifier
+    > * and & are complementary - order doesnt matter
+
+7.4 Paramenter passing by reference
+    > function(&a);
+    > receiving function must have a pointer paramenter
+    > no difference between passing pointer to a variable and array;
+        when paramenter is declared as array (int a[]), compiler turns in to
+        int *a, thus two forms are interchangable (once again when passing array
+        what really happens is address of first variable is sent, values of original
+        array can be changed)
+
+7.5 Using const modifier with pointers
+    > not all systems support const modifier
+    > 4 ways to send pointer to the function:
+        - changable pointer to changable data
+        - constant pointer to changable data (by default the name of the array
+            is of this type - always points to the first cell, but data in that
+            cell can change)
+                int *const pointer;
+        - changable pointer to constant data (use this when working with big data
+            and you wont save time not to send whole copy, while also do not change
+            values)
+                void function(const char *s);
+        - constant pointer to constant data (when you only want to go through data)
+            const int *const pointer;
+
+7.6 Bubble sort with pointers
+    > extra:
+        can place function prototype inside calling fucntion, so that only that
+            fucntion can call it
+        sizeof on arrays returns total size in bytes
+        sizeof can be used without brackets on variables only
+
+7.7 Expressions and arithmetic operations with pointers
+    > 

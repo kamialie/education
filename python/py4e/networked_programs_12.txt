@@ -1,0 +1,39 @@
+HTTP
+    > built-in support in Python through sockets(almost like files, but two-way
+        connection)
+    > https://www.w3.org/Protocols/rfc2616/rfc2616.txt - http protocol
+
+world's simpliest web browser
+    > GET command:
+        GET [page requested] [followed by a blank line]
+    > server first returns header with info about documents content followed by
+        a blank line
+    > b'' and encode() are equivalent - store data as a bytes object
+        b'hell'
+        'hello'.encode()
+    > new line in  - '\r\n'
+    > f.e. retrieve_text_http.py
+
+retrieving an image over HTTP
+    > recv() method - method request data from server, takes max number of bytes
+        to recieve
+    > server and client have different speeds of sending and recieving data,
+        thus call to time.sleep() will create a delay and fill intermediate
+        buffer, so that server goes ahead and client can get more data on each
+        call
+    > f.e. retrieve_img_http.py
+
+retrieving web pages using urllib
+    > import urllib.request, urllib.parse, urllib.error
+    > f.e.:
+        fhand = urllib.request.urlopen('url_example')
+    > now can works with fhand just like with file handler
+
+reading binary files using urllib
+    > f.e. - read_binary_urllib.py
+    > read() method returns source code as bytes object instead of returning
+        an HTTPResponse object        
+
+parsing HTML using regular expressions
+    > f.e. html_parsing_regex.py
+    > ssl library allows program to access web site with strictly HTTPS enforce
