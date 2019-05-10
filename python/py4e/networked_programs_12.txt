@@ -1,4 +1,4 @@
-HTTP
+    HTTP
     > built-in support in Python through sockets(almost like files, but two-way
         connection)
     > https://www.w3.org/Protocols/rfc2616/rfc2616.txt - http protocol
@@ -11,7 +11,7 @@ world's simpliest web browser
     > b'' and encode() are equivalent - store data as a bytes object
         b'hell'
         'hello'.encode()
-    > new line in  - '\r\n'
+    > new line in  - '\r\n' or '\n'???
     > f.e. retrieve_text_http.py
 
 retrieving an image over HTTP
@@ -37,3 +37,23 @@ reading binary files using urllib
 parsing HTML using regular expressions
     > f.e. html_parsing_regex.py
     > ssl library allows program to access web site with strictly HTTPS enforce
+
+parsing HTML using BeautifulSoup
+    > https://pypi.org/project/beautifulsoup4/ 
+    > https://www.python.org/psf/ - python foundation
+    > f.e. html_parsing_beautifulsoup.py
+
+bonus
+    > curl -O http://www.py4e.com/cover.jpg (checkout curl command)
+    > wget http://www.py4e.com/cover.jpg (same as previous)
+
+presentation 12_2
+    > Internet Engineering Task Force (IETF), www.ietf.org - develope standards
+        for all of the Internet protocols - standards are called "RFCs",
+        "Request for Comments"
+    > https://nmap.org/movies/ - fun
+
+presentation 12_3
+    > ord(some_character) - function that returns numberic representation of a
+        character (base 10)
+    > x = b'abc' - byte array
