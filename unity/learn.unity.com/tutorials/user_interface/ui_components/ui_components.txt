@@ -1,0 +1,50 @@
+1) UI Canvas
+    > controls how group of ui elements will be rendered
+    > all ui elements must be children of canvas
+    > render modes:
+        - screen space overlay - feels entiry screen automatically and is
+            autoadjusted based on current screen (size setting are not available);
+            Overlays everything on the screen
+        - screen space camera - very similar to the previos one, lets specify
+            specific camera that will render the canvas (specific setting can be
+            appleid); most common - perspectic camera - to give ui a feeling of
+            depth, canvas fills camera's viewport automatically
+        - world space - renders ui elements in scene volume (could be static
+            object in the scene or mobile labels following a player);
+            event camera is required to receive events and determine which camera
+            will be used to detect events like clicking (usually main camera);
+    > canvas elemets are rendered in a top-down order
+    > pixel perfect checkbox - ui elements will be adjusted to the nearest pixel,
+        which can sharpen the look in some cases
+
+2) Rect Transform
+    > all UI elements have Rect Transform instead of usual transform of 3D objects
+    > UI element is anchored to it's parents Rect Transform
+    > editing
+        - holding shift key will resize UI element proportionaly
+        - near corners (outside) can rotate the element
+        - rotations are done according to pivot point: click and drag blue
+            circle in the middle (change to Pivot in Center/Pivot toggle)
+    > anchor point is by default the middle of parent object; position is relative
+        to that anchor point; anchors (four correspoding to four corners of
+        a rectangle) are within the bounds of parent object; anchor min, max
+        values are relative to parent's size and are absolute (normalized from
+        0 to 1, 0,0 is lower left corner); distance from anchors to object's
+        corners is fixed
+        common cases of placement:
+            - corners of an object - stretch will maintain and will take the
+                same percentage area of the parent
+            - corners of a parent - fixed border
+            - particular side of a parent - stretching either horizonally, but
+                not vertically or vice versa
+            !- testing can be done while object is selected, parent comes back
+                after transformations
+        holding shift when positioning anchors will also change object's size
+    > pivot point is in boundaries of object scaled for 0 to 1, 0 0 being lower
+        left corner
+    > resizing doesnt change items related to UI element (font size, etc);
+        negative values makes element invisible
+    > scaling effects all items of UI element, can also flip it round, when
+        fiven negative values
+    > blueprint mode - as if object wasnt rotated and scaled
+    > raw edit mode - changing anchors, pivot point, etc also changes the object
