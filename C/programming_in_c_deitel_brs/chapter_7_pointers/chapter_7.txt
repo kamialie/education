@@ -43,4 +43,24 @@
         sizeof can be used without brackets on variables only
 
 7.7 Expressions and arithmetic operations with pointers
-    > 
+    > operators '++', '--', '+=', '-=' depend on type of pointer - multiplyed by
+        the size of pointer type
+    > to assign pointer of different type you need to add cast operation;
+        void pointer doesnt need to be casted and any pointer can be assign to
+        void without casting
+    > can not dereference void pointer since compiler doesnt know the size
+
+7.8 Connection between pointers and arrays
+    > indexes are converted to expression with pointer operations, thus index
+        notation will work slower
+    > array name is constant pointer - can not be modified
+
+7.9 Pointer arrays
+
+7.10 Example
+
+7.11 Function pointers
+    > pointer to the beginning of function code
+    > name of the function is the address to it
+    > declare array of function pointers:
+        void (*f[3]) (int) = {fun1, fun2, fun3};

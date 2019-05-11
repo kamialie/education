@@ -123,3 +123,6 @@ dkms.conf
 
 # vim Session
 Session.vim
+
+# vscode settings
+.vscode
