@@ -1,0 +1,43 @@
+XML
+    > element or node - pair of openinig and closing tags with the same name;
+        each element can have some text, attributes and other nested nodes;
+        can be empty, thus self closing, example:
+            <person>
+                <name>Kamil</name>
+                <phone type="intl">
+                    +7 9162802499
+                </phone>
+                <email hide="yes" />
+            </person>
+
+Parsing XML
+    > parsing_xml_example.py
+    > import xml.etree.ElementTree as ET
+    > tree = ET.fromstring(data) - data is a string containing xml, fromstring
+        returns "tree" of xml elements
+    > find method searches tags and retrieves their values
+
+Looping through nodes
+    > looping_through_nodes_xml.py
+    > findall method returns a python list of subtrees that represent the
+        'parameter' structures, example(stuff is string with text, users is
+        parent tag that contains many user elements):
+            lst = stuff.findall('users/user')
+    > important to include all parent level elements in findall
+
+JSON
+
+Paring JSON
+    > parsing_json_example.py
+    > import json
+    > info = json.loads(data) - returns list of 'objects'
+    > then just use Pyhton index operator to exctract data
+
+API - Application Programming Interface (rules to follow to access services
+    provided by program)
+    > serialize - internal program data representation to serial (json, etc)
+    > SOA approach - Service-oriented architecture that is program makes use of
+        services provided by other programs
+
+Security and API usage
+    > http://www.oauth.net/ - OAuth
