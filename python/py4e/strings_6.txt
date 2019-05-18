@@ -44,3 +44,11 @@ format operator
         f.e. camels = 42
              'I have spotted %d camels.' % camels
              'I have spotted 42 camels.'
+
+extra
+    > triple quote at the beginning and end of string allows to create multiline
+        strings, for example:
+        data = '''
+        some text
+        more text
+        bla bla'''
