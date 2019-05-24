@@ -1,4 +1,5 @@
 https://habr.com/post/270009/
+https://medium.com/game-dev-channel/что-можно-уместить-в-4-килобайта-bcd99daf4d9
 
 Ed suggestions:
     https://ru.wikipedia.org/wiki/Model-View-ViewModel

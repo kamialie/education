@@ -1,0 +1,15 @@
+python
+    > created by Guido van Rossum
+    > competitors:
+        - Perl - by Larry Wall
+        - Ruby - by Yukihiro Matsumoto
+
+more than one python
+    > CPython
+        - PSF - Python Software Foundation
+        - all python coming from PSF are written in C
+    > Cython - automatically translate Python code into C
+    > Jython - can communicate with existing Java infrastucture
+    > PyPy - python environment written in python-like language; source-code
+        isn't interpreted, but translated into C and executed separetely
+        (mainly for python developement)
