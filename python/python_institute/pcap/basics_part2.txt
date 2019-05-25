@@ -1,0 +1,57 @@
+Making decisions in Python
+    > relational operators: ==, >, <, >=, <=, != (greater than, etc have higher
+        priority than equal or not equal)
+    > else if in python - elif
+
+Python's loops
+    > while loop
+    > for loop:
+       for i in range(100):
+         #do smth
+    > range() function:
+        - with one argument generates number from 0 up to and not including
+            specified number
+        - two arguments generates number from (including) first one, up to
+            not including second argument
+        - three arguments same as two, third argument is an increment added
+            each time
+        - can only be a set in ascending order
+    > both while and for loops can have an else branch (it is always executed);
+        for loop with range function will retain last valid value; if control
+        variable was assigned before for loop and couldnt be executed in a loop
+        it will it will go to else branch, but it wasnt assinged before the loop
+        and couldnt be assinged by for loop, it will not exist in else branch
+
+Logic and bit operations
+    > logical operators: and, or, not
+    > bitwise operators:
+        - & (ampersand) - bitwise conjunction (and)
+        - | (bar) - bitwise disjunction (or)
+        - ~ (tilde) - bitwise negation
+        - ^ (caret) - bitwise exclusion or xor (exactly one 1 to provide 1 as
+            as a result)
+    > bitwise can be used in abbriviated form (&=, except ~), logical can not
+    > i = 4, ~i equals -16 - check binary number system, two's complement numbers
+    > bitwise operators usage:
+        - check the state of a bit - number & mask
+        - reset bit - number & ~mask
+        - set bit - number | mask
+        - negate bit - number ^ mask
+    > shifting operators - right-side argument is the size of shifting (2's exponent)
+        for example - shifting one to right is division by two, 3 to left -
+        multiplication by 8
+
+Lists - colection of data
+    > dynamic array of elements
+    > delete element from a list:
+        del list[1] - an instruction
+    > add element:
+        list.append(value) - to the end
+        list.insert(where, what)
+    > traverse list(i will have a copy of list's element each time):
+        for i in list:
+            pass
+    > swap elements:
+        v1 = 1
+        v2 = 2
+        v1, v2 = v2, v1

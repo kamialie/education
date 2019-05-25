@@ -8,3 +8,5 @@ Ed suggestions:
     https://ru.wikipedia.org/wiki/Design_Patterns
     https://ru.wikipedia.org/wiki/GRASP
     https://habr.com/ru/post/348286/
+
+https://tproger.ru/curriculum/devops/
