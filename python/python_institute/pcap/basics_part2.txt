@@ -55,3 +55,20 @@ Lists - colection of data
         v1 = 1
         v2 = 2
         v1, v2 = v2, v1
+
+Lists - more details
+    > list assignment(list1 = list2) copies the name(reference), not its contents
+    > slicing creates brand new list, thus (list1 = list2[:]) copies the contents
+    > slicing - list[start:end]
+        - returns new list from start to end - 1
+        - using negative indexes is possible
+        - if start is further that end, result is empty list
+        - del on list slice deletes specified range (del list[1:3])
+        - del on list deletes list as a whole - del list
+    > in, not in operators
+        - check if element is somewhere in the list
+
+Lists in advanced applications
+    > list comprehension - special syntax by Python to create list on-the-fly
+    > example:
+        board = [[EMPTY for i in range(8)] for j in range(8)]
