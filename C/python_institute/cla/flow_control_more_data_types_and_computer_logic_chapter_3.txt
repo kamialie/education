@@ -1,0 +1,48 @@
+if-else statement
+    >
+
+More data types
+    > short, long long (or just long) - int may be ommited, dependent on compiler
+    > 0L or 1981l - L(l) appended to number makes it a long literal
+    > double == long float (8 vs. 15-17 guaranteed precisely stored digits)
+    > short and unsigned cant be used with floats and doubles
+    > numerical anomaly - adding very small float(double) to very big, smaller
+        just vanishes
+
+Conversions
+    > implicit conversion rules:
+        1) char and short int will be converted to int (integer promotion)
+        2) if there is a float, other data is converted to float
+        3) if there is a double, other data is converted to double
+        4) if theere is a long int, other data is converted to long int
+    > int = short + char + float, example
+        - promotions go first - (int)short + (int)char + float
+        - sum of int is then converted to flaot - (float)((int)short + (int)char) + float
+        - result of expression is converted to int
+
+Loops
+    > do loop, example:
+        do
+        {
+            statement;
+        } while(condition);
+    > for loop, example:
+        for (i = 0; i < 100; i++)
+        {
+            statement;
+        }
+    > if any of 3 components are omitted, it is assumed there is a 1 there
+        fun, valid example(infinite loop):
+            for(;;)
+            {
+                statement;
+            }
+    > break and continue are syntactic sugar - Edsger Dijkstra proved it in 1965
+
+Computer logic
+    > &&, || - digraphs
+    > fun example(j equals 0 if i was 0, 1 if i is nonzero):
+        int i,j;
+        j = !!i;
+    > bitwise operators can be used in shortcut form:
+        var >>= 1
