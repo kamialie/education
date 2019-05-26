@@ -1,0 +1,5 @@
+
+    > Dockerfile - defines what goes on in the environment inside container
+        (access to networking interfaces, disk drives is virtualized inside
+        environment, which is isolated from the rest of the system, thus you
+        need to map ports to the outside world)

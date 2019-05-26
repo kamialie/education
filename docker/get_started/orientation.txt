@@ -1,0 +1,7 @@
+manage access rights - https://docs.docker.com/install/linux/linux-postinstall/
+
+Usefull commands
+    > docker --version
+    > docker info (or docker version without --) to view more details
+    > docker or docker container --help - list docker CLI commands
+    > docker image ls (--al, -aq) - list docker containers (all, all in quiet mode)
