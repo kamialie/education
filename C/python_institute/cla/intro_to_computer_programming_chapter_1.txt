@@ -20,7 +20,7 @@ bonus:
     >
         double x = -.1;
         int i = x;
-        i WILL BE 0
+        i WILL BE 0 (conversion to int just cuts fractional part)
     
     >
         int i = 0, j = 1, k;
