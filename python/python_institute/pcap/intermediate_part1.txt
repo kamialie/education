@@ -1,0 +1,19 @@
+Using modules
+    > file with definitions that are used in a scripts or in an interactive
+        instance of the interpreter
+    > to add module functions, variables, classes, etc into script:
+        import module_name
+    > to add more either state import smth on the next line, or specify next
+        module after comma on the current line
+    > nameplace - a space in which some names exist and the names dont conflict
+        with each other
+    > after import is done, names in that namespace become available, but they
+        dont conflict with already existing names
+    > access variable from module:
+        math.pi
+    > import entities precisely(only those specified are imported, can be now
+        accessed without qualification, the later overwrites):
+            from math import pi
+    > alias imported modules name or entity:
+       import module as alias 
+       from module import name as alias, another_name as another_alias
