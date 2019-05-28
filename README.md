@@ -7,3 +7,12 @@
   + https://ru.wikipedia.org/wiki/Design_Patterns
   + https://ru.wikipedia.org/wiki/GRASP
   + https://habr.com/ru/post/348286/
+
+- education sources:
+  * https://tproger.ru/curriculum/devops/
+
+- interesting articles:
+  + https://habr.com/post/270009/
+
+- fun stuff:
+  + https://medium.com/game-dev-channel/что-можно-уместить-в-4-килобайта-bcd99daf4d9
