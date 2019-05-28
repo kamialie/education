@@ -64,4 +64,20 @@ Package
     > Python can use a zip file as a directory with modules
 
 Errors
-    > 
+    > simply structure(if exception is raised in try block, it immidiately jumps
+        into except block, otherwise except block is ignored):
+            try:
+                #do smth
+            except:
+                #do smth
+    > catching particular exceptions:
+            try:
+                #do smth
+            except exc1:
+                #do smth
+            except exc1:
+                #do smth
+            except:
+                #do smth
+    > only one branch can be executed; searched in the same order they appear
+    > KeyboardInterrupt exception is raised when Ctrl-C
