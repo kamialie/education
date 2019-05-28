@@ -17,3 +17,51 @@ Using modules
     > alias imported modules name or entity:
        import module as alias 
        from module import name as alias, another_name as another_alias
+
+Some useful modules
+    > dir(module) - returns alphabetically sorted list containing all entities'
+        names available in the module (module must be imported first as a whole)
+    > random module
+        - random() - produces a float number frmo the range (0.0, 1.0)
+            including zero, excluding one
+        - seed() - directrly set the generator's seed; if no paramenter - uses
+            current time, otherwise integer value
+        - randomrange(end), randomrange(beg, end), randomrange(beg, end, step) -
+            random intergers from the range (excluding right side number)
+        - randint(left, right) - random integer including right-side number
+        - choice(sequence) - choses a random element
+        - sample(sequence, elements_to_choose=1) - builds a list of consisting
+            of random elements
+    > platform module
+        - platform() - shows all underlying layers in one glance; (1) - alternative
+            names, (0,1) - brief form
+        - machine() - generic name of processor
+        - processor - real name of processor
+        - system() - generic OS name
+        - version() - OS version
+        - python_implementation() - denotes Python implementation
+        - python_version_tuple() - (major part version, minor part, patch level
+            number)
+
+Package
+    > __pycache__ - folder that is created when module is imported(contains
+        module_name.python_implementation-xy.pyc where x and y are version numbers);
+        semu-compiled file for Python use, will be rebuilt if source file has
+        been modified; modules are implicitly executed by Python once
+    > __name__ - internal source file variable; File containing a module gets -
+        __main__, while file where module was imported get the name of the module
+    > preceding variable with an underscore shows module users not to modify it
+        (only a convention)
+    > doc-string - string (maybe a multiline) placed before any module
+        instructions (including imports) that briefly explains the purpose
+        and contents of the module
+    > path variable in sys module contains paths to folders where Python is going
+        to look for module to be imported (append or insert absolute or relative
+        path to the folder)
+    > __init__.py - this file should located in package folder (executed when
+        any of the pachake's modules is imported); can be left empty unless
+        special initialization is required
+    > Python can use a zip file as a directory with modules
+
+Errors
+    > 
