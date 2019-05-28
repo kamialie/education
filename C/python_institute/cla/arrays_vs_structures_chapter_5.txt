@@ -1,0 +1,54 @@
+The real meaning of array indexing
+    > t[i] === i[t] - compiler doesnt care, cause [] operator is commutative
+    > example:
+        char str[] = "ABC";
+        char p = str + 1;
+        char c;
+        - c = *p++; - assings B to c, and increases the pointer(now points to C)
+        - c = (*p)++; - assing B to C, doesnt change pointer, increases second
+            element of the array(now str is ACC)
+
+Using pointers
+    > 
+
+Arrays of arrays
+    > 
+
+Memory allocation and deallocation
+    > void *p - amorphous pointer (can point to any value), can not be dereferenced
+    > conversion from void to any type requires explicit type casting, while
+        vice versa doesn't
+
+Array of pointers
+    > 
+
+Traps and puzzles
+    > declaring an array of int pointers:
+        int *array[10];
+    > declaring a pointer to an array of 10 ints
+        int (*array)[10];
+    > declaring a pointer to an array of int pointers:
+        int *(*array)[10];
+
+Structures
+    > it is possible to define a structure and declare a variable at the same
+        time:
+            struct DATE
+            {
+                int year, month, day;
+            } DateOfBirth, visits[100];
+
+Declaring and initializing structures
+    > structure's field name may overlap with tag name
+    > structure initialization - fewer elements presumes the rest to be filled
+        with zeros
+    > if structure contains another structure and inner initializer is complete,
+        you can ommit curly braces for innir initialization
+
+Pointers to structures
+    > unions store only one value (biggest in size), except tricky parts -
+        revelations are later
+    > all field are stored in the same location
+
+Basics of recursive data collections
+    > 
