@@ -1,0 +1,42 @@
+Functions
+    > 
+
+First function
+    > compiler deduction - assumes everything is int, for example:
+        void hello(void) - will be assumed as int hello(void)
+    > should provide function prototype before first invocation, otherwise
+        deduction takes place
+    > return is implicitly added after last instruction of the function's block
+
+Variables, parameters and results
+    > if variable is declated outside any function, it becomes global and is
+        accessible in all functions
+    > formal parameters - the ones in function definition, declaration
+    > actual parameters - values passed in function invocation
+
+Scalars as function parameters
+    > by-value parameter passing
+    > by-reference parameter passing
+
+Arrays as function parameters
+    > if a parameter is a multidimensional array (declared as array[3][3]),
+        compiler needs to know how many cells are in one row to successfuly
+        move to the next one, thus acceptable and good prototype is the following:
+            void printarr(int t[][3]);
+
+Parameterizing the main function
+    > int main(int argc, char *argv[]);
+        - argc - argument counter
+        - argv - argument values
+    > convention to output info about version with the -v option and terminate
+        immediately and inform about how the program has to be used if launched
+        without parameters
+
+Basics of disjoint compilation
+    > example of header file content:
+        extern int factorial(int n);
+    > parameter names can be ommitted, extern keyword indicates that the
+        function/variable described in this declaration is defined in
+        a different source file
+    > if include directive is surrounded by quotes it means to look for it in
+        the current working directory, angle brackets - in standard locations
