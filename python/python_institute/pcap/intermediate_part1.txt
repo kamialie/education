@@ -81,3 +81,71 @@ Errors
                 #do smth
     > only one branch can be executed; searched in the same order they appear
     > KeyboardInterrupt exception is raised when Ctrl-C
+
+Anatomy of exceptions
+    > 63 built-in exceptions
+    > exceptions match their own branch, but can also be handled by more general
+        branch - first one met satisfies the exception
+    > to handle two or more exception the same way:
+        try:
+            #smth
+        except(exc1, exc2):
+            #smth
+    > exceptions can cross function and modules, and travel through the invocation
+        chain looking for a matching except clause able to handle it:
+            def badfun(n):
+                try:
+                    return 1/n
+                except ArithmeticError:
+                    #do smth
+                return None
+            badfun(0)
+
+            or
+
+            def badfun(n):
+                return 1/n
+            
+            try:
+                badfun(0)
+            except ArithmeticError:
+                #do smth
+    > raise exc - raises specified exception; without specified exception
+        immidiately re-raises the same exception as currently handled (may be
+        used inside except block only)
+    > assert expression - if result of expression evaluates to True, non-zero
+        value, non-empty string, or other value different than None, nothing
+        happens, otherwise raises an exception named AssertionError
+
+Some of the most useful exceptions
+    1) BaseException<-Exception<-ArithmeticError - abstract exception including
+        all exception caused by arithmetic operations like zero division or
+        ivalid domain
+    2) BaseException<-Exception<-AssertionError - concrete exception raised by
+        assert instruction
+    3) BaseException - most general (abstract) of all Python exceptions
+    4) BaseException<-Exception - abstract exception including all exceptions
+        caused by errors resulting from code malfunctions
+    5) BaseException<-Exception<-LookupError<-IndexError - concrete exception
+        raised when you try to access non-existent sequence's element
+    6) BaseException<-KeyboardInterrupt - concrete exception raised when user
+        uses keyboard shortcut to terminate a program's execution (Ctrl-C in
+        most OSs); if handling this exception doesn't lead to program termination,
+        the program continues its execution; not derived from exception class
+    7) BaseException<-Exception<-LookupError - abstract exception including all
+        exceptions resulting from invalid references to different collections
+    8) BaseException<-Exception<-MemoryError - concrete exception raised when
+        an operation cannot be complete due to a lack of free memory
+    9) BaseException<-Exception<-ArithmeticError<-OverflowError - concrete
+        exception raised when a number is too big to be successfully stored
+    10) BaseException<-Exception<-StandardError<-ImportError - concrete
+        exception raised when an import operation fails
+    11) BaseException<-Exception<-LookupError<-KeyError - concrete exception
+        raised when you try to access non-existant collection's element
+        (dictionary)
+
+Characters and strings
+    > 
+
+Nature of string in Python
+    > 
