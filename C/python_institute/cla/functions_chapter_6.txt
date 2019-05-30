@@ -40,3 +40,7 @@ Basics of disjoint compilation
         a different source file
     > if include directive is surrounded by quotes it means to look for it in
         the current working directory, angle brackets - in standard locations
+
+Bonus:
+    if function has return type int, but doesnt explicitely return anything,
+        it implicitly returs 0
