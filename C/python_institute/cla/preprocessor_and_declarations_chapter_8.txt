@@ -1,0 +1,3 @@
+Preprocessor, absolute basics
+    > gcc -E program.c - stop compiler right after preprocessor completes and
+        sends output to stdout

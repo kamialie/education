@@ -82,4 +82,8 @@ Dealing with the steam's position
     > int feof(FILE *stream); - returns 0 if file isn't in EOF state
 
 Bonus
-    > binary mode includes '\0' when writes
+    > pay attention when writing numbers to the stream - each digit is one
+        byte
+    > special case - fwrite writing from FILE *f - it is possible, as it
+        write from some structure pointed by f
+    > EOF has a value of -1
