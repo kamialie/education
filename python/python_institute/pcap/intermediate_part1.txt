@@ -148,4 +148,80 @@ Characters and strings
     > 
 
 Nature of string in Python
-    > 
+    > immutable sequence
+    > multiline string start and ends with three apostrophes(or thriple quotes):
+        string = '''line one
+        line two'''
+    > concatinate strings with '+' operator ('+=' is also permisslbe) - produces
+        new string
+    > replicate strings with '*' operator - needs number as second argument,
+        order doesnt matter ('=*' is permisslbe)
+    > ord() - as in ordinal; returns ANSI/UNICODE code point value, needs
+        one-character string as its argument
+    > chr() - inverse of the function above
+    > slicing works the same as with lists
+    > in operator checks if left argument appears anywhere in the right argument
+        (string)
+    > min() - function, find min according to ASCII(sequence can not be empty)
+    > max() - same as above but max
+    > index() - method searches the sequence from the beginning in order to find
+        first appearance of specified argument(absence of argument will cause
+        a ValueError exception)
+    > list() - function, creates a new list given a string as an argument(also
+        able to create lists from tuples, dictionaries...)
+    > count() - method, counts occurences of the element inside sequence(absense
+        of element doesnt raise exception)
+    > more at https://docs.python.org/3.4/library/stdtypes.html#string-methods
+
+String methods
+    > capitalize() - creates new string and tries to apply the following rule
+        - if the first element is a character(of the whole argument),
+        capitalizes it and converts remaining to lower-case
+    > center() - takes number(width) as its first argument and tries to center
+        the string; second argument specifies what character to use instead of
+        space
+    > endswith() - checks if the given string ends with specified argument;
+        returns True or False
+    > find() - similar to index(), but safer; works with strings only; returns
+        -1 if not found; second argument may specify where to start the search,
+        third - where to end
+    > isalnum() - parameterless, checks if the strnig contains only digits or
+        alphabetical characters; returns True or False(empty string returns False)
+    > isalpha() - letters only
+    > isdigit() - digits only
+    > islower() - lower-case isalpha() only
+    > isspace() - only whitespace
+    > isupper() - upper-case variant of islower()
+    > join() - takes one argument - a list, whose elements must be strings,
+        the string from which the method has been invoked is used as a separator
+    > lower() - replaces all upper-case letters with their lower-case counterparts
+    > lstrip() - removes all leading whitespaces; one argument version removes
+        all character enlisted (in a string)
+    > replace() - (2 parameter version) replaces all occurences of the first
+        argument by the second one second argument can be empty string,
+        first one can not; (3 paramenter version) uses the third argument
+        to limit the number of replacements
+    > rfint() - same as find(), but starts from the right side
+    > rstrip() - right side version of lstrip()
+    > split() - assumes that substring are delimited by whitespaces and returns
+        a list of these substrings(empty string results in empty list)
+    > startswith() - checks if string begins with specified parameter
+    > strip() - combination of lstrip() and rstrip()
+    > swapcase() - swaps the case of all letters (upper tp lower and vice versa)
+    > title() - changes every word's first character to upper, the rest to lower
+    > upper() - replaces all lower-case letter with upper-case
+
+Strings in action
+    > two strings are equal of both consists of the same characters in the same
+        order
+    > final relation is based on first different character
+    > longer string is considered greater, if shorted is identical to longer's
+        beginning
+    > sorting lists:
+        - sorted() - function, takes one argument, a list, and returns a new list
+            filled with the sorted argument's elements
+        - sort() - method, affect the list itself
+    > conversions:
+        - str(), int(), float() functions
+        - conversion from string to integer only works, if a string represents
+            a valid number, otherwise ValueError exception
