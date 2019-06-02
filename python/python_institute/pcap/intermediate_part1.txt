@@ -225,3 +225,6 @@ Strings in action
         - str(), int(), float() functions
         - conversion from string to integer only works, if a string represents
             a valid number, otherwise ValueError exception
+
+> Four simple programs
+    > https://en.wikipedia.org/wiki/International_Bank_Account_Number

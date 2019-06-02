@@ -1,0 +1,6 @@
+Basic concepts of objective programming
+    > define a class:
+        class OurClass:
+            pass
+    > creating an object:
+        object = OurClass()

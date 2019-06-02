@@ -48,7 +48,11 @@ Pointers vs. arrays
     > pointer arithmetics - multiplied by type size...
 
 Strings
-    > 
+    > important distinction:
+        char a[] = "some string";
+        char *b = "some string";
+    > later cant be modified, compiler reserves the memory for it and creates
+        a pointer variable that points to it
 
 Assigning values to string
     > not allowed:
