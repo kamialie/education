@@ -4,3 +4,119 @@ Basic concepts of objective programming
             pass
     > creating an object:
         object = OurClass()
+
+From procedual to object-oriented approach
+    > constructor has a name of __init__ and should always have at least one
+        parameter (self - its a convention); also created a variable i and
+        assigned it a value of 1:
+            class Class:
+                def __init__(self):
+                    self.i = 1 
+    > to create and assign a value to a property specify it on the constructor:
+        def __init__(self):
+            self.i = 1
+    > to create a private property preceed it with 2 underscores:
+        def __init__(self):
+            self.__i = 1
+    > every method must have self as its first parameter in order to access
+        object's properties(Python implicitly sends the current object as the
+        first argument)
+    > define a sub-class:
+        class SubClass(Class):
+            pass
+    > have to explicitly invoke a superclass' constructor
+        class SubClass(Class):
+            def __init__(self):
+                Class.__init__(self)
+    > invoking a method outside the class never requires to put self argument,
+        but invoking from within the class does(also has to be put first)
+    > to override a method and add extra functionality write a new one and call
+        parent class's method inside it as well:
+            def method(self, val)
+                self.__i += val
+                Class.method(self, val)
+
+Properties
+    > instance variables can be created at any time of object's life (not only
+        initialization(constructor)) and be removed at any time
+    > each object get a set of predefined properties:
+        - __dict__ - contains the names and values of all the properties the
+            object is currently carrying(dictionary is the output)
+    > When instance variable is created inside any of the object's methods
+        (including constructor), Python mangles the name - puts one underscore
+        and class name before the name of the property(only with private variables),
+        that is __First variable become _Class__First; second name is fully
+        accessible from outside; mangling doesn't work when property is created
+        on the fly - object.__property = 1, and is accessible by its name like
+        ordinary property
+    > class variable exists inside a class and outside any object(mangling has
+        the same effect); aren't shown in __dict__:
+            class Class:
+                i = 0
+                def __init__(self):
+                    pass
+    > hasattr() - function that takes 2 arguments: class or object, name of
+        property(has to be passed as a string); returns True or False;
+        returns True on class's attribute when invoked on the object of that
+        class, even though its not listed in __dict__
+    > getattr() - function that takes 2 arguments: object and its property name
+        (as a string) and returns its current value
+    > isinstance()
+    > setattr() - function that takes 3 arguments: object, property name, new
+        value
+
+Methods
+    > self (convention) must be the first parameter in all methods - it is used
+        to obtain reference to object's instance and class variables and other
+        methods
+    > __init__ can not return a value, cannot be invoked directly either from
+        the object or from inside the class
+    > mangling works just like with properties
+    > predifined attributes:
+        - __name__ - string containing name of the class(object's doesnt have it);
+            type(object) - return class which has been used to instantiate
+            the object
+        - __module__ - string containing name of the module which contains the
+            definition of the class(module named __main__ means module currently)
+            being run
+        - __bases__ - tuple containing classes(not names) which are direct superclasses for
+            for the class(the order is the same as that used inside the definition);
+            objects don't have this attribute; class without explicit
+            superclass point to object(predefined Python class) as its ancestor
+
+Inheritance
+    > __str__(self) - method that Python invokes when it needs to present
+        object/class as a string (print(object) for example); predifine this
+        method to get anything, result must be string:
+        __str__(self):
+            return "some string"
+    > issubclass(class1, class2) - function that checks if class1 is a subclass
+        of class2; returns True or False; each class is considered to be a
+        subclass of itself
+    > isinstance(object, class) - function that checks of an object is instance
+        of the class; returns True or False; will return true when checking
+        against parent class as well
+    > is operator checks whether two variables refer to the same object
+    > super() - function that returns the reference to parent class; no need to
+        pass self argument as well; can be used to access variables/method of
+        a parent class:
+            class Sub(class):
+                def __init__(self, name):
+                    super().__init__(name)
+    > Python looks for object components in the following order:
+        1) inside objet itself
+        2) in all classes involved in the object;s inheritance from botto to top
+        3) if there us more than one class(multiple parents), Python scans from
+            left to right(in the definition of the class)
+        4) if both above fail, AttributeError exception is raised
+    > any class method can be overwritten by its child(any method is implicitly
+        virtual method)
+    > Polymorphism - situation when a subclass can modify its superclass
+        behaviour
+    > Virtual method - redefined in any of the child classes
+    > Inheritance - extends class's capabilities by adding new components and
+        modifying existing ones; complete recipe is contained inside the class
+        itself and all its ancestors; object makes use of all there attributes
+    > Composition - project a class as a container able to store and use other
+        object(derived from other classes) where each of the objects implements
+        a part of desired behaviou
