@@ -120,3 +120,79 @@ Inheritance
     > Composition - project a class as a container able to store and use other
         object(derived from other classes) where each of the objects implements
         a part of desired behaviou
+
+Exceptions
+    > try-except-else-finally block - else goes after last except block (only
+        one can be executed - either one of except branches or else block, thus
+        else is executed when no exceptions were raised); finally block is
+        always executed and goes last; else and finally are completely independant
+        - can coexist or occur independantly:
+            try:
+                n = 1 / n
+            except ZeroDivisionError:
+                print("div failed")
+                n = None
+            else:
+                print("everything is fine)
+            finally:
+                print("time to say goodbye")
+                print(n)
+    > exceptions are classes too, and the error message is produced by __str__()
+        method
+    > to get additional info abotu exception object use the following clause:
+        try:
+            pass
+        except Exception as e:
+            print(e)
+            print(e.__str__())
+    > args - property introduced by BaseException class - tuple designed to
+        gather all arguments passed to class constructor:
+            def printargs(args):
+                lng = len(args)
+                if lng == 0:
+                    print("")
+                elif lng == 1:
+                    print(args[0])
+                else:
+                    print(str(args))
+            ...
+            except Exception as e:
+                printargs(e.args)
+    > own exceptions can be created by deriving ot from one of the built-in
+        exception classes. It is also possible to to build your own hierarchy
+        (derive from any of the top exception classes, like Exception)
+
+Generators
+    > piece of specialized code able to produce a series of values, and to
+        control the iteration process
+    > generators returns series of values, and implicitly invoked more than
+        once
+    > iterator protocol - a way in which an object should behave to conform to
+        the rules imposed by the context of for and in statements; iterator
+        must provide two methods:
+            1) __iter__() - returns object itself and is invoked once(for Python
+                to successfuly start the iteration)
+            2) __next__() - intendent to return the next value of the desired
+                series; will be invoked by the for/in statements in order to pass
+                through the next iteration; method should raise StopIteration
+                exception, if there are no more values to provide
+    > iterator (being object of a class itself) can also be a part of another
+        class; in order to use iterator than class should return this iterator
+        on __iter__ invocation
+    > yield - works as return for iterators; provides the values of the expression
+        and doesn't lose the state of the function; all variables are frozen
+        and will be resumed on the next invocation; should not be invoced
+        explicitely, as it is a generator object:
+            def fun(n):
+                for i in range(n):
+                    yield n
+            for v in fun(5):
+                print(v)
+    > generators may be used within list comprehensions; list() function can
+        trasnfrom a series of subsequent generator invocation into a real list
+        as well:
+            lst = list(fun(5))
+    > conditional expression  - way of selecting one of two different values
+        based on the result of boolean expression(it is an operator, weird
+        ternary operator):
+            expression1 if condition else expression2
