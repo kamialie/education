@@ -196,3 +196,31 @@ Generators
         based on the result of boolean expression(it is an operator, weird
         ternary operator):
             expression1 if condition else expression2
+    > list comprehension plus conditional expression example:
+        list = [1 if x % 2 == 0 else 0 for x in range(10)]
+    > brackets make a comprehension, while parethesis make a generator -
+        comprehension creates an actual list, that is can be iterated through by
+        loop, while generator provides subsequent values
+    > lambda - anonymous function(without a name); useful for one time
+        use, can be assigned to variable as well:
+            lambda parameters : expression
+    > map() - function that applies the first argument(function) to all of its
+        second argument's elements(list, tuple, generator, etc) and returns an
+        iterator delivering all subsequent function results:
+            map(function, list)
+    > filter() - function (takes same arguments as map()) that filters the second
+        argument based on directions from the function:
+            filter(function, list)
+    > closure - technique which allows the storing of values in spite of the fact
+        that the context in which they were created does not exist anymore:
+            def outer(par):
+                loc = par
+                def inner():
+                    return loc
+                return inner
+            fun = outer(1)
+            print(fun())
+    > inner is outer's private tool - can be invoked only inside outer
+    > functions returns during outer execution is called closure - can use inside
+        environment as well as take outside values in a form of parameters
+            
