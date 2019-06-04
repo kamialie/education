@@ -224,3 +224,38 @@ Generators
     > functions returns during outer execution is called closure - can use inside
         environment as well as take outside values in a form of parameters
             
+Processing files
+    > Unix system file names are case-sensitive, while Windows is not
+    > Python can recognize OS requirements and convert slashes to backslashes
+        atutomatically, thus the following is fine:
+            name = "/dir/file"
+            name = "c:/dir/file"
+    > stream types: text, binary
+    >  end of line symbol - Linix/Unix (LF - ASCII 10, in Python '\n'), CP/M
+        (Windows) (CR and LF - ASCII 13 and 10, '\r\n')
+    > translation of newline characters - \r\n are replaced with \n during read,
+        vice versa during write
+    > open() - function that returns required object to work with files (file
+        handle); last two arguments can be ommitted; raises exception on errors
+        (like file doesn't exist):
+            stream = open(file, mode='r', encoding=None)
+    > open modes:
+        - 'r' - read, file must exist and be readablie
+        - 'w' - write, file doesn't have to exist: either new one is created or
+            will be truncated to zero
+        - 'a' - appeand, file doesn't have to exist: either new one is created
+            or will be set to the end of file
+        - 'r+' - read and update, file must exist and be writable, both read and
+            write are allowed
+        - 'w+' - write and update, file doesn't have to exist, previous content
+            is untouched, both read and write are allowed
+        - 't' or 'b' at the end corresponds to text or binary mode, t is default
+    > stdin, stdout, stderr - already opened streams (import sys module first)
+    > close() - function, expects now arguments, returns nothing, raises IOError
+        in case of error(if for example buffer flush fails, as it has to be done
+        before closing)
+    > errno property in IOError object; its values can be compared to the list
+        of predefined symbolic constants defined in errno module(import errno)
+            if e.errno == errno.ENOENT
+    > strerror(e.errno) - function that returns string describing the meaning of
+        the error(import os module)
