@@ -1,0 +1,31 @@
+Books and resources
+    > "The C++ Programming Language" Bjarne Stroustrup
+        - 
+    > "Effective C++" Scott Meyers
+        - https://www.amazon.com/gp/product/0321334876?ie=UTF8&tag=aristeia.com-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0321334876
+
+First program
+    > example:
+        #include <iostream>
+        using namespace std;
+        int main(void)
+        {
+            cout << "first program";
+            return (0);
+        }
+    > namespace - abstract container created to hold a logical grouping of unique
+        entities(blocks); all elements of the standard C++ library are declared
+        inside std(have to include outside any function at the top of the file)
+
+Integer values, integer variables and comments
+    > for octal number precede with zero - 0123, for hexadecimal precede with
+        zero x - 0x123
+    > block comments can't be nested
+
+Numbers and their operators
+    > 3e10 or 3E10 - scientific notation, exponent must be integer
+    > converting from float to int simpty cuts decimal part
+    > division by zero return inf (infinitive)???
+
+Characters
+    > 
