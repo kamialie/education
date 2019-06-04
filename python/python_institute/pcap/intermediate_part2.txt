@@ -259,3 +259,37 @@ Processing files
             if e.errno == errno.ENOENT
     > strerror(e.errno) - function that returns string describing the meaning of
         the error(import os module)
+
+Working with real files
+    > read() - method (on open() returned object) that reads and returns desired
+        number of characters as a string or read the whole file and return as a
+        string(no argument or None); if there is nothing to read, returns empty
+        string
+    > readline() - method that tries to read a complete line of text from the
+        file and returns it as a string, otherwise empty string
+    > readlines() - method that returns a list of string (one element per line);
+        can specify maximum number of bytes to read as argument; returns empty
+        list if there is nothing to read
+    > open() function object is an isntance of the iterable class - __next__
+        method returns the next line read from the file; also automatically
+        invokes close() when any of file read reaches the end of the file
+    > write() - method to write to text file, expects one argument - string,
+        doesn't append new line; can use it on sys.std... steams as well
+    > bytearray class - array containing (amorphous) bytes; fills whole array
+        with zeros:
+            data = bytearray(100)
+    > class above is mutable, subject to len() function, can be accessed by
+        conventional indexing; cant set element not an integer, value must be
+        0 to 255 inclusive; is iterable:
+            for b in data:
+                print(hex(b))
+    > write method can take bytearray object as argument; returns number of
+        successfuly written bytes(difference with inital object's size may
+        signal the error occurence)
+    > readinto() - method fills previously created bytearray object with values
+        taken from the file(object is passed as argument); if there is more data
+        than space, method stops; returns number of successfuly read bytes -
+        may be used as signal of error
+    > read() - method tries to read all the contents of the file and returns
+        an object of the bytes class(immutable) - can then be used as
+        bytearray() argument
