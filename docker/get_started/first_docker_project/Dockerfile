@@ -18,3 +18,7 @@ ENV NAME World
 
 # Run app.py when the container launches
 CMD ["python", "app.py"]
+
+# Set proxy server, replace host:port with values for your servers
+ENV http_proxy host:port
+ENV https_proxy host:port
