@@ -1,0 +1,19 @@
+Prerequisite info
+    > Docker Desktop comes with docker-machine
+    > new solutions(Desktop versions) come with their own native virtualization
+        solutions rather than Oracle VirtualBox - you can use
+        'docker-machine create' with the vurtualbox driver to create additional
+        local machines (Mac version uses HyperKit)
+
+Use Machine to run Docker containers
+    > to run Docker container you need:
+        - create a new (or start an existing) Docker virtual machine
+        - switch your environment to your new VM
+        - use the docker client to create, load, and manage containers
+    > machine maintains its configs between uses just like VMs
+
+Create a machine
+    - open shell
+    - run 'docker-machine ls' - should output nothing, as there is not machines
+        yet
+    - run 'docker-machine create --driver virtualbox <name>'

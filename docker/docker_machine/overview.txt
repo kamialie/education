@@ -1,0 +1,11 @@
+Docker Engine and Docker Machine
+    > Docker Engine - client-servier application made up of the Docker daemon,
+        a REST API (specifies interfaces for interacting with daemon), and
+        CLI client that talks to the daemon (through the REST API wrapper).
+        Accepts docker commands like docker run <image>, docker ps...
+    > Docker Machine - tool for provisioning and managing Dockerized hosts
+        (hosts with Docker Engine on them). Has its own command line client
+        docker-machine and the Docker Engine client, docker. Can use Machine to
+        install Docker Engine on ome or more virtual systems. Virtual hosts can
+        be local (for example VirtualBox) or remote (Dockerized hosts on cloud
+        providers). Dockerized hosts are referred as "machines".
