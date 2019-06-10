@@ -1,0 +1,27 @@
+If and else
+    > if else clause
+    > nesting
+    > cascade - else if
+
+More types
+    > modifiers:
+        - long
+        - short
+        - unsigned
+    > literal of type long:
+        - literal values goes beyond the acceptable range of int
+        - letter L or l is appended to the literal
+    > type double - increased accuracy compared to float (32 to 64 bits)
+    > type bool - true or false values(keywords), exclamation mark in front
+        negates the variable state; special type of int
+
+Loops
+    > while loop
+    > do while loop
+    > for loop:
+        - initiator of the counter
+        - checking of the condition
+        - modification of the counter
+    > if any of the for loop components is ommitted, it is assumed to be 1
+
+Boolean algebra and computer logic
