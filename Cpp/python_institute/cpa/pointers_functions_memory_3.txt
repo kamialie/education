@@ -1,0 +1,18 @@
+Pointers
+    > pointers are used to store information about the location (address) of any
+        other data
+    > int *p; - declaring a pointer to data of type int
+    > C++ syntax doesnt allow to assign integer literal to pointer (pointer = 1234)
+    > p = 0; null pointer (or p = NULL, include cstring header or any other
+        which includes it, for example iostream does)
+    > p &i; - assign address of a variable
+    > i = *p; - dereferencing - operator where the pointer variable becomes
+        synanymous with the value it points to
+    > sizeof - operator (unary prefix) that provides info on how many bytes of
+        memory its argument occupies or may occupy; takes variables, literals
+        and types as its argument; may not use parethesis, if argument is a value
+        or literal, but have to for types
+
+Pointers vs arrays
+    > name of array without indices is a synonym of teh pointer pointing to the
+        first element of an array
