@@ -3,7 +3,7 @@ Functions
 
 First function
     > compiler deduction - assumes everything is int, for example:
-        void hello(void) - will be assumed as int hello(void)
+        hello(void) - will be assumed as int hello(void)
     > should provide function prototype before first invocation, otherwise
         deduction takes place
     > return is implicitly added after last instruction of the function's block

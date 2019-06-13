@@ -16,3 +16,47 @@ Pointers
 Pointers vs arrays
     > name of array without indices is a synonym of teh pointer pointing to the
         first element of an array
+    > meaningful and possible pointer operations:
+        - adding an integer (integer is multiplied by type size)
+        - subtracting an integer (same as previous)
+        - subtracting pointer from a pointer (result is divided by type size)
+        - comparing two pointers
+
+Functions
+    > type_of_result function_name(parameters_with_type); - function declaration;
+        alongside function body forms function definition
+    > return does two things:
+        - indicates which value is returned
+        - terminates the execution
+    > function declaration must be placed before first invocation; function
+        definition can be placed after invocation; parameter names can be ommitted
+
+Declaring and defining functions
+    > declaration:
+        - return type defaults to int; void meains nothing
+        - can have more than one function of the same name - overloading
+        - void in parameter list endicates no parameters, every parameter has to
+            have a type in front of it
+    > definition
+        - return; - can be placed in void function; it is assumed that the
+            return statement is implicitly executed within the void function's
+            body
+        - void function's result can't be assigned to a variable, thus the only
+            acceptable invocation form is the folowing:
+                VoidFunction();
+
+Transferring data to and from functions
+    > global variable - declated outside any function, thus accessible by all
+        functions declared in the same source file after variable declaration
+    > functions can modify a global variable - that is called side effect
+    > passing parameter by value:
+        - formal parameter doesn't change actual parameter's value, as the later
+            only provides the value
+    > passing parameter by reference:
+        - void function(int &parameter); - declare passing by reference in
+            function definition
+        - every modification made into a formal parameter will affect actual
+            parameter
+        - corresponding actual parameter must be a variable - cant be expression
+            or other function invocation result
+    > 'C language' way of passing by reference - pass pointer to a variable

@@ -19,6 +19,8 @@
     * https://help.github.com/en/categories/writing-on-github
   + Computer hardware
     * https://nsu.ru/xmlui/bitstream/handle/nsu/9054/tanenbaum_AC.pdf
+  + Computer science
+    * https://github.com/ossu/computer-science
 
 - fun stuff:
   + https://medium.com/game-dev-channel/что-можно-уместить-в-4-килобайта-bcd99daf4d9
