@@ -24,3 +24,6 @@
 
 - fun stuff:
   + https://medium.com/game-dev-channel/что-можно-уместить-в-4-килобайта-bcd99daf4d9
+
+- AI:
+  + https://habr.com/ru/post/305578/
