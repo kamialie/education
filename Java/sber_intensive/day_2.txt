@@ -1,0 +1,71 @@
+Oracle JDK
+    > https://docs.oracle.com/en/java/javase/12/index.html
+History
+    > 1991 by James Gosling
+    > coffee -> island??
+    > 1995 - going to public
+    > 1996 - JDK 1.0
+
+Java essential
+    > javac FirstApp.java - compile program(name must be the same as class name)
+    > java FirstApp - run program
+
+
+Data types
+    > primitive:
+        - byte, short, int, int, long
+        - char from 0 to 
+    > 0 devision raises exception, overflow throughs extra bits - integers
+    > floating point cases:
+        - positive div by 0 - +inf
+        - negative div by 0 - -inf
+        - div 0 by 0 - NaN
+
+Logical operators
+    > 
+
+Arrays
+    > created by new operators
+    > all elements are initialized by 0
+    > size is fixed:
+        int[] array = new int[10];
+    > initialization:
+        int[] nums = new int[] {1, 2, 3};
+    > array.length - returns the length
+
+Strings
+    > class java.lang.String
+    > immutable
+    > methods:
+        - length()
+        - charAt(int index)
+        - toCharArray()
+        - String substring(int start, int end)
+    > '+' operator is actually calling java.lang.StringBuilder:
+        StringBuilder buf = new StringBuilder();
+        buf.append("Hello");
+        buf.append("wolrd");
+        String result = buf.toString();
+    > == compares references not the actual content for all types(small sring or
+        numbers, int up to 128 java just makes another reference to the value)
+
+Switch:
+    > example(not need for break in java 12 if you use ->, syntactic sugar):
+        switch (12)
+        {
+            case: 1, 2, 3 -> System...
+            case: 4, 5, 6 -> System...
+        }
+
+Loops:
+    > foreach loop:
+        int[] arr = new int[] {1, 3, 4};
+        for (int i: array) {
+            
+        }
+
+Bonus:
+    > small number (up to 128) are cached
+
+Homework:
+    > 
