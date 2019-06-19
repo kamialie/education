@@ -25,6 +25,7 @@
 - fun stuff:
   + https://medium.com/game-dev-channel/что-можно-уместить-в-4-килобайта-bcd99daf4d9
   + http://www.braingames.ru/
+  + https://www.youtube.com/watch?v=0ZGbIKd0XrM
 
 - OS:
   + https://en.wikipedia.org/wiki/Andrew_S._Tanenbaum

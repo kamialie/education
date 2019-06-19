@@ -89,3 +89,37 @@ Strings - temporary summation
         two parameters are ommitted the whole string is appended
     > str.append(integer, char) - appends specified char integer times; append
         method also returns new string
+    > str.push_pack(char) - append character
+    > str.insert(location_index, str2) - insert method, 3rd and 4th arguments
+        can specify substring to insert based on str2 parameter(index, length)
+    > str.insert(location_index, int_times, char) - insert char, second param
+        specifies how many times
+    > str.assign(int_times, char) - assigns completely new value
+    > str.replace(start, length, str2, start_sub, length_sub) - last 2 params
+        can be ommitted to use the whole str2
+    > str.erase(start, length) - remove substring; start defaults to 0, length -
+        to original length
+    > str.swap(str2) - swaps contents of variables(swaps pointers to strings)
+
+Name spaces
+    > cout and endl are part of std namespace
+    > '::' - scope resolution operator, qualifies names and binds them with their
+        homespace:
+            home_namespace :: entity - identify names, if didn't add using namespace std
+            std::cout, std::endl
+    > namespace name_of_space{} - define a name space; any entiry inside brackets,
+        will be bound to this namespace
+    > using namespace name_of_space - used outside block affects
+        the code after it till the end of source file; can add multiple, but
+        should not lead to ambigious identfiers(same name in two scopes);
+        if used inside block, ends in the same place that block does
+    > namespace may be extended by defining it more than once, can also be placed
+        in separate files
+    > using name_of_space::entity - introduce just one entity from a namespace;
+        can't cause ambiguity
+    > namespace {} - anonymous namespace; implicitly and automaticly used in a
+        source file wher eits definition is visible
+    > namespace new_name = old_name - namespace aliasing; assigning new name to
+        a newspace, both names are valid; only recognized in the source file
+        where the act of renaming has occured; should be placed after definition
+        (cant be inline with definition)
