@@ -63,6 +63,7 @@ Loops:
         for (int i: array) {
             
         }
+    > assigning items wont affect original array
 
 Bonus:
     > small number (up to 128) are cached

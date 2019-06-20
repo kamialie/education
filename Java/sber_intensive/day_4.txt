@@ -1,0 +1,29 @@
+Access modifiers
+    > public, private, protected, default
+    > default is the default access modifier - accessible within the package
+    > public - accessible for all
+    > protected - accessed by children(can also be outside package) and inside
+        one package(by all)
+    > default - accessible inside one package
+
+Final, static
+    > final - for class means class can not be extended, inherited anymore;
+        for variables means value can not be changed
+    > static exists outside all objects and is one for all
+
+Anynoumous class
+    > without name, can inherit class and use interface
+    > create anynoumous class and its object at once
+    > usage - inside methods(almost like lymbda)
+    > cant make anynoumous constructor
+    > arguments defined in class definition are passed to its constructor
+
+Nested class
+    > defined as field of another class:
+        - nested inner class
+        - method local inner class
+        - static nested classes or member of outer class)
+        - anynoumous inner class
+
+Operator instanceof 
+    > object instanceof TypeClass - return true or false
