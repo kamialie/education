@@ -1,0 +1,76 @@
+Exceptions
+    > java.lang.Throwable - parent of all exceptions, available methods:
+        - String getMessage()
+        - StackTraceElement[] getStrackTrace()
+        - void printStack
+    > ierarchy:
+        1) Error(StackOverFlow, OutOfMemoty, etc) - unchecked
+        2) Exception
+            - RunTimeException(NullPointerException, Arithmetic, IndexOufOfBounds, etc) - unckecked
+            - Other exceptions
+    > exception types:
+        - checked - are expected (like outer connection - server may not be available),
+            local, normal work may be recovered
+        - unchecked - not expected, external or internal, work can not be recovered
+    > throw stop normal execution and runs exception handler(looks for suitable
+        handler from top to bottom on function call stack)
+    > try/catch block (put Throwable in catch parameter to catch any exception):
+        try {
+            
+        } catch (Exception e) {
+            
+        }
+    > if method want to throw exception to the next method on stack:
+        public void ride() throws EndRoadException {}
+    > catch multiple exceptions (started from java 7):
+        catch (Exception1 | Exception2 e)
+    > finally - always executed after try/except block - goes after try and all
+        catch:
+            try {
+                
+            } finally {
+                
+            }
+    > if finally cathes another exception, exception is try block is lost(suppressed):
+        try {
+            throw new Exception("A");
+        } finally {
+            throw new Exception("B");
+        }
+    > e.addSuppress(Exception) - to handle second exception before throwing it,
+        thus it will also contain suppressed exception(first)
+    > also finally can override try:
+        try {
+            return true;
+        } finally {
+            return false;
+        }
+    > try with resources(resources(classes) must implement java.lang.AutoClosable,
+        implement close() method):
+            try (InputStream is new FileInputStream(...))
+    > exception chain(inner exception can be accessed by getCause() method), can
+        be usefull if you dont want to add Exception in method signature, rather
+        incapsulate it in known one:
+            try {
+                
+            } catch (Exception1 e) {
+                Exception2 exception = new Exception2;
+                exception.initCause(e);
+                throw exception;
+                // or just one line - throw new Exception2("other exception", e)
+            }
+Java Logging API
+    > java.util.logging - package)
+    > levels - INFO, WARNING, SEVERE:
+        logger.setLevel(Level.INFO);
+        logger.fine("");
+        logger.log(Level.INFO, "message");
+    > log handlers: java.util.logger.ConsolerHander, ...FileHandler
+    > different formats
+    > different logging technologies: Log4J, JCL, Logback, SLF4J
+
+Debugging
+    > right-click on break point to assign condition
+    > drop frame - add new stack - go to the method call
+    
+        
