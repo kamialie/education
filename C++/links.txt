@@ -1,1 +1,4 @@
 https://habr.com/ru/post/348198/ - lvalue and rvalue
+books:
+    “The C++ Programming Language” - Bjarne Striusrup
+     “Effective C++.” - Scott Meyers

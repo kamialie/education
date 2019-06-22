@@ -1,0 +1,26 @@
+Defining class inheritance
+    > define a subclass Y from superclass X(visibility specifier is optional),
+        if more than one class, list them using commas:
+            class Y:{visibility specifier}X{...};
+    > define a subclass, so that superclass's public components are available
+        in subclass; private components remain private (if specifier is ommitted,
+        it is assumed to be private, which means public components of parent
+        class turn to private):
+            class Sub : public Super {};
+    > protected - (keyword) behaves like public, when used by any of the
+        subclasses (publicly inherited) and is private for the rest of the world
+
+Classes, inheritance and type compatibility
+    > objects derived from classes which lie in different branches of the
+        inheritance tree are always incompatible
+    > objects of the superclass are compatible with objects of subclass(but wont 
+        have access to a subclass method), while objects of subclass are not
+        compatible with objects of the superclass:
+            Superclass *ptr = new Subclass(); - pointer to Superclass can serve
+                as a pointer to subclass object
+    > static cast - operator that foreces compiler to use target_type name, when
+        evaluation the value of an_expression(temporarily will gain its abilities):
+            static_cast<target_type>(an_expression);
+            Pet *a_pet = new Cat("Tom");
+            static_cast<Cat *>(a_pet) -> MakeSound();
+    > dynamic cast - later

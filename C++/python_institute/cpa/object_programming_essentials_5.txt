@@ -1,0 +1,99 @@
+Basic concept
+    > class Name_of_class {} - class definition
+    > Name_of_class new_object() - object creation(parenthesis can be ommitted,
+        parameterless constructor will be called)
+    > class Name_of_subclass : Name_of_class - sub-class definition
+
+Anatomy of class
+    > access modifiers:
+        - default access modifier - private
+        - public - accessible to all users of the class
+        - private - only within class
+    > can place function definition either inside or outside the class (if outside
+        it was declared inside)
+    > if a function introduces an entity of the name identical to any of the
+        class components, the name of the class component if overriden; It can
+        only be accessed by the qualification with the home class name:
+            Class::value = value;
+    > this - keyword(may not be overriden, should not be declared explicitly),
+        is a pointer to the current object; object component then can be
+        accessed by one of two ways:
+            (*p).component or
+            p->component
+    > return_type class_name::function_name(parameters){} - function body outside
+        class, has the same access and overriding rule as inside class function
+    > class functions may have default parameters and be overloaded as well
+    > function with the name identical to its home class is a constructor;
+        must not have any return type, may be overloaded; can not be directly
+        invoked; cannot not be accessed explicitly like Class::Class or
+        object.Class()
+    > copying constructor - implicitly invoked when declaration is followed
+        by an initiator(Class object = object1) or declaration specifies
+        a constructor suitable for the declaration or when a particular 
+        object is transferred to a function as a value-passed actual 
+        parameter(Class object(object1)):
+            Class(Class const &source) {}
+        If copying constructor does not exist, its content will be copied
+        "field by field"
+    > stack memory (for example object creation like the following - Class object())
+        is automatically freed when function finishes its life; explicitly
+        allocated memory (for example with operator new), does not get automatically
+        freed.
+    > destructor - is used to free explicitly allocated memory, which is "held"
+        inside object; class named X, has a destructor named ~X; cannot have
+        any parameters; shouldn't be invoked explicitly:
+            ~Class(void){}
+    > delete keyword - frees explicitly allocated memory
+
+Static components
+    > varialbes are either automatic (created and destroyed automatically) or
+        static (existing continuously); all variables are automatic by default
+    > static keyword forces variable to be created during "program prologue"
+        and be destroyed after program completion ("program epilogue"):
+            static int variable;
+    > Class can have static components which will exist throughout whole program;
+        only one instance (of field or method) will be created - objects share it;
+        non-const value must be initialzed outside a class:
+            int Class::Static = 0;
+        Can also be accessed through object, if it publicly available:
+            object.Static;
+        Can not be accessed inside functions and from objects, if declared as
+            static:
+                Class::Static = 1; or
+                object.Static;
+        Static function can be called from the class as well:
+            Class::StaticFunction();
+    > Static function accessig non-static is not possible, as it requires an
+        object to exist; the rest 3 cases are possible
+
+Pointers to objects
+    > automatic varialbe (including object created without new keyword) are
+        allocated in Stack
+    > objects created on demand (new keyword) are allocated in heap, and can be
+        accessed using arrow unless first being dereferenced:
+            object->value = 1;
+    > static entities accessed at the class level using '::' operator behave as
+        usual
+    > an object of any class may be the field of an object of any other class -
+        constructors of inner objects are invoked before the outer one
+    > to declare the use of non-default constructor (parameterless) for objects
+        inside a class (invocation follows the order of declaration, not the 
+        order they were listed in constructor):
+            class Class {
+                Class(...):inner_field_constr1(...), inner_field_constr2(...) {
+                    
+                }
+            }
+    > when constructor is devided between declaration and definition the list of
+        alternative constructors should be associated with definition, not the
+        declaration:
+            class X {
+                public:
+                    X (int x) {}
+            };
+            class Y {
+                X x;
+                public:
+                    Y(int x);
+            };
+            Y::Y(int x) : x(1) {};

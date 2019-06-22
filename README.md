@@ -10,6 +10,8 @@
 
 - education sources:
   + https://tproger.ru/curriculum/devops/
+  + https://www.codewars.com/users/g964
+  + https://www.youtube.com/channel/UCZ-sv20iKVXtQVR4epbmz8A/featured
 
 - interesting articles:
   + https://habr.com/post/270009/
