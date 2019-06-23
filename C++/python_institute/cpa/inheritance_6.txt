@@ -9,6 +9,10 @@ Defining class inheritance
             class Sub : public Super {};
     > protected - (keyword) behaves like public, when used by any of the
         subclasses (publicly inherited) and is private for the rest of the world
+    > visibility specifiers:
+        - public - leaves everything as is
+        - protected - makes public protected
+        - private - makes everything private
 
 Classes, inheritance and type compatibility
     > objects derived from classes which lie in different branches of the
@@ -24,3 +28,124 @@ Classes, inheritance and type compatibility
             Pet *a_pet = new Cat("Tom");
             static_cast<Cat *>(a_pet) -> MakeSound();
     > dynamic cast - later
+
+Polymorphism and virtual methods
+    > when a subclass declares a method of the name previously known in its
+        superclass, the original method is overriden; the effect of overriding
+        may be reversed (voided) by static_cast operator in reverse (downcasting - 
+        treat pointer to superclass as a pointer to subclass, uppercasting - 
+        same vice versa)
+    > when object of subclass is assigned to pointer that is explicitly declared
+        as superclass, overriding doesn't take place
+    > polymorphism - method to redefine the behaviour of a superclass without
+        touching its implementation 
+    > "virtual" keyword placed in front of the method in superclass, forces the
+        method to be replaced (redifined) at the level of the original class, if
+        there is a definition of the same name in subclass; replacement takes
+        place when subclass is created(object is created); virtual method will
+        produce the same result even from superclass pointer, as it has been 
+        completely replaced;
+
+Objects as parameters and dynamic casting
+    > passing an object as a function parameter:
+        - by value - 'variable' both in parameters of function definition and
+            in parameters of function invocation; object outside will not be 
+            affected
+        - by pointer - '*variable' in parameters of function definition and either
+            pointer is created in calling function and is passed as a variable
+            or '&variable' in function invocation
+        - by reference - '&varaible" in parameters of function definition and
+            regular object or dereference pointer (*variable) passed as parameter
+            of function invocation
+    > dynamic_cast operator(can only be used on polymorphic classes - containing
+        at least one virtual method - it is a tool to check if object is an
+        istance of a target type; RTTI):
+            - in the following form returns valid pointer, if conversion is possible
+                (if compiler identifies an object of pointer_type  or any of its 
+                subclasses), or NULL, if it is not:
+                    dynamic_cast<pointer_type>(pointer_to_object) = ptr;
+            - in the following forms returns newly transformed reference, which may 
+                be used like an ordinary l-value(no need to assign it to a variable
+                in order to use it); howerver you cant check the result(may crash):
+                    dynamic_cast<reference_type>(reference_to_object);
+                    void function(Pet &pet) {
+                        dynamic_cast<GermanShepherd &>(pet).DoSmth();
+                    }
+    > https://www.learncpp.com/cpp-tutorial/12-9-dynamic-casting/ - about dynamic_cast
+    > dynamic_cast uses RTTI with has pretty significant space performance cost
+        (some compilers allows to turn it off as an optimization)
+    > since C++ cant return null reference, excepton is thrown on casting failure
+        - use try/catch for check
+
+Various supplements
+    >> adding any constructor (copying, parameter) overrides default, thus it
+        wont be called implicitly!
+    > if class has values stored in newly created allocated memory(new keyword)
+        and pointer that points to it, implicit copying constructor will simply
+        copy the pointer to new object, thus two objects are going to share one
+        variable - add explicit copying constructor that will make sure to make
+        new allocation and copy value from initial object to it
+    > passing object by value actually calls copying constructor first to create
+        a copy to be passed
+    > to prevent the use of implicit copying constructor, add explicit one to
+        private part of the class
+    > copying an object of the class that contains objects of other classes
+       also invokes inner copying constructors; an explicit outer constructor
+       will not use inner constructors, thus they need to be added explicitly:
+            Compo(Compo &src): f1(src.f1), f2(src.f2){}
+
+The const keyword
+    > const int size = 100 (or int const size = 100) - constant varialbe
+        declaration (read-only) - protects variable from being modified, size++
+        or size = other_variable; declaration always has to be followed by
+        initialization (const int size; - is illegal)
+    > aggregates(structures and arrays) can be declared as const too, but you
+        cant treat them as litarals??
+    > int * const ptr = 2 - constant pointer declaration; pointer itself cant
+        be modified, while entities pointer by this pointer can
+    > const int *ptr = 2 - pointer to constant declaration; pointer can be
+        modified, but not entities pointed by
+    > const int * const ptr = 2 - constant pointer to constant declaration;
+        nothing can be modified
+    > int fun (const int n) - (modification of n wont propogate outside anyways)
+        n cant be modified inside funciton
+    > int fun (const int &n) - promise not to modify the actual parameter
+    >> C-stype literal are commonly stored in the read-only memory:
+        int main(void) {
+            char *str = "Hello!";
+            return (0);
+        }
+    > any function can declare its result as const:
+        const char *fun(void){retun "cation!";} - can only be assinged to a
+            variable tha t guarantees safety(const char *str = fun())
+    > any class may declare its field as const - bounded to a single object;
+        must be initialized inside an initialization within any of the class
+        constructors(any other way is prohibited!)
+    > any object of any class may be declared as const; object mustn't be modified
+        during its life - invoking any methods as well as changing fields is
+        prohibited
+    > any of the class's methods may declare themselves as const; a promise not
+        to change the sate of an object - in conjunction with previous example
+        constant object can now call this method:
+            type_name(parameters) const; - in declarations
+            type_name(parameters) const {}; - in definitions
+
+Friendship in the C++ world
+    > friend class - the class that can use and invoke private elements of another
+        class; declaration can be placed anywhere (public, private, protected),
+        but has to be outside any function or aggregate; works only one way - 
+        class declares another class to be its friend:
+            class A{
+                friend class B;
+            }
+    > more rules:
+        - class can have many friends
+        - class can be friend to many classes
+        - friend's friend isn't my friend
+        - friendship isn't inherited - subclass must define its own friendship
+    > friend function - allow function to have full access; friendship declaration
+        must have a complete prototype of friend function(including return type
+        and parameters); can recognize global function as well as member
+        functions(methods):
+            friend void C::dec(A&) - friend method of class C
+            friend void DoIt(A&) - friend global function
