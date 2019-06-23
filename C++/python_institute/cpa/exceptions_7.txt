@@ -1,0 +1,34 @@
+To err is to human
+    > EOF - symbol indicating no more data to process, end of file:
+        ^D [Ctrl-D] - Unix/Linux
+        ^Z [Ctrl-Z] - Windows
+    > cin coupled with >> operator returns a reference to itself; if there is 
+        no data in input stream or the data is invalid, the cin stream returns 
+        a null reference
+    > exception - base for all exceptions, both predefined and user-defined:
+        - logic_error - exceptions connected to program logic (algorithm,
+            implementation, data validily, cohesion); thrown at a higher level
+            of program abstraction
+        - runtime_error - unexpected accidents(for example lack of memory)
+        #include <exception> - needed to make use of classes above; identifiers
+        are accessible in std namespace
+    > exception class defines only the following:
+        - constructor
+        - virtual destructor - originally empty
+        - virtual function "what" - returns C-style string describing the cause
+            and nature of exception:
+                virtual char* what()
+    > division by zero in C++ doesn't throw an exception
+    > try block marks part of the code in which exceptions may occur:
+        try {
+            ...
+        }
+    > catch block catches the specified exception, can be either litaral (int, 
+        string) or by identifying the class it belongs to (or any other class 
+        derived from the exception class?):
+            catch (string &anyproblem) {...}
+            catch (exception &anyproblem) {...}
+    > throw keyword - throws a literal? or an object of a class as an exception;
+        need to specify constructor in later case:
+            throw 999;
+            throw string("BYE BYE");
