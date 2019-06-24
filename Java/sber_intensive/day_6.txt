@@ -1,0 +1,5 @@
+if runtime exception no need to add to fucntion signature
+
+Generic
+    > public class Stack<T extends Number> - limit class to accept particular
+        class as input
