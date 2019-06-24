@@ -32,3 +32,21 @@ To err is to human
         need to specify constructor in later case:
             throw 999;
             throw string("BYE BYE");
+
+Throw statement in detail
+    > variable inside catch block is local (automatic) variable - hides former
+        declaration:
+            string str;
+            try {
+                throw string("");
+            } catch (string &str) {...}
+    > throw statement causes a function to execute its epilogue (cleaning
+        procedure); throw is obligated to throw a value
+    > throw Class("exception") - causes a creation of a new object of class Class;
+        appropriate constructor is called before the function ends its life(ends
+        its life only in appropriate catch block); 
+    > function, which throws an exception, may (doesn't have to) specify types
+        of entities being thrown(may as well be part of declaration in header):
+            void fun(void) throw (x1, x2...) - indicates that function throws
+                exceptions of type x1,x2...; empty parethesis is a promise that
+                function does not throw exceptions
