@@ -48,5 +48,73 @@ Throw statement in detail
     > function, which throws an exception, may (doesn't have to) specify types
         of entities being thrown(may as well be part of declaration in header):
             void fun(void) throw (x1, x2...) - indicates that function throws
-                exceptions of type x1,x2...; empty parethesis is a promise that
+                exceptions of type x1,x2...; empty parenthesis is a promise that
                 function does not throw exceptions
+    > if promised type isn't thrown, compilation still goes ok, but execution
+        causes error message to appear 
+    > if specification shows no exceptions to be thrown, compilation produces
+        warning
+    > it is obligatory to specify all of possible exception that function can
+        throw, even if they come from different function's body (for example
+        function is calling another, and they other one throw some exception -
+        it should be specified in outer function as well, if it doesn't handle it,
+        and throws it further)
+    > if any unxpected (incompatible with specification) exception appears, a
+        unxpected() runtime function is invoked - it terminates the program and
+        emits the diagnostic message(can not be modified, but can add additional
+        function calls before termination)
+    > to do smth right before program terminates (in case of unxpected error
+        occurence):
+        - make a parameterless function of type void
+        - invoke a function set_unxpected(name_of_your_function) - before
+            about everything
+
+Categorizing exception 
+    > explicit - keyword; may be placed in front of class's constructor declaration,
+        protecting it from being used in any context requiring the use of implicit
+        conversions (for example A a = 1 is assumed to be A a(1)), thus constructor
+        can only be used in an explicit way;
+    > A fun(void) {return 0;} - will also cause error, as it is going to explicitly
+        assign 0 to object of class A, as it ws mention above
+    > need to include <stdexcept>
+    > exception class is a base for all other predefined exceptions; contains
+        method what() which returns a pointer to to the C-style string
+        describing the nature of exception
+    > logic_error class (from exception) designed to represent all exceptions
+        caused by a violation of the rules imposed  by the logic of the
+        algorithm/program; constructor allows pack a string inside this class
+    > domain_error class (from logic_error) - all exceptions caused by data
+        exceedining the permissible range
+    > invalid_argument class (from logic_error) - passing improper arguments
+        to methods or functions or constructors
+    > length_error class (from logic_error) - illegal values to specify size/length
+        of data aggregates(for example extend a string to unaccepatable length)
+    > out_of_range(from logic_error) - use of ollegal indexes/keys while
+        accessing numbered/keyed data collection
+    > runtime_error class (from exception) - caused by circumstances which may
+        occurduring the execution of the program; generally unpredictable
+    > range_error class (from runtime_error) - obtaining computational results
+        exceeding the permissible range
+    > overflow_error class (from runtime_error) - obtaing results too large
+        to represent any useful value(in the domain sense)
+    > underflow_error class (from runtime_error) - same as previous but too small
+    > bad_alloc class (from exception) - on runtime when can not allocate memory (for
+        example new operator)
+    > bad_exception class (from exception) - thrown when unpromised exception
+        is thrown in function; proper handling:
+        - specify bad_exception in function's throw list
+        - define and set unexpected handler function
+    > empty throw statement statements re-throws received exception
+
+Catching exceptions
+    > catch instruction is only able to catch exceptions that are compatible
+        in type with catch header; the following can catch any exception, but
+        can neither identify it nor make any use of it(intended for final
+        cleanings):
+            catch (...) {};
+    > catch-all (ellipsis, above example) branch must come last
+    > the responsibility of handling exceptions may be divided - a function
+        between main and target functions may catch a specified exception and
+        handle them there; it also may be shared by re-throwing exception:
+            throw; - re-throw last exception anonymously
+            throw some_class() - specify the same exception or even another one 
