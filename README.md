@@ -33,6 +33,9 @@
   + https://hackerone.com/reports/403417
   + https://store.steampowered.com/app/605230/Grey_Hack/
   + https://www.hacker101.com/resources#2
+  + Начинаете решать CTF или лабы (https://www.hackthebox.eu/), понимаете чего именно Вам не хватает (Python, Crypto, Java, ...) и тогда ищите материал. 
+Искать можно в классической/академической литературе, либо в предыдущих решениях аналогичных задач (writeups/райтапы), например, тут https://ctftime.org/writeups
+Для чтения перед сном вполне сгодится журнал Хакер ( https://t.me/xakep_ru / https://t.me/hacker_frei )
 
 - OS:
   + https://en.wikipedia.org/wiki/Andrew_S._Tanenbaum
