@@ -29,6 +29,11 @@
   + http://www.braingames.ru/
   + https://www.youtube.com/watch?v=0ZGbIKd0XrM
 
+- cybersecurity related
+  + https://hackerone.com/reports/403417
+  + https://store.steampowered.com/app/605230/Grey_Hack/
+  + https://www.hacker101.com/resources#2
+
 - OS:
   + https://en.wikipedia.org/wiki/Andrew_S._Tanenbaum
 
