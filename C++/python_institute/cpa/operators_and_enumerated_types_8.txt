@@ -1,0 +1,23 @@
+Overloading operators - basics
+    > classification:
+        - unary, binary, ternary
+        - prefix, postfix, infix
+    > in C++ it is possible to overload existing operators (can create new), but
+        cant redifine existing meaning
+    > operator function may be implemented as:
+        - method of a class - implicitly assumed that an object of that class is
+            one of the required operator's arguments
+        - "standalone" - function must explicitly specify the types of its
+            arguments
+    > [return_type] operator[operator] (argument) - operator overloading, first 
+        word is a keyword, second is one of existing operators is C++(must be 
+        glued together); stack push method as operator example:
+            void Stack::operator<< (int v) throw (stack_overflow) - should be
+                able to throw the same type of exception as the method it uses
+                inside
+    > to make a chained call possible (like values passed to cout) return the
+        reference to the object; in stack example it is:
+            Stack& operator>> (int v) throw(stack_overflow);
+    > to make same stuff as above without touching source code of the class,
+        add a standalone operator definition my specifying a reference to an
+        object of the class as the first argument
