@@ -118,3 +118,10 @@ Catching exceptions
         handle them there; it also may be shared by re-throwing exception:
             throw; - re-throw last exception anonymously
             throw some_class() - specify the same exception or even another one 
+
+Exceptions in action
+    > header file - contains declarations (header.h)
+    > #ifndef directive checks if compile-time symbol is defined (if yes, skips
+        nested block till #endif)
+    > #define _SMTH_ - defines symbol
+    > #include "header.h" - include in source files
