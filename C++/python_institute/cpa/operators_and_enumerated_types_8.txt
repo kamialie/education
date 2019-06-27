@@ -21,3 +21,16 @@ Overloading operators - basics
     > to make same stuff as above without touching source code of the class,
         add a standalone operator definition my specifying a reference to an
         object of the class as the first argument
+
+Enumerated types
+    > declaration:
+        enum weekday {SUNDAY, MONDAY, TUESDAY...} - name of enumerator is weekday,
+            compiler assigned values from 0 to 6 (also implicitly promoted to int,
+            when used in context requiring integral values - '+', '-' operators)
+    > in order to assign a value to variable of type enum you need to cast by
+        one of the following ways(data will be lost):
+            weekday day = static_cast<weekday>(0);
+            weekday day = (weekday)0;
+    > to assign custom values add equal sign followed by a value, need to specify
+        first two - the following will be assumed:
+            enum Symbols {ALPHA = -1, BETA = 1, GAMMA};
