@@ -36,6 +36,7 @@
   + Начинаете решать CTF или лабы (https://www.hackthebox.eu/), понимаете чего именно Вам не хватает (Python, Crypto, Java, ...) и тогда ищите материал. 
 Искать можно в классической/академической литературе, либо в предыдущих решениях аналогичных задач (writeups/райтапы), например, тут https://ctftime.org/writeups
 Для чтения перед сном вполне сгодится журнал Хакер ( https://t.me/xakep_ru / https://t.me/hacker_frei )
+  + https://m.habr.com/ru/company/mailru/blog/282700/
 
 - OS:
   + https://en.wikipedia.org/wiki/Andrew_S._Tanenbaum

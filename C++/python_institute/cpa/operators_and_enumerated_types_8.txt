@@ -34,3 +34,55 @@ Enumerated types
     > to assign custom values add equal sign followed by a value, need to specify
         first two - the following will be assumed:
             enum Symbols {ALPHA = -1, BETA = 1, GAMMA};
+    > more than one value may be assigned the same value, example (A and C = 1):
+        enum letters {A = 1, B = 0, C, D};
+    > all values must be unique(even if assigned the same value)
+    > enum type symbols must be unique across a namespace - one solution may be
+        to put two enums in different classes
+    > overloading a plus operator so it acts accordingly for weekdays enum:
+        enum weekday {SUNDAY, MONDAY, TUESDAY, WEDNESDAY...};
+        weekday operator+(weekday day, int days) {
+            return weekday((int(day) + days) % 7);
+        }
+
+Overloading operators in detail
+    > number of arguments in strict based on context overloading is used:
+        - global (standalone) function - 1 or 2 arguments (unary or binary)
+        - class method - 0 or 1 arguments (object of the class is recignized as
+            one of the required arguments - usually the left one)
+    > can't:
+        - define new operators
+        - change priority of the redefined operators
+        - overload operators working with standard data types
+    > overloadable operators:
+        1. + - * / % - all binary, may be both implemented in global and member
+            function
+        2. ^ | & ~ << >> - all binary, except ~; may be both implemented in
+            global and member function
+        3. = - can only be implemented as a method and return a reference to an
+            object or l-value in general
+        4. == != > >= < <= - all binary, may be both implemented in global and
+            member function; return value is boolean; overloading one of them
+            doesn't cause any effect on another
+        5. ! && || - binary, except ! - may be both implemented in global and
+            member function; return type is boolean; the original operators use
+            use short-cut evaluation tactic - ommit the evaluation of the right 
+            argument if left one is sufficient to determine final result - means
+            if arguments are function, right one might not be invoked at all;
+            overloaded logical functions cant make such a distinction
+        6. += -= *= %= /= &= |= ^= >>= <<= - can only be implemented as methods,
+            return a reference to an object or an l-value in general; non of
+            them are implicitly derived from regular counterparts (overloading
+            + has no effect on +=); have only one argument and directly modify
+            home object; should return a reference to the modified object to
+            allow chaining
+        7. ++ -- - (prefix) can only be implemented as methods and return
+            a reference to  an object or an l-value in general; has to be
+            implemeted as parameterless and return a reference to the modified
+            object
+        8. ++ -- - (postfix) same as prefix, but has to be implemeted as
+            one-parameter function, so that compiler can distinguish between
+            prefix and postfix; should return unmodified object (since postfix
+            has effect after operations are performed)
+
+
