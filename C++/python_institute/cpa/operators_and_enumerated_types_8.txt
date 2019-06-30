@@ -84,5 +84,16 @@ Overloading operators in detail
             one-parameter function, so that compiler can distinguish between
             prefix and postfix; should return unmodified object (since postfix
             has effect after operations are performed)
-
-
+        9. [] - can only be implemented as methods and return a reference to 
+            an object or an l-value in general; not commutative anymore, may
+            accept indexes when they are not integers, ints can be negative,
+            operator needs to find a reference to the data; has to be declared
+            as one-parameter operator - index comes from outside, object is the
+            second argument
+        10. () - can only be implemented as methods and return any value, any
+            number of parameters, one class may have more than one overloaded
+            operator () function
+        11. & * - may be both implemented in global and member function; return
+            any type; used to create pseudo-pointers (small pointers);
+        12. more like ',', ->, new, new[], delete, delete[], typename
+    > non-overloadable: ?:, ., ::, sizeof
