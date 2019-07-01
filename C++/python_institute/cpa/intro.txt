@@ -77,7 +77,7 @@ Input and output
         requires header file iomanip (special cases do not)
         #include <iomanip>
         cout << stebase(16) << number;
-    > count is able to recognize the actual type of its elements:
+    > cout is able to recognize the actual type of its elements:
         char Char = 'X';
         cout << Char << " " < (int)Char;
     > endl manipulator works just like adding '\n'
