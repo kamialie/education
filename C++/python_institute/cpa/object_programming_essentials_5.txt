@@ -84,6 +84,12 @@ Pointers to objects
                     
                 }
             }
+    > class fields can be also initialized in the way above (inherited fields 
+        can not be accessed in the following way):
+            class Class {
+                int x;
+                Class() : x(1) {}
+            }
     > when constructor is devided between declaration and definition the list of
         alternative constructors should be associated with definition, not the
         declaration:
