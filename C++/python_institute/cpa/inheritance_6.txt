@@ -59,7 +59,7 @@ Objects as parameters and dynamic casting
             of function invocation
     > dynamic_cast operator(can only be used on polymorphic classes - containing
         at least one virtual method - it is a tool to check if object is an
-        istance of a target type; RTTI):
+        instance of a target type; RTTI):
             - in the following form returns valid pointer, if conversion is possible
                 (if compiler identifies an object of pointer_type  or any of its 
                 subclasses), or NULL, if it is not:
