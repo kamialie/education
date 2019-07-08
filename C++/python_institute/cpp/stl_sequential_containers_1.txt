@@ -118,3 +118,42 @@ Sequence containers
         no [] operator, additional memory consumption to keep linking info
 
 Iterators
+    > two most common - random access, bidirectional
+    > every container is made up of 4 members (types) related to iterators:
+        - iterator - read/write iterator type
+        - const_iterator - read-only iterator type
+        - reverse_iterator - reverse iterator type
+        - const_reverse_iterator - as above read only
+        Members have the same names throughout the collections, but are different
+        in each container type(for example vector and deque support random access,
+        while list supports bidirectional iterators)
+    > initialization of iterators - 4 methods that can do that:
+        - begin() - returns iterator that point to the first element on the collection
+        - end() - returns the iterator that refers to past-the-end-element (for
+            collection of n elements return n + 1 element that is non-existant)
+        - rbegin() - return last element of the collection
+        - rend() - returns iterator that refers to the element before the first
+            one
+        Each comes in 2 variations, normal and const(const iterator cannot be
+        further modified) - for example:
+            iterator begin();
+            const_iterator begin () const;
+    > normal iterator example:
+        #include <deque>
+        #include <iosteam>
+        using namespace std;
+
+        int main() {
+            deque <int> d(10);
+            
+            int i = 1;
+            deque<int>::iterator itD = d.begin();
+            for (itD = d.begin(); itD != d.end(); ++itD, ++i) {
+                *itD = i;
+            }
+            for (itD = d.begin(); itD != d.end(); ++itD) {
+                cout << *itD << " ";
+            }
+            cout << endl;
+            return (0);
+        }
