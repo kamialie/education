@@ -7,6 +7,7 @@
   + https://ru.wikipedia.org/wiki/Design_Patterns
   + https://ru.wikipedia.org/wiki/GRASP
   + https://habr.com/ru/post/348286/
+  + https://ru.m.wikipedia.org/wiki/SOLID_(объектно-ориентированное_программирование)
 
 - education sources:
   + https://tproger.ru/curriculum/devops/

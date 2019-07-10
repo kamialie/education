@@ -157,3 +157,17 @@ Iterators
             cout << endl;
             return (0);
         }
+
+Operations(methods)
+    > size() - returns number of elements which are currently stored inside
+        a collection
+    > max_size() - returns maximum physical capacity of a container (depends on
+        STL implementation, OS...), is constant in the same environment
+    > empty() - returns boolean if container is empty(better choice than size()
+        to check if container is empty - faster)
+    > resize(size_type sz, T c = T()) - changes the size of a container by
+        either causing it to grow or shrink (controlled by sz parameter); sz is
+        the exact new size (unsigned)
+        - new size is greater than old - new elements are added, which are created
+            by copying parameter c, or if not provided by default value
+        - deleting extra elements - might cause destructors to be called
