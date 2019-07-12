@@ -171,3 +171,81 @@ Operations(methods)
         - new size is greater than old - new elements are added, which are created
             by copying parameter c, or if not provided by default value
         - deleting extra elements - might cause destructors to be called
+    > vector<T>::capacity() - returns total emount of space for elements
+        currently allocated for particular vector(usually when reallocation is
+        needed, that is capacity() check shows no more available space, new 
+        allocation is made as old capacity + 2 for better performance)
+    > vector<T>::reserve(size_type n) - n is the minimum value of capacity to be
+        requested; method allocates additional space for elements inside a vector,
+        if newly requested capacity is greater than current, reallocation is
+        enforced (new capacity is at least greater than requested); Used for
+        preparing vector to accept new elements and eliminate the need for
+        reallocation for each element 
+    > access operators:
+        - front() - returns reference to the first element in a conainers, might
+            be normal or constant; method can become the target if the assignment
+            - the l-value
+        - back() - same as front(), but returns reference to the last element
+        - operator[n] (vector and deque only) - returns reference to the element
+            of index n; valid range - 0 to (size - 1); accessed element can be
+            used as l-value and r-value; doesn't check for proper range, can
+            only change an already stored element, thus cant change the size of
+            the container
+        - at(n) (vector and deque only) - returns reference element to the element
+            of index n; the only difference with [] operator is check for valid
+            range - if fails exception is thrown
+    > assign(size_type n, const T& u)
+        assign(InputIterator first, InputIterator second) - first, second are
+            input operators that provide a collection - assign will copy all
+            element from range, including first, excluding last; n - number
+            of element, u - value to be copied; the whole old container is 
+            dropped and deleted, as a result it's possible to have source and
+            target containers of diffirent size, resulting size is dictated
+            by parameters; in both cases new elements are obtained by
+            copying the source values
+    > iterator insert(iterator position, const T& x)
+        insert(iterator position, size_type n, const T& x)
+        insert(iterator position, InputIterator first, InputIterator last) -
+            position - the postion in the container at whick the insertion of
+            an element(or elements) to be performed (for deque and vector this is
+            RandomAccessIterator, for list this is BidirectionalIterator),
+            x - the value to be inserted, n - the number of x values to be
+            inserted, first, last - specify range of iterators to be inserted;
+            vector - if reallocation is needed, all references and iterator are
+            invalidated, deque - same as vector, unless insertion at the beginning,
+            or end, list - iterators and references remain the same 
+    > iterator erase(iterator position)
+        iterator erase(iterator first, iterator last) - returns iterator to the
+            first element after the last removed or end if last element of the
+            collection is removed; during the removal the of the element
+            destructors are called
+    > void vector::swap(vector<T, Allocator>& vec)
+        void deque::swap(deque<T, Allocator>& dqe)
+        void list::swap(deque<T, Allocator>& lst) - vec, dqe, lst - another
+            collection of the same type as this one; swaps entire content between
+            two collections of the same type, sizes may differ; after swap all
+            existing iterators are still valid, but point to different containers
+    > void clear() - removes all elements and sets size to 0, during removal
+        destructors are called
+    > void push_back(const T& x) - x is the value which will be used to create
+        a new element (by copying) inside a container; adds a value to the end
+        of the conainer and increases the size by one, however different
+        containers react differently:
+        - vector - is has enough capacity, no reallocation is performed
+        - deque - all iterators are invalidated
+        - list - all iterators are left unaffected
+    > void pop_back() - removes an element from the tail of the container
+        (destructor is called); in case of vector all iterators, pointers and
+        references referring to element are invalidated
+    > void push_front(const T& x) (deque and list only) - same as push_back, but adds
+        element to the beginning, in case of deque all iterators are invalidated,
+        list - left unaffected
+    > void pop_front() - same as pop_back(), but removes element at the beginning
+    > void slice(iterator position, list<T, Allocator>& x)
+        void slice(iterator position, list<T, Allocator>& x, iterator i)
+        void slice(iterator position, list<T, Allocator>& x, iterator first, iterator last)
+        - (list) moves elements from list x to target list; target list size
+            increases, while parameter list decreases; 3 version are as follows:
+            moves whole content, moves only one element, moves a range of elements;
+            no destruction or construction takes place
+        
