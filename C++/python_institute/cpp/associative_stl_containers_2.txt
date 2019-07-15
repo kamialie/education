@@ -1,0 +1,40 @@
+Intro
+    > Associative containers - containers in which every element stored inside
+        is accessible by a key
+    > 4 types in STL:
+        - set
+        - multiset
+        - map
+        - multimap
+    > bitset???
+
+Set and multiset
+    > header <set>
+    > signature:
+        template <class Key, class Compare = less<Key>, class Allocator = allocator<Key>> class set
+        template <class Key, class Compare = less<Key>, class Allocator = allocator<Key>> class multiset
+    > parameters:
+        - Key - type of key stored inside the set (therefore the type of elements
+            themselves)
+        - Compare - the type of comparator used to perform a comparison between
+            the set elements, in order in ensure strict weak ordering; can be
+            implemented as a two-argument function, or functional object,
+            less() is default
+        - Allocator - type of allocator used to provide storage allocation model
+    > set and multiset are associative containers where elements are keys
+        themselves
+    > strict weak ordering algorithm compares two consecutive elements using
+        the second template parameter - Compare; less<Key> uses '<' operator,
+        if particular type doesnt not support operation, a custom comparator
+        must be created and passed during the set object definition; comparator
+        should return true if the element k1 is placed before element k2 (two
+        possible prototypes of a comparator:
+        template<class Key>
+        bool cmp<Key key1, Key key2);
+
+        template<class Key>
+        struct CMP {
+            bool operator() (Key k1, key k2);
+        };)
+        If comparator arguments are passed by reference, those references must be
+        const - key immutability restriction
