@@ -1,0 +1,32 @@
+Intro to programming languages
+    # High-level languages
+        > compiler vs interpreter https://stackoverflow.com/questions/38491212/difference-between-compiled-and-interpreted-languages/38491646#38491646
+        
+Intro to C/C++
+
+Intro to C++ development : Intro to the compiler, linker, and libraries
+    # Define the problem to solve
+    # Determine how you are going to solve the problem - good characteristics:
+        - straightforward
+        - well documented
+        - built modularly (parts can be reused or changed later)
+        - robust (can recover or give useful erre message)
+    # Write the program
+    # Compile source code - first phase si checking that source code follows the
+        rules of language, second is translating .cpp files to file.o or file.obj
+    # Linking object files and libraries - linker takes 3 steps:
+        - combine all object files into single executable program
+        - link library files(precompiled code): standard library or own
+        - resolve all cross-file dependencies
+        Extra info about Makefile
+    # Testing and Debugging
+
+Configuring compiler
+    > add -pedantic-errors flag to disable compiler extensions for gcc/g++
+    > -std=c++11 to indicate what standard to support - need this for uniform
+        initialization
+
+Configuring compiler: warning and error levels
+    > -Wall -Weffc++ -Wextra -Wsign-conversion - gcc/g++ flags to increase warning
+        level
+    > -Werror - gcc/g++ flag to treat warnings as errors

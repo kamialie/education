@@ -4,3 +4,4 @@ books:
      “Effective C++.” - Scott Meyers
 educational resources:
     https://www.cprogramming.com/tutorial/stl/iterators.html
+    https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#es20-always-initialize-an-object
