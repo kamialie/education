@@ -1,0 +1,99 @@
+2.3 Intro to function parameters and arguments
+    # A warning about function argument order of evalutation
+        > C++ specification doesn't define define whether arguments are matched
+            with parameters in left to right order or right to left - no problem
+            when copying values, but when arguments are function calls, order
+            may vary
+
+2.4 Intro to local scope
+    # Local variable lifetime
+        > parameters and variables inside the function body are local variables
+        > C++ specification gives compiler a lot of flexibility to determine
+            when local variables are created and destroyed - objects may be
+            created earlier or created later for optimisation purposes; most
+            often local variables are created when function is entered and
+            destroyed in the opposite order of creation when function is exited
+
+2.6 Whitespace and basic formatting
+        > C++ is a whitespace-independent language - compiler jsut ignores any
+            whitespaces (spaces, tabs, newlines) except string literals
+        > newlines are not allowed in quoted text:
+            std::cout << "Hello
+                world";
+        > quoted text separeted by notgin but whitesapce will be contacenated:
+            std::cout << "Hello "
+                "world!";
+    # Basic formatting
+        > if a long line is split with an operator, the operator should be placed
+            at the beginning of the next line:
+                std::cout << 3 + 4
+                    + 5 + 6;
+        > allign values or comments
+
+2.9 Naming conflicts and the std namespace
+        > best practice to use explicit namespace qualifier:
+            std::cout << "Best practice!";
+
+2.10 Intro to the preprocessor
+    # Translation and the preprocessor
+        > https://en.cppreference.com/w/cpp/language/translation_phases - translation
+            phases
+        > best analogy for preprocessor is a separate program that manipulates
+            the text in each source file
+        > preprocessor directives are instructions that start with # symbol and
+            end with a new line
+    # Object-like macros with substitution text
+        > example:
+            #include <iostream>
+            #define MY_NAME "Alex"
+
+            int main(void) {
+                std::cout << MY_NAME;
+                return (0);
+            }
+    # Object-like macros without substitution text
+        > 
+    # Conditional compilation
+        > #ifdef - checks wether an identifier has been previously '#define'd,
+            if so code between the #ifdef and mathcing #endif is compiled
+        > #ifndef - the opposite of #ifdef
+    # #if 0
+        > another way for multiline comment
+
+2.11 Header files
+    # Writing own header files
+        > example:
+            #include "my_own_header_file.h"
+        > best practice to include paired header file (if it exists) to detect
+            mismatches early
+    # Angled brackets bs quotes
+        > use angled brackets to include header files that come with the compiler
+        > use double quotes for any other header files
+    # Including header files from other directories
+        > add -I path to compilation command to indicate what directory should
+            look for
+    # Headers may include other Headers
+        > best practice to include all headers explicitly
+    # Header file best practices
+        > order #includes as follows: first user-defined, then 3rd party library,
+            then standard library
+
+2.12 Header guards
+    # Header guards
+        > it is possible for two directories to have the same name header file,
+            which will cause one file to be ignored, if both are included in one
+            file, because of header guard, recommended solution is to use more
+            unique name in header guards:
+            - <PROJECT>_<PATH>_<FILE>_H
+            - <FILE>_<LARGE RANDOM NUMBER>_H
+            - <FILE>_<CREATION DATE>_H
+    # #pragma once
+        > serves the same purpose as header guard, but not all compilers support
+            it
+
+2.13 How to design your first program
+    1) define your goal
+    2) define requirements - timeline, space, memory...
+    3) define your tools, targets, and backup plan - target OS, tools, testing,
+        version control
+    4) break hard problems down into easy problems
