@@ -7,6 +7,7 @@ Reductions
     ОРД - объект релизной деятельности
     ПСИ - приемо-сдаточные испытания
     ИС - инсталиционный пакет
+    КТС - комплекс технических средств
 
 General info about DevOps
     > DevOps conveyor is sequential stages where assembly or distribution go through
