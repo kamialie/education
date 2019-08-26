@@ -9,3 +9,4 @@
 - Usefull stuff
     + https://virtualenv.pypa.io/en/latest/ - virtual environment
     + https://stackoverflow.com/questions/27835619/urllib-and-ssl-certificate-verify-failed-error - interesting answer about certification handling
+    + https://realpython.com/vim-and-python-a-match-made-in-heaven/ - setting evironment with vim
