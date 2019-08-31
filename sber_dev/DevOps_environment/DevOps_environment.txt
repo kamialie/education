@@ -1,0 +1,8 @@
+Instruments:
+    - agile-processes - Scrum and Kanban
+    - task management - JIRA
+    - documentation - Confluence
+    - code storage and inspection - BitBacket (Stash)
+    - continuous integration - Jenkins
+    - installation package storage - Nexus
+    - another code inspection - SonarQube

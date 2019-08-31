@@ -1,0 +1,45 @@
+Link to material
+    https://sbtatlas.sigma.sbrf.ru/wiki/display/SDLC/DevOps
+
+Reductions
+    AC - автоматизированные системы
+    КЭ - конфигурационный элемент
+    ОРД - объект релизной деятельности
+    ПСИ - приемо-сдаточные испытания
+    ИС - инсталиционный пакет
+    КТС - комплекс технических средств
+
+General info about DevOps
+    > DevOps conveyor is sequential stages where assembly or distribution go through
+        multiple quality gates (quality check to predict errors on late stges of
+        development)
+    > object going through uniform DevOps conveyor is automated system as a whole
+        ot its part (configuration element for example)
+    > main instument - jenkins
+
+Main stages of DevOps conveyor
+    > Continuous integration (CI) - software development practice, frequent automated
+        assemblies for early error detections; is done in development and finished
+        by creating and posting distribution in repository(Nexus) where it is
+        going to be used to CDL
+        https://sbtatlas.sigma.sbrf.ru/wiki/pages/viewpage.action?pageId=659688929
+    > Continuous delivery (CDL) - software development practice that guarantees
+        that software is always ready for deployment in production; practice
+        includes automated deployment on test environments, automated success
+        testing of admin deployment (technical and functional deployment testing),
+        passing for testing and functional, load, dynamic security testing;
+        before CDL stage Nexus repository already has app instalation package
+        (distribution), then it goes unchanged through all tests
+        https://sbtatlas.sigma.sbrf.ru/wiki/pages/viewpage.action?pageId=659689008
+    > Continuous deployment (CDP) - software development practice, automation
+        of delivery process from development to production, automation of ПСИ
+        and production deployment of automated system
+        https://sbtatlas.sigma.sbrf.ru/wiki/pages/viewpage.action?pageId=659689082
+    > Continuous testing - the main part of DevOps conveyor, where each section
+        is connected with quality gates; conveyor's job is determined as executing
+        environment development scripts and instalation package, loading and
+        executing tests and analising results; other tets are done on separete
+        stages:
+            CI - module and static testing
+            CDL - functional, regression, integration, load and dynamic testing
+            CDP - ПСИ

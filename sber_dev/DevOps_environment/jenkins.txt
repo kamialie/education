@@ -1,0 +1,1 @@
+Main instrument of continuous integration (CI)
