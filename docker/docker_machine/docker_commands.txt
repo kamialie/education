@@ -1,0 +1,46 @@
+[] - optional
+<> - custom names, etc
+
+Some docker-machine commands assume that the given operation should be run on a
+    machine named default(if it exists); using local VM named default is
+    a common pattern:
+        > config
+        > env
+        > inspect
+        > ip
+        > kill
+        > provision
+        > regenerate-certs
+        > restart
+        > ssh
+        > start
+        > status
+        > stop
+        > upgrade
+        > url
+    
+docker-machine
+    > ls - list available machines
+    > create [--driver virtualbox] <name> - create a docker machine
+    > env <name> - shows commands to run to set up environment in your current shell
+        eval $(docker-machine env <name>) - executes commands e
+    > ip <name> - get host ip address
+    > start <name>
+    > stop <name>
+    > env -u - shows what commands to run to unset all Docker variables
+        eval $(docker-machine env -u <name>) - unsets all Docker variables
+    
+
+
+docker
+    > ps -a - list all containers
+    > rm - remove containers
+    > images -a - list all images
+    > run - run a command in a new container
+        + --rm - automatically remove container when it exits
+        + --tty or -t - allocate pseudo-tty
+        + --interactive or -i - keep stdin open even if not attached
+        + --detach or -d - run container in a background
+        + --env -e variable=<value> - set environment variables
+    > inspect <name> - full info about container (ip, etc)
+    > 

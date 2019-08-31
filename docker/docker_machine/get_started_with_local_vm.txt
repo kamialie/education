@@ -14,6 +14,21 @@ Use Machine to run Docker containers
 
 Create a machine
     - open shell
-    - run 'docker-machine ls' - should output nothing, as there is not machines
+    - "docker-machine ls" - should output nothing, as there is not machines
         yet
-    - run 'docker-machine create --driver virtualbox <name>'
+    - "docker-machine create --driver virtualbox <name>" - create a machine
+    - "docker-machine env <name>" - tell Docker to talk to the new machine
+    - "eval $(docker-machine env <name>)" - connect shell to the new machine;
+        sets environment variables for the current shell that the Docker client
+        reads whick specify the TLS settings - need to do each time open a new
+        shell or restart a machine
+
+Run containers and experiment with Machine
+    - docker run - to download and run containers
+    - docker run -d -p 8000:80 nginx - run a web server in a container; is available
+        on docker-machine ip address on port 8000
+
+Start local machines on startup
+    > can put $(docker-machine env default) in shell configuration file, however
+        its only going to work if machine is already running
+    > https://docs.docker.com/machine/get-started/
