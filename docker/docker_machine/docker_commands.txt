@@ -42,5 +42,7 @@ docker
         + --interactive or -i - keep stdin open even if not attached
         + --detach or -d - run container in a background
         + --env -e variable=<value> - set environment variables
+        + --publish  or -p - https://docs.docker.com/engine/reference/run/
+        + --volume or -v, --mount - https://docs.docker.com/storage/bind-mounts/
     > inspect <name> - full info about container (ip, etc)
     > 

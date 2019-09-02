@@ -1,0 +1,11 @@
+https://docs.docker.com/engine/reference/commandline/swarm_init/
+https://www.youtube.com/watch?v=bU2NNFJ-UXA
+
+Steps:
+    > create nodes woth docker-machine create [name]
+    > run docker swarm init supplied with optional flag --advertised-addr [manager_ip]
+        in manager machine
+Commands:
+    > docker swarm init --advertised-addr $(docker ) - create a swarm and manager
+    > follow instruction to add nodes as workers or managers
+    > docker node ls -  outputs nodes in swarm(only on manager node)
