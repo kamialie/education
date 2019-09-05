@@ -1,6 +1,7 @@
-# Plugins
+# Lovely Vim
 
 ## Hot keys
+
 
 - File/buffer manipulaton:
 	+ [:w] - save file
@@ -31,6 +32,7 @@
 	+ [:b] - go to the next buffer
         	* {substring} - unique filename substring will make it jump to that buffer
 
+
 - Insert mode enter
 	+ [i] - under cursor
 	+ [I] - at the beginning of line
@@ -40,6 +42,7 @@
 	+ [O] - new line above cursor
 	+ [s] - delete character and insert
 	+ [S] - delete line and insert
+
 
 - Motion
 	+ [w] - go to the beginning of next word
@@ -74,6 +77,7 @@
 	+ [Ctrl-o] - go to the previous jump (be careful with what is considered to be a jump in vim - hjkl      are not jumps)
 	+ [Ctrl-i] - go to the next jump
 
+
 - Editing
 	+ [r] {letter} - replace letter under cursor
 	+ [R] - enter replace mode, every typed character deletes existing one
@@ -90,6 +94,7 @@
 		* {t} - tags
 	For example [d][i]{“} - delete a everything inside quotes
 
+
 - Copy/paste/cut
 	+ [yy] or [Y] - copy current line
 	+ [dd] or [D] - cut current line
@@ -100,7 +105,7 @@
 	You can also copy/cut till label - just create a label somewhere, then use [y][`]{label}
 	+ [p] - paste line under cursor
 	+ [P] - paste line before cursor
-	+ [x] - cut character under cursor
+	+ [\x] - cut character under cursor
 	+ [“]{letter}[command] - specify the buffer for the command
 		* {_} - underscore, empty buffer
 	+ {number}[operation] - do operation number of times
@@ -110,6 +115,7 @@
 	+ While in insert mode:
 		* [Ctrl-r]{register} - insert text from specified register (register is any lowercase letter)
 		* [Ctrl-r][a] - insert text from dot register (dot register holds last modification you made in insert mode
+
 
 - Search and substitution
 	+ [\*] -  go to next occurence of the word under cursor
@@ -125,10 +131,12 @@
 	+ [\*] - highlights all occurrences of the current word under cursor
 	+ [:noh] - turn off highlighting
 
+
 - Back to the future
 	+ [u] - undo last command
 	+ [U] - return current line to its original form
 	+ [Ctrl-R] - undo undos
+
 
 - Labels and folders
 	+ [mb][%][zf’b] - fold lines
@@ -143,7 +151,8 @@ Highlight region in vim, then [:][fold] - fold lines
 	+ [`][label] - go to the label created before
 		* [`][`] - go to last jump
 
-- Macros
+
+- Macros:
 	+ [q]{letter}[command sequence][q] - record macros
 		* [@]{letter} - apply to the current cursor location
 		* [@@] - rerun last macros
@@ -154,6 +163,29 @@ Highlight region in vim, then [:][fold] - fold lines
 	+ [-] - go the previous line (beginning)
 	+ [+] - go to the next line (beginning)
 	+ [K] - find a reference to the function under cursor
-	+ [J] - append line below to the current (physically move it) 
+	+ [J] - append line below to the current (physically move it)
+
+
+- Fun stuff:
+	* [Operation] {count} [motion] - for example, [d2w] - deletes next two words
+	* [:!][shell_command] - run shell command within vim
+	* [:make] - trigger make within your vim!
+	* [Ctrl-R][=][expression] - calculator in vim!!! Use it in insert mode - result will be printed in file
+
 
 ## Plugins
+
+## Interesting links
+- https://medium.freecodecamp.org/learn-linux-vim-basic-features-19134461ab85
+- http://vim.wikia.com/wiki/Mapping_keys_in_Vim\_-\_Tutorial\_(Part_2)
+- http://learnvimscriptthehardway.stevelosh.com/chapters/07.html
+- https://hashrocket.com/blog/posts/8-great-vim-mappings
+- https://www.shortcutfoo.com/blog/top-50-vim-configuration-options/
+- https://dougblack.io/words/a-good-vimrc.html
+- https://stackoverflow.com/questions/736701/class-function-names-highlighting-in-vim
+- https://stackoverflow.com/questions/29192124/how-to-color-function-call-in-vim-syntax-highlighting
+- https://stackoverflow.com/questions/736701/class-function-names-highlighting-in-vim
+- https://stackoverflow.com/questions/37777417/how-to-use-vim-key-bindings-with-visual-studio-code-vim-extension - exit key mapping in vscode for vim extension:
+
+
+## Installation on systems
