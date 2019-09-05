@@ -44,7 +44,7 @@
 	+ [S] - delete line and insert
 
 
-- Motion
+* Motion
 	+ [w] - go to the beginning of next word
 	+ [b] - go to the beginning of previous word
 	+ [e] - go to the end of current(next) word
@@ -95,14 +95,14 @@
 	For example [d][i]{“} - delete a everything inside quotes
 
 
-- Copy/paste/cut
+* Copy/paste/cut
 	+ [yy] or [Y] - copy current line
 	+ [dd] or [D] - cut current line
 	+ [y] or [d]
 		* [j] or [arrow down] - copy/cut current and line below
 		* [k] or [arrow up] - copy/cut current and line above
 	+ [:]{start}[,]{end}[y] or [d] - copy or cut line between lines start and end (included)
-	You can also copy/cut till label - just create a label somewhere, then use [y][`]{label}
+	+ You can also copy/cut till label - just create a label somewhere, then use [y][`]{label}
 	+ [p] - paste line under cursor
 	+ [P] - paste line before cursor
 	+ [\x] - cut character under cursor
@@ -111,7 +111,6 @@
 	+ {number}[operation] - do operation number of times
 	+ [.] - repeat last operation in a whole
 	+ [:read] {filename} - yank and paste everything from specified file into current buffer
-
 	+ While in insert mode:
 		* [Ctrl-r]{register} - insert text from specified register (register is any lowercase letter)
 		* [Ctrl-r][a] - insert text from dot register (dot register holds last modification you made in insert mode
@@ -156,7 +155,6 @@ Highlight region in vim, then [:][fold] - fold lines
 	+ [q]{letter}[command sequence][q] - record macros
 		* [@]{letter} - apply to the current cursor location
 		* [@@] - rerun last macros
-
 	+ Control N or Control P - autocomplete
 	+ Control X Control N - autocomplete only in current file
 	+ Control X control F - autocomplete for filenames
