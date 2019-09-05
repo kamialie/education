@@ -33,7 +33,7 @@
         	* {substring} - unique filename substring will make it jump to that buffer
 
 
-- Insert mode enter
+* Insert mode enter
 	+ [i] - under cursor
 	+ [I] - at the beginning of line
 	+ [a] - after cursor
@@ -78,7 +78,7 @@
 	+ [Ctrl-i] - go to the next jump
 
 
-- Editing
+* Editing
 	+ [r] {letter} - replace letter under cursor
 	+ [R] - enter replace mode, every typed character deletes existing one
 	+ [v] - enter visual mode
@@ -117,7 +117,7 @@
 		* [Ctrl-r][a] - insert text from dot register (dot register holds last modification you made in insert mode
 
 
-- Search and substitution
+* Search and substitution
 	+ [\*] -  go to next occurence of the word under cursor
 	+ [/]{text} - got to the first character of first occurence of text in file starting from cursor location
 		* [\c] - turn on ignore case search for just one search
@@ -138,7 +138,7 @@
 	+ [Ctrl-R] - undo undos
 
 
-- Labels and folders
+* Labels and folders
 	+ [mb][%][zf’b] - fold lines
 	+ [za] - open/close toggle
 	+ [zo] - open folding
@@ -166,7 +166,7 @@ Highlight region in vim, then [:][fold] - fold lines
 	+ [J] - append line below to the current (physically move it)
 
 
-- Fun stuff:
+* Fun stuff:
 	* [Operation] {count} [motion] - for example, [d2w] - deletes next two words
 	* [:!][shell_command] - run shell command within vim
 	* [:make] - trigger make within your vim!
