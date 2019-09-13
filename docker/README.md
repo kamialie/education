@@ -82,10 +82,11 @@ Exlude not relevant files with .dockerignore (works similar to .gitignore, more 
 		  subversion	
 - decouple applications - create separate images for database, web server, etc
 
+Building ruby on rails docker image https://medium.com/@lemuelbarango/ruby-on-rails-smaller-docker-images-bff240931332, https://ncona.com/2017/09/getting-rails-to-run-in-an-alpine-container/
 
 ### Instructions
 
-##### FROM
+#### FROM
 - **FROM** _\<image\>_ [**AS** _\<name\>_]
 - **FROM** _\<image\>:\<tag\>_ [**AS** _\<name\>_]
 
@@ -100,33 +101,32 @@ Optionally a name can be given to a new build stage by adding **AS** _name_, the
 
 Alpine is the recommended base image - currently under 5MB
 
-##### RUN
+#### RUN
 - **RUN** _\<command\>_ (shell form) - defaults to _/bin/sh -c_ on Linux; can use \ to break line
 - **RUN** [_"exec", "param1", "param2"_](exec form) - parsed as JSON array, that is must use double-quotes; doesn't invoke command shell, so **RUN** ["echo", "$HOME"] wont be substituted, run with shell or use shell form
 
 Execute commands in a new layer on top of of the current image; default shell can be changed using **SHELL** or use exec form; cache for **RUN** can be used during next build - can be invalidated using _--no-cache_ flag on build
 
 
-
-##### CMD
+#### CMD
 - **CMD** [_"exec", "param1", "param2"_] (exec form)
 - **CMD** [_"param1", "param2"_] (as default params to **ENTRYPOINT**)
 - **CMD** command param1 param2 (shell form) - will be executed in /bin/sh -c
 
 Provide defaults for an executing container, can include an executable or can omit exec, but specify **ENTRYPOINT** as well; if **CMD** is used to provide defaults to **ENTRYPOINT**, both should be with the JSON array format; can be only one **CMD** in Dockerfile; doesnt execute anything at build time; if arguments are specified on docker run, then they will override the default in **CMD**
 
-##### ENTRYPOINT
+#### ENTRYPOINT
 - **ENTRYPOINT** [_"exec", "param1", "param2"_](exec form, preferred)
 - **ENTRYPOINT** command param1 param2 (shell form)
 
 Configure container that will run as exec; both **CMD** and **ENTRYPOINT** define what commands executed when running a container; command line arguments to docker run \<image\> will be appended after all elements in an exec form **ENTRYPOINT** and override all **CMD** elements; only last **ENTRYPOINT** will have an effect
 
-##### EXPOSE
+#### EXPOSE
 - **EXPOSE** _\<port\>_ [_<port>/protocol>..._] 
 
 Informs Docker that the container listens on the specified network port at runtime(doesn't actually publish them, use -p flag of docker run to publish or -P to publish all exposed port randomly), defaults to TCP(can specify UDP)
 
-##### ADD
+#### ADD
 - **ADD** _\<src>... \<dest\>_
 - **ADD** ["_\<src>_",... "_\<dest\>_"]
 
@@ -141,29 +141,31 @@ Copies new files, directories or remote files from \<src\> and adds them to the 
 * if _\<dest\>_ doesn't end with a slash, it will be considered a regular file and contents of _\<src\>_ wil be written at _\<dest\>_
 * if _\<dest\>_ doesn't exist, it is created along with all missing directories
 
-##### COPY
+#### COPY
 - **COPY** _\<src>... \<dest\>_
 - **COPY** ["_\<src>_",... "_\<dest\>_"]
 
 Copies new files or directories from \<src\> and adds them to the filesystem at the path \<dest\>, same rules as **ADD** apply to **COPY**
 
-##### ENV
+#### ENV
 - **ENV** _\<key\>_ _\<value\>_ - sets a single variable to a value, entire string after the first space(after key) will be treated as the \<value\>
 - **ENV** _\<key\>_=_\<value\>_ ... - allows for multiple variable to be set(quotes and backslashes can be used to include white-spaces)
 
 Sets the environment variable \<key\> to the value \<value\>, this value will be in the environment for all subsequent instructions in the build stage; variables set using **ENV** will persist when container is run from resulting image(can view them using docker inspect)
 
-##### ARG
+**ENV** and **ARG** usage - https://vsupalov.com/docker-arg-env-variable-guide/#arg-and-env-availability
+
+#### ARG
 - **ARG** _\<name\>[=\<default\>]_ 
 
 Defines a variable that users can pass at build-time to the builder using _docker build --build-arg \<varname\>=\<value\>_(can be viewed by any user with docker hitory command - therefore not recommended for passwords, etc); can optionally include a default value; comes into effect from the line on which it was defined and ends at the end of the build stage - out of scope results in empty string; **ENV** always overried **ARG**; predefined ARGS (excluded from _docker history_ and is not cached) - HTTP_PROXY HTTP_proxy HTTPS_PROXY http_proxy FTP_PROXY ftp_proxy NO_PROXY np_proxy; "cache miss" occured upon first usage, not definition(if value has changed)
 
-##### WORKDIR
+#### WORKDIR
 - **WORKDIR** /path/to/workdir
 
 Sets the working directory for any **RUN**, **CMD**, **ENTRYPOINT**, **COPY** and **ADD** instructions, if doesnt exist it is created; can resolve previously set **ENV** variables
 
-##### USER
+#### USER
 - **USER** \<user\>[\<group\>
 - **USER** \<UID\>[\<GID\>]
 
