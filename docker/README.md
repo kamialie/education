@@ -43,6 +43,7 @@ docker
 * exec
 * attach
 * start
+* pull - pull(download) an image from a registry, can be used to update an image as well
 
 ### Links
 
@@ -84,6 +85,8 @@ Exlude not relevant files with .dockerignore (works similar to .gitignore, more 
 
 Building ruby on rails docker image https://medium.com/@lemuelbarango/ruby-on-rails-smaller-docker-images-bff240931332, https://ncona.com/2017/09/getting-rails-to-run-in-an-alpine-container/
 
+Building gitlab image manually https://docs.gitlab.com/ee/install/installation.html, https://about.gitlab.com/install/#debian, https://packages.gitlab.com/gitlab/gitlab-ce/install
+
 ### Instructions
 
 #### FROM
@@ -106,6 +109,12 @@ Alpine is the recommended base image - currently under 5MB
 - **RUN** [_"exec", "param1", "param2"_](exec form) - parsed as JSON array, that is must use double-quotes; doesn't invoke command shell, so **RUN** ["echo", "$HOME"] wont be substituted, run with shell or use shell form
 
 Execute commands in a new layer on top of of the current image; default shell can be changed using **SHELL** or use exec form; cache for **RUN** can be used during next build - can be invalidated using _--no-cache_ flag on build
+
+Avoid using apt-get upgrade and dist-upgrade, as many essential packages from parent images can not upgrade inside an uprivileged container, rather update and install packages you need (keep it in one command to avoid caching issues, if command changes in the future
+
+	RUN apt-get update && apt-get install -y \
+	    package-one \
+	    package-two 
 
 
 #### CMD
