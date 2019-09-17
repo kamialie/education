@@ -40,10 +40,13 @@ docker
     + [--size], [-s] - display total file sizes
 * images
 * run
+    + https://stackoverflow.com/questions/35550694/what-is-the-purpose-of-the-i-and-t-options-for-the-docker-exec-command/35551071#35551071 - on TTY
 * exec
 * attach
 * start
 * pull - pull(download) an image from a registry, can be used to update an image as well
+* build .
+    + [--tag], [-t] \<name\>:\<tag\> - tag resulting image
 
 ### Links
 
@@ -71,6 +74,12 @@ Build context is the directory with all recursive contents where _docker build_ 
 
 Exlude not relevant files with .dockerignore (works similar to .gitignore, more at https://docs.docker.com/engine/reference/builder/#dockerignore-file)
 
+Docker offers a reserved, miminal image, _scratch_, as starting point for building images. It signals to the build process that the next command ti be the first filesystem layer in the final image. Can copy executable and just run it(https://docs.docker.com/develop/develop-images/baseimages/):
+
+	FROM scratch
+	ADD hello /
+	CMD ["/hello"]
+
 [not finished]Minimize image size:
 - Only **RUN**, **COPY**, **ADD** create layers, rest create temporary intermediate images.
 - sort multi-line arguments alphanumerically, add space before backslash
@@ -86,6 +95,12 @@ Exlude not relevant files with .dockerignore (works similar to .gitignore, more 
 Building ruby on rails docker image https://medium.com/@lemuelbarango/ruby-on-rails-smaller-docker-images-bff240931332, https://ncona.com/2017/09/getting-rails-to-run-in-an-alpine-container/
 
 Building gitlab image manually https://docs.gitlab.com/ee/install/installation.html, https://about.gitlab.com/install/#debian, https://packages.gitlab.com/gitlab/gitlab-ce/install
+Problems:
+    - https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4257 - configuration freezes on ruby-block
+    - https://gitlab.com/gitlab-org/omnibus-gitlab/issues/430
+    - https://serveradmin.ru/ustanovka-gitlab-v-lxc-konteyner/
+    - https://docs.gitlab.com/omnibus/common_installation_problems/
+Further configuration - https://docs.gitlab.com/omnibus/README.html#installation-and-configuration-using-omnibus-package
 
 ### Instructions
 
@@ -110,7 +125,7 @@ Alpine is the recommended base image - currently under 5MB
 
 Execute commands in a new layer on top of of the current image; default shell can be changed using **SHELL** or use exec form; cache for **RUN** can be used during next build - can be invalidated using _--no-cache_ flag on build
 
-Avoid using apt-get upgrade and dist-upgrade, as many essential packages from parent images can not upgrade inside an uprivileged container, rather update and install packages you need (keep it in one command to avoid caching issues, if command changes in the future
+Avoid using apt-get upgrade and dist-upgrade, as many essential packages from parent images can not upgrade inside an uprivileged container, rather update and install packages you need (keep it in one command to avoid caching issues, if command changes in the future):
 
 	RUN apt-get update && apt-get install -y \
 	    package-one \
@@ -124,11 +139,26 @@ Avoid using apt-get upgrade and dist-upgrade, as many essential packages from pa
 
 Provide defaults for an executing container, can include an executable or can omit exec, but specify **ENTRYPOINT** as well; if **CMD** is used to provide defaults to **ENTRYPOINT**, both should be with the JSON array format; can be only one **CMD** in Dockerfile; doesnt execute anything at build time; if arguments are specified on docker run, then they will override the default in **CMD**
 
+Should almost always be used in exec form (like **CMD** ["apache2", "-DFOREGROUND"]), in most other cases should be given an interactive shell, such as bash, python and perl, so that docker run -it python would will get user dropped into usable shell. In rare cases should be used as params to **ENTRYPOINT**
+
 #### ENTRYPOINT
 - **ENTRYPOINT** [_"exec", "param1", "param2"_](exec form, preferred)
 - **ENTRYPOINT** command param1 param2 (shell form)
 
 Configure container that will run as exec; both **CMD** and **ENTRYPOINT** define what commands executed when running a container; command line arguments to docker run \<image\> will be appended after all elements in an exec form **ENTRYPOINT** and override all **CMD** elements; only last **ENTRYPOINT** will have an effect
+
+Can be used in combination with a helper script, allowing it to work just like in combination with **CMD** - having default and particular behaviour. Script uses the _exec_ Bash command so that the final running application becomes the container's PID 1, allowing to receive any Unix signals
+
+	#!/bin/bash
+	set -e
+	if [ "$1" = 'postgres' ]; then
+	    chown -R postgres "$PGDATA"
+	    if [ -z "$(ls -A "$PGDATA")" ]; then
+		gosu postgres initdb
+	    fi
+	    exec gosu postgres "$@"
+	fi
+	exec "$@"
 
 #### EXPOSE
 - **EXPOSE** _\<port\>_ [_<port>/protocol>..._] 
@@ -150,17 +180,29 @@ Copies new files, directories or remote files from \<src\> and adds them to the 
 * if _\<dest\>_ doesn't end with a slash, it will be considered a regular file and contents of _\<src\>_ wil be written at _\<dest\>_
 * if _\<dest\>_ doesn't exist, it is created along with all missing directories
 
+For best image size results prefer curl or wget over **ADD** (can later delete unnecessary files and avoid adding extra layer)
+
 #### COPY
 - **COPY** _\<src>... \<dest\>_
 - **COPY** ["_\<src>_",... "_\<dest\>_"]
 
 Copies new files or directories from \<src\> and adds them to the filesystem at the path \<dest\>, same rules as **ADD** apply to **COPY**
 
+**COPY** is generally preferred over **ADD** as it is more transparent and provides basic functionality. **ADD** best usage is for local tar extraction. In case of multiple Dockerfile steps, **COPY** them individually - results in fewer cache invalidations, as each **COPY** is on seperate layer.
+
 #### ENV
 - **ENV** _\<key\>_ _\<value\>_ - sets a single variable to a value, entire string after the first space(after key) will be treated as the \<value\>
 - **ENV** _\<key\>_=_\<value\>_ ... - allows for multiple variable to be set(quotes and backslashes can be used to include white-spaces)
 
 Sets the environment variable \<key\> to the value \<value\>, this value will be in the environment for all subsequent instructions in the build stage; variables set using **ENV** will persist when container is run from resulting image(can view them using docker inspect)
+
+To really unset **ENV** variable set, use and unset them on the same layer:
+
+	FROM alpine
+	RUN export ADMIN_USER="mark" \
+	    && echo $ADMIN_USER > ./mark \
+	    && unset ADMIN_USER
+	CMD sh
 
 **ENV** and **ARG** usage - https://vsupalov.com/docker-arg-env-variable-guide/#arg-and-env-availability
 
@@ -178,7 +220,7 @@ Sets the working directory for any **RUN**, **CMD**, **ENTRYPOINT**, **COPY** an
 - **USER** \<user\>[\<group\>
 - **USER** \<UID\>[\<GID\>]
 
-Sets the user name (or UID) to use when running the image and any **RUN**, **CMD**, **ENTRYPOINT** instructions that follows
+Sets the user name (or UID) to use when running the image and any **RUN**, **CMD**, **ENTRYPOINT** instructions that follows. Avoid installing or using sudo as it has unpredictable TTY and signal-forwarding behavior. For similar to sudo behavior consider "gosu" (https://github.com/tianon/gosu).
 
 ### Links
 
