@@ -39,6 +39,14 @@
 Искать можно в классической/академической литературе, либо в предыдущих решениях аналогичных задач (writeups/райтапы), например, тут https://ctftime.org/writeups
 Для чтения перед сном вполне сгодится журнал Хакер ( https://t.me/xakep_ru / https://t.me/hacker_frei )
   + https://m.habr.com/ru/company/mailru/blog/282700/
+  + CTF(21school):
+    * http://kmb.ufoctf.ru/
+    * https://proglib.io/p/capture-the-flag/
+    * https://vk.com/spbctf
+    * https://www.hackthebox.eu/
+    * https://ctftime.org/
+    * https://training.hackerdom.ru/
+    * http://forkbomb.ru/
 
 - OS:
   + https://en.wikipedia.org/wiki/Andrew_S._Tanenbaum
