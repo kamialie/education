@@ -23,6 +23,8 @@ docker-machine
 * stop \<name\> - stop machine
 * restart \<name\> - restart machine
 * upgrade \<name\> - upgrade machine to latest version of Docker(depends on underlying distribution on host); for example if uses Ubuntu, command is similar to sudo apt-get upgrade docker-engine
+* ssh \<machine_name\> \<command\>- login or run a command on a machine using SSH, if no command specified logs in like regular ssh
+    + [--native-ssh] - use Go ssh implementation instead of local one; docker by default tries to find local ssh and uses that it does find it
 
 ### Links
 
@@ -36,6 +38,8 @@ docker-machine
 docker [command] --help - brings options list
 
 docker
+* login - login to dockerhub to push and pull images
+* tag \<image_name\> \<username\/repository:tag\> - give a new tag to image(prepare to push to remository), new tag is created and referenced the parent image
 * ps - list containers (default to currently running containers)
     + [--all], [-a] - show all
     + [--quiet], [-q] - display only numeric IDs
@@ -52,14 +56,87 @@ docker
 
 ### Links
 
+------------
 
-
-# docker swarm
+# docker swarm and docker node
 
 ...
+A swarm is a group of machines that are running Docker and joined into a cluster. Docker commands are now executed on a whole cluster by a swarm manager.
+Machines can be physical or virtual, referred as nodes in swarm.
+Always run docker swarm init and join with port 2377 or leave it blank for default(swarm manager port)
 
 ### Commands
 
+docker swarm
+* init - initialize swarm, targeted docker engine becomes a manager; generates two random tokens - manager and worker
+    + [--advertise-addr] - addvertise address
+* leave - leave a swarm, works without warning for workers
+    [--force] - use it on manager, when swarm wont be used anymore; proper way is to demote manager to worker, then leave the swarm without warnings
+
+docker node
+* ls - list all the nodes that the Docker Swarm manager knows about(used on manager node)
+
+### Links
+
+
+------------
+
+# docker service
+
+...
+Service can be viewed as a separate part of the app, in docker sense - separate container(piece of software). Service can be scaled through replicas - number of containers running that(same) piece of software.
+Load-balancing is done through round-robin fashion(after last one comes first)
+
+### Commands
+
+docker service
+* ls - lists services running in the swarm(has to be run targeting a manager node)
+* ps \<service\> - list the tasks of one or more services(has to be run targeting a manager node)
+
+### Links
+
+
+------------
+
+# docker stack
+
+...
+Single container running in a service is called a _task_.
+
+### Commands
+
+docker stack
+* deploy \<stack_name\> - deploy a new stack or update an existing one(no need to shut down, just apply changes and run command again)
+    + [--compose-file] [-c] \<path_to_docker-compose.yml\> - path to docker-compose.yml that is docker swarm is used
+* ps \<stack_name\> - view all tasks of a stack
+* ls - lists the stacks
+* rm \<stack_name\> - removes the stack from the swarm(has to be run targeting a manager node) that is services, netwerks and secret associations
+
+### Links
+
+
+------------
+
+# docker-compose
+
+### Commands
+
+docker-compose
+* config - validate and view the Compose file
+* up - build, recreate, start and attach to container
+    + [--detach], [-d] - set a driver; full list of avaliable drivers at https://docs.docker.com/machine/drivers/
+    + [--build] - build images before starting(force to even if they exist)
+* down - stops and removes containers, networks, volumes and images createad by up, external networks and volumes are not removed
+* exec - equivalent of docker exec, allows to run commands in services (by default allocates TTY, example, docker-compose exec web sh)
+* kill - forces conainers to stop by sending SIGKILL, optinally other signals can be sent
+* logs - display logs output from services
+    + [--folow], [-f] - follow output
+* pause - pauses running containers of the service, can be unpaused by docker-compose unpause
+* ps - list containers
+* restart - restart all stopped and running services, for changes in Compose file use restart_policy
+* rm - remove stopped service containers
+* scale - sets the number of containers to run for a service; alternatively in Compose file 3. can specify replicas under deploy key, deploy key only works woth docker stack deploy command
+* top - list runnning processes
 
 ### Links
 
@@ -228,3 +305,10 @@ Sets the user name (or UID) to use when running the image and any **RUN**, **CMD
 
 - https://docs.docker.com/engine/reference/builder/
 - https://kapeli.com/cheat_sheets/Dockerfile.docset/Contents/Resources/Documents/index
+
+------------
+
+
+# docker-compose.yml file
+
+docker-compose [-f] \<path\> - specify path to docker-compose.yml file; can specify two, the later is applied over and in addition to previuos files; if nothing is specified docker is looking for docker-compose.yml and docker-compose.overried.yml - must supply at least the first; followed by '-' instructs to read from stdin
