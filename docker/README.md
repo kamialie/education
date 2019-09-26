@@ -6,7 +6,10 @@ https://github.com/veggiemonk/awesome-docker
 # docker-machine
 
 ...
+Tool for provisioning and managing Dockerized hosts (hosts with Docker Engine on them), typically installed on local system, has its own command line client (docker-machine) and the Docker Engine client (docker)
+Docker Engine is a client-server app made if the Docker daemon, REST API, CLI client that talks to the daemon (through REST API wrapper)
 
+Can ssh into machine using "docker-machine ssh \<machine_name\>". To work as root either add sudo upfront or change to root either by "sudo -i" or "sudo su"
 
 ### Commands
 
@@ -19,6 +22,7 @@ docker-machine
     + [--driver] \<name\> --help - list available options to create a machine
 * ip \<name\> - get machine's ip address
 * env \<name\> - display commands to set up environment for docker (to run docker commands against particular machine)
+    + [-u] - display commands to unset environemnt variabes
 * start \<name\> - start machine
 * stop \<name\> - stop machine
 * restart \<name\> - restart machine
@@ -45,7 +49,14 @@ docker
     + [--quiet], [-q] - display only numeric IDs
     + [--size], [-s] - display total file sizes
 * images
-* run
+* run - run a command in a new container
+    + [--rm] - automatically remove container when it exits
+    + [--tty], [-t] - allocate pseudo-tty
+    + [--interactive], [-i] - keep stdin open even if not attached
+    + [--detach], [-d] - run container in a background
+    + [--publish], [-p] \<host_port\>:\<container_port\> - publish ports from host to container
+    + [--volume], [-v] - https://docs.docker.com/storage/bind-mounts/
+    + [--mount] - https://docs.docker.com/storage/bind-mounts/
     + https://stackoverflow.com/questions/35550694/what-is-the-purpose-of-the-i-and-t-options-for-the-docker-exec-command/35551071#35551071 - on TTY
 * exec
 * attach
@@ -75,6 +86,29 @@ docker swarm
 
 docker node
 * ls - list all the nodes that the Docker Swarm manager knows about(used on manager node)
+* ps \<node_name\> - list tasks running on one or more nodes, default to current node
+    + $(docker ls -q) - list all tasks in a swarm(better use docker stack ps)
+
+### Links
+
+https://docs.docker.com/engine/reference/commandline/swarm_init/
+https://www.youtube.com/watch?v=bU2NNFJ-UXA
+
+------------
+
+# docker stack
+
+...
+Single container running in a service is called a _task_.
+
+### Commands
+
+docker stack
+* deploy \<stack_name\> - deploy a new stack or update an existing one(no need to shut down, just apply changes and run command again)
+    + [--compose-file] [-c] \<path_to_docker-compose.yml\> - path to docker-compose.yml that is docker swarm is used
+* ps \<stack_name\> - view all tasks of a stack
+* ls - lists the stacks
+* rm \<stack_name\> - removes the stack from the swarm(has to be run targeting a manager node) that is services, netwerks and secret associations
 
 ### Links
 
@@ -92,25 +126,6 @@ Load-balancing is done through round-robin fashion(after last one comes first)
 docker service
 * ls - lists services running in the swarm(has to be run targeting a manager node)
 * ps \<service\> - list the tasks of one or more services(has to be run targeting a manager node)
-
-### Links
-
-
-------------
-
-# docker stack
-
-...
-Single container running in a service is called a _task_.
-
-### Commands
-
-docker stack
-* deploy \<stack_name\> - deploy a new stack or update an existing one(no need to shut down, just apply changes and run command again)
-    + [--compose-file] [-c] \<path_to_docker-compose.yml\> - path to docker-compose.yml that is docker swarm is used
-* ps \<stack_name\> - view all tasks of a stack
-* ls - lists the stacks
-* rm \<stack_name\> - removes the stack from the swarm(has to be run targeting a manager node) that is services, netwerks and secret associations
 
 ### Links
 
