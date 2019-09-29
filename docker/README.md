@@ -2,6 +2,7 @@
 
 https://github.com/docker/dockercraft
 https://github.com/veggiemonk/awesome-docker
+https://docs.docker.com/get-started/part6/ - at the ends links to go deeper
 
 # docker-machine
 
@@ -327,3 +328,102 @@ Sets the user name (or UID) to use when running the image and any **RUN**, **CMD
 # docker-compose.yml file
 
 docker-compose [-f] \<path\> - specify path to docker-compose.yml file; can specify two, the later is applied over and in addition to previuos files; if nothing is specified docker is looking for docker-compose.yml and docker-compose.overried.yml - must supply at least the first; followed by '-' instructs to read from stdin
+
+Network, volume and service definitions are applied to each container respectively (analogy to docker netwrok create, docker volume create)
+
+### Instructions
+
+**veriosn** - specify version of compose file to use (f.e. 3, 2, 3.7...)
+
+**services** 
+
+#### build
+
+Can be specified as a string containing a path to build context or as an object with the path specified under context and optionally Dockerfile and args. If **image** is also specified, then Compose names the build images with \<name\>:\<tag\> and optinal tag
+
+* **context** - path to build context or url to git repository; if relative, then relative to compose file
+* **dockerfile** - dockerfile to use
+* **args** - environment variables accessible only during the build process (first should specify in Dockerfile using **ARG** instructiona); if value is ommitted then environment variables where the compose file is run is used
+* **cache_from** (v3.2) - a list of images that the engine uses for cache resolution
+
+	build:
+	    context: .
+	    cache_from:
+		- alpine:latest
+		- corp/web_app:3.14
+
+* **labels** (v3.3) - add metadata to the resulting image using Docker labels(https://docs.docker.com/config/labels-custom-metadata/); recommended to use reverse-DNS notation to avoid conflicts
+* **shm_size** (v3.5) - set the size of /dev/shm partition for this build's containers, specify as the number of bytes are a sting representing a byte value(https://docs.docker.com/compose/compose-file/#specifying-byte-values)
+* **target** (v3.4) - build the stage as defined inside Dockerfile(https://docs.docker.com/engine/userguide/eng-image/multistage-build/)
+* **cap_add** - add or drop container capabilities (ignored when deploying a stack)
+* **cgroup_parent** - optinal parent group
+* **command** - override default command, can be either in shell or list form
+* **configs** - grant access to configs [to be continued]
+* **container_name** - specify custom name, cant be scaled(cause ever container name must be unique), ignored when deploying stack
+* **credential_spec** - [to be continued]
+* **depends_on** - express dependancies between services, docker-compose up startes redis and db before web(waits only until they have started, not until the are "ready", to control deploying stage - https://docs.docker.com/compose/startup-order/), docker-compose stop stops web before redis and db; ignored when deploying stack
+
+	version: "3.7"
+	services:
+	    web:
+		build: .
+		depends_on:
+		    - db
+		    - redis
+	    redis:
+		image: redis
+	    db:
+		image: postgres
+
+#### deploy
+
+Specify configuration related to deployment and running of services. Only takes effect when deploying with a docker stack deploy and ignored by docker-compose up and docker-compose run
+
+* **endpoint_mode** - specify a service discovery method for external clients connecting to a swarm
+    + vip - docker assignes the service a virtual IP (VIP) that acts as the front end for clients to reach the service on a network. Docker routes requests between the client and the available worker nodes for the service without client knowledge of how many nodes are participating in the service or their IP addresses or ports (it is default)
+    + dnsrr - DNS round-robin (DNSRR), does not use a single virtual IP; Docker sets up DNS entries for the services such that a DNS query for the service name returns a list of IP addresses; useful for using own load balancer for example
+* **labels** - specify labels for the service; only set on service, not containers, to set on containers use labels outside deploy
+* **mode**
+    + [global] - exactly one container per swarm node
+    + [replicated] - specified number of containers (default)
+* **placement** - specify placement of constraints and preferences(more info at https://docs.docker.com/engine/reference/commandline/service_create/#specify-service-placement-preferences-placement-pref)
+    + node.role == manager
+
+	deploy:
+	    placement:
+		constaints: [node.role == manager]
+
+	deploy:
+	    placement:
+		constaints:
+		    - node.role == manager
+
+* **replicas** - specify number of containers
+* **resources** - configure resource constraints, analogoes to docker service create counter part [to be continued]
+* **restart_policy** - configures if and how to restart containers when they exit
+    * condition: [on-failure or any] - any is default
+    * delay: \<number\>s - specify how long to wait (default is 0s)
+    * max_attempts: \<number\> - default is never give up; if restart doesnt succeed within window that attempt does count toward max_attempts
+    * window: \<number\>s - how long to wait before deciding if a restart has succeded, specified as a duraton (default immediatly)
+
+	deploy:
+	    restart_policy:
+		condition: on-failure
+		delay: 5s
+		max_attempts: 3
+		window: 120s
+
+* **rollback_config** (v3.7) - configures how the service should be rolledback in case of failing update
+    * parallelism: \<number\> - number of containers to roll back at a time, if set to 0 all rollback simultaneously
+    * delay: \<number\>s - time to wait between each container group's rollback (default is 0)
+    * faulire_action: [continue or pause] - what to do of rollback fails (default is pause)
+    * monitor: ns|us|ms|s|m|h - duration after each task update to monitor for fauilre (default is 0)
+    * max_faulire_ration: - faulire rate to tolerate (default is 0)
+    * order: [stop-first or start-first] - order of operations during rollback, stop - old task is stopped before starting new, start - new task is started first and the running task brieflt overlaps (default is stop-first)
+
+* **update_config** - 
+
+### Links
+
+
+------------
