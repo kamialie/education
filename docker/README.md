@@ -4,6 +4,17 @@ https://github.com/docker/dockercraft
 https://github.com/veggiemonk/awesome-docker
 https://docs.docker.com/get-started/part6/ - at the ends links to go deeper
 
+# Contents
+
+* [docker-machine](#docker-machine)
+* [docker](#docker)
+    - [docker swarm, docker node](#docker swarm and docker node)
+    - [docker stack](#docker stack)
+    - [docker service](#docker service)
+    - [docker-compose](#docker-compose)
+* [Dockerfiles](#Dockerfiles)
+* [Docker compose file](#docker-compose.yml file)
+
 # docker-machine
 
 ...
@@ -23,7 +34,7 @@ docker-machine
     + [--driver] \<name\> --help - list available options to create a machine
 * ip \<name\> - get machine's ip address
 * env \<name\> - display commands to set up environment for docker (to run docker commands against particular machine)
-    + [-u] - display commands to unset environemnt variabes
+    + [-u] - display commands to unset environment variabes
 * start \<name\> - start machine
 * stop \<name\> - stop machine
 * restart \<name\> - restart machine
@@ -331,6 +342,31 @@ docker-compose [-f] \<path\> - specify path to docker-compose.yml file; can spec
 
 Network, volume and service definitions are applied to each container respectively (analogy to docker netwrok create, docker volume create)
 
+Not supported for docker stack deploy:
+* build
+* cgroup_parent
+* container_name
+* devices
+* tmpfs
+* external_links
+* links
+* netword_mode
+* restart
+* security_opt
+* userns_mode
+
+Multiple arguments can be specified either in dictionary style:
+
+	instruction:
+	    var1: value1
+	    var2: value2
+
+or in list style:
+
+	instruction:
+	    - var1=value1
+	    - var2=value2
+
 ### Instructions
 
 **veriosn** - specify version of compose file to use (f.e. 3, 2, 3.7...)
@@ -421,7 +457,228 @@ Specify configuration related to deployment and running of services. Only takes 
     * max_faulire_ration: - faulire rate to tolerate (default is 0)
     * order: [stop-first or start-first] - order of operations during rollback, stop - old task is stopped before starting new, start - new task is started first and the running task brieflt overlaps (default is stop-first)
 
-* **update_config** - 
+* **update_config** - configures how the service should be updated; same agruments as rollback_config
+
+#### devices
+
+List of device mappings, uses the same format as the --device docker client create option
+
+	devices:
+	    - "/dev/ttyUSB0:/dev/ttyUSB0"
+
+#### dns
+
+Custom DNS servers
+
+	dns:
+	    - 8.8.8.8
+	    - 9.9.9.9
+
+#### dns_search
+
+Custom DNS search domain
+
+	dns_search:
+	    - dnc1.example.com
+	    - dnc2.example.com
+
+#### entrypoint
+
+Override the default entrypoint, both ENTRYPOINT and CMD instructions in Dockerfile are ignored
+
+	entrypoint: /code/entrypoint.sh
+
+	entrypoint:
+	    - php
+	    - -d
+	    - zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so
+	    - -d
+	    - memory_limit=-1
+
+#### env_file
+
+[to be continued]
+
+#### environment
+
+Add environment variables either as array or dictionary; any boolean values true, false, yes, no... need to be enclosed in quotes; environment variables with only a key are resolved to their values on the machine Compose is running on (helpful for secret or host specific values)
+
+	environment:
+	    RACK_ENV: development
+	    SHOW: 'true'
+	    SESSION_SECRET:
+
+#### expose
+
+Expose ports without publishing then to the host machine - only accessible to linked services, only internal port can be specified
+
+#### external_links
+
+[to be continued]
+
+#### extra_hosts
+
+[to be continued]
+
+#### healthcheck
+
+[to be continued]
+
+#### image
+
+Specify image to start the container from, can either be a repository/tag or partial image ID
+
+#### init
+
+[to be continued]
+
+#### isolation
+
+[to be continued]
+
+#### labels
+
+[to be continued]
+
+#### links [legacy feature]
+
+[to be continued]
+
+#### logging
+
+[to be continued]
+
+#### network_mode
+
+Network mode, uses the same values as the docker client --network parameter, plus the special form _service:[service name]_
+
+[to be continued]
+
+#### networks
+
+Networks to join, referencing entries under the top-level network key
+
+	services:
+	    some-service:
+		networks:
+		    - some-network
+		    - other-network
+
+* **aliases** - alternative hostnames for the service on te network, other services can use either service name or this aliases to connect to one of the service's containers; same service can have different aliases on different networks:
+
+	networks:
+	    some-netwerk:
+		aliases:
+		    - alies1
+		    - alies3
+	    other-netwerk:
+		aliases:
+		    - alies2
+
+* **ipv4_address**, **ipv6_address** - specify a static IP address for containers when joining networks; corresponding networks configuration in the top-level networks section must have an ipam block with subnet configurations covering each static address
+
+	version: "3.7"
+
+	services:
+	  app:
+	    image: nginx:alpine
+	    networks:
+	      app_net:
+		ipv4_address: 172.16.238.10
+		ipv6_address: 2001:3984:3989::10
+
+	networks:
+	  app_net:
+	    ipam:
+	      driver: default
+	      config:
+		- subnet: "172.16.238.0/24"
+		- subnet: "2001:3984:3989::/64"
+
+#### pid
+
+[to be continued]
+
+#### ports
+
+[to be continued]
+
+#### restart
+
+[to be continued]
+
+#### secrets
+
+[to be continued]
+
+#### security_opt
+
+[to be continued]
+
+#### stop_grace_period
+
+Specify how long to wait when attempting to stop a container if it doesnt handle SIGTER (or whatever top signal has been specified with stop_signal), before sending SIGKILL; specified as duration (default is 10s)
+
+#### stop_signal
+
+Set alternate signal to stop the container (default is SIGTERM)
+
+#### sysctls
+
+[to be continued]
+
+#### tmpfs
+
+[to be continued]
+
+#### ulimits
+
+Override the default ulimits for a container, can either specify a single limit as an integer or soft/hard limits as a mapping
+
+	ulimits:
+	    nproc: 65535
+	    nofile:
+		soft: 20000
+		hard: 40000
+
+#### userns_mode
+
+[to be continued]
+
+#### volumes
+
+Mount host paths or named volumes, specified as sub-options to a service. Can mount a host path as part of a definition for a single service, for reusable volume across multiple services define a named volume in top-level volume key(service, swarms, stack files).
+
+When working with services, swarms and stacks use named volumes and constraints to run on manager only for databases, as anonymous volumes may be created on different nodes each time
+
+* short syntax
+
+	volumes:
+	    # specify path in container, docker engine will automatically create volume on host and assign it
+	    - /var/lib/mysql
+
+	    # absolute path mapping
+	    - /opt/data:/var/lib/mysql
+
+	    # path on the host relative to docker-compose file (must start with . or ..)
+	    - ./cache:/var/lib/mysql
+
+	    # named volume
+	    - databolume:/var/lib/mysql
+
+* long syntax (v3.2) - allows additional configuration fields to be added
+    + type: [volume, bind, tmpfs, npipe]
+    + source: source of the mount, path on the host for a bind mount, or name of a volume
+    + target: path in the container
+    + read_only: flag to set as read-only
+    + bind: additional bind options (?)
+    + volumeL additional volume options
+	- nocopy: [true, false] flag to disable copying of data from a container when a volume is created
+    + tmpfs: additional tmpfs options
+	- size: size in bytes
+    + consistency: [consistent(host and container have identical view), cached(read cache, host view is authorative), delegated(read-write cache, container's view is authorative)]
+
+####
 
 ### Links
 
