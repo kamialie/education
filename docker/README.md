@@ -8,12 +8,23 @@ https://docs.docker.com/get-started/part6/ - at the ends links to go deeper
 
 * [docker-machine](#docker-machine)
 * [docker](#docker)
-    - [docker swarm, docker node](#docker swarm and docker node)
-    - [docker stack](#docker stack)
-    - [docker service](#docker service)
+    - [docker swarm, docker node](#docker-swarm-and-docker-node)
+    - [docker stack](#docker-stack)
+    - [docker service](#docker-service)
     - [docker-compose](#docker-compose)
 * [Dockerfiles](#Dockerfiles)
-* [Docker compose file](#docker-compose.yml file)
+    - [FROM](#FROM)
+    - [RUN](#RUN)
+    - [CMD](#CMD)
+    - [ENTRYPOINT](#ENTRYPOINT)
+    - [USER](#USER)
+    - [ADD](#ADD)
+    - [COPY](#COPY)
+    - [ENV](#ENV)
+    - [ARG](#ARG)
+    - [WORKDIR](#WORKDIR)
+    - [USER](#USER)
+* [Docker compose file](#docker-compose.yml-file)
 
 # docker-machine
 
