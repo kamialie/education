@@ -1,62 +1,87 @@
-**Docker**
+**Docker** :whale:
 
-https://github.com/docker/dockercraft
-https://github.com/veggiemonk/awesome-docker
+
+
 https://docs.docker.com/get-started/part6/ - at the ends links to go deeper
+Go further:
+* [Awesome docker](https://github.com/veggiemonk/awesome-docker)
+* [Docker craft](https://runnable.com/docker/basic-docker-networking)
 
 # Contents
 
-* [docker-machine](#docker-machine)
-* [docker](#docker)
-    - [docker swarm, docker node](#docker-swarm-and-docker-node)
-    - [docker stack](#docker-stack)
-    - [docker service](#docker-service)
-    - [docker-compose](#docker-compose)
-* [Dockerfiles](#Dockerfiles)
-    - [FROM](#FROM)
-    - [RUN](#RUN)
-    - [CMD](#CMD)
-    - [ENTRYPOINT](#ENTRYPOINT)
-    - [USER](#USER)
-    - [ADD](#ADD)
-    - [COPY](#COPY)
-    - [ENV](#ENV)
-    - [ARG](#ARG)
-    - [WORKDIR](#WORKDIR)
-    - [USER](#USER)
-* [Docker compose file](#docker-compose.yml-file)
+* [ ] [Networking in docker](#Networking-in-docker)
+* [ ] [Storage in docker](#Storage-in-docker)
+* [ ] [docker-machine](#docker-machine)
+* [ ] [docker](#docker)
+    - [ ] [docker swarm, docker node](#docker-swarm-and-docker-node)
+    - [ ] [docker stack](#docker-stack)
+    - [ ] [docker service](#docker-service)
+    - [ ] [docker-compose](#docker-compose)
+* [ ] [Dockerfiles](#Dockerfiles)
+    - [x] [FROM](#FROM)
+    - [x] [RUN](#RUN)
+    - [x] [CMD](#CMD)
+    - [x] [ENTRYPOINT](#ENTRYPOINT)
+    - [x] [USER](#USER)
+    - [x] [ADD](#ADD)
+    - [x] [COPY](#COPY)
+    - [x] [ENV](#ENV)
+    - [x] [ARG](#ARG)
+    - [x] [WORKDIR](#WORKDIR)
+    - [x] [USER](#USER)
+    - [ ] [VOLUME](#VOLUME)
+    - [ ] [ONBUILD](#ONBUILD)
+    - [ ] [STOPSIGNAL](#STOPSIGNAL)
+    - [ ] [HEALTHCHECK](#HEALTHCHECK)
+    - [ ] [SHELL](#SHELL)
+    - [ ] [LABEL](#LABEL)
+* [ ] [Docker compose file](#docker-compose.yml-file)
+    - [ ] [volumes](#volumes)
 
-# docker-machine
+## Networking in docker
+
+[to be continued]
+https://docs.docker.com/network/
+https://runnable.com/docker/basic-docker-networking
+
+## Storage in docker
+
+[to be continued]
+https://docs.docker.com/storage/
+
+## docker-machine
 
 ...
 Tool for provisioning and managing Dockerized hosts (hosts with Docker Engine on them), typically installed on local system, has its own command line client (docker-machine) and the Docker Engine client (docker)
 Docker Engine is a client-server app made if the Docker daemon, REST API, CLI client that talks to the daemon (through REST API wrapper)
 
-Can ssh into machine using "docker-machine ssh \<machine_name\>". To work as root either add sudo upfront or change to root either by "sudo -i" or "sudo su"
+Can ssh into machine using "docker-machine ssh \<machine_name\>". To work as root either add sudo upfront or change to root either by "sudo -i" or "sudo su"; login and password for ssh connection - docker - tcuser
+
+Docker autosend bug reports in case of docker-machine create or upgrade faulires, to opt out create .docker/machine/no-error-report file (doesnt have to have any contents)
 
 ### Commands
 
 Not specifying the name of machine defaults to the name 'default'
 
-docker-machine
-* ls - list available machines
-* create \<name\> - create a docker machine
-    + [--driver], [-d] \<name\> - set a driver; full list of avaliable drivers at https://docs.docker.com/machine/drivers/
-    + [--driver] \<name\> --help - list available options to create a machine
-* ip \<name\> - get machine's ip address
-* env \<name\> - display commands to set up environment for docker (to run docker commands against particular machine)
+**docker-machine**
+* **ls** - list available machines
+* **create** *\<name\>* - create a docker machine
+    + [--driver], [-d] *\<name\>* - set a driver; full list of avaliable drivers at https://docs.docker.com/machine/drivers/
+    + [--driver] *\<name\>* --help - list available options to create a machine
+* **ip** *\<name\>* - get machine's ip address
+* **env** *\<name\>* - display commands to set up environment for docker (to run docker commands against particular machine)
     + [-u] - display commands to unset environment variabes
-* start \<name\> - start machine
-* stop \<name\> - stop machine
-* restart \<name\> - restart machine
-* upgrade \<name\> - upgrade machine to latest version of Docker(depends on underlying distribution on host); for example if uses Ubuntu, command is similar to sudo apt-get upgrade docker-engine
-* ssh \<machine_name\> \<command\>- login or run a command on a machine using SSH, if no command specified logs in like regular ssh
+* **start** *\<name\>* - start machine
+* **stop** *\<name\>* - stop machine
+* **restart** *\<name\>* - restart machine
+* **upgrade** *\<name\>* - upgrade machine to latest version of Docker(depends on underlying distribution on host); for example if uses Ubuntu, command is similar to sudo apt-get upgrade docker-engine
+* **ssh** *\<machine_name\>* *\<command\>-* login or run a command on a machine using SSH, if no command specified logs in like regular ssh
     + [--native-ssh] - use Go ssh implementation instead of local one; docker by default tries to find local ssh and uses that it does find it
 
 ### Links
 
 
-# docker
+## docker
 
 ...
 
@@ -64,35 +89,35 @@ docker-machine
 
 docker [command] --help - brings options list
 
-docker
-* login - login to dockerhub to push and pull images
-* tag \<image_name\> \<username\/repository:tag\> - give a new tag to image(prepare to push to remository), new tag is created and referenced the parent image
-* ps - list containers (default to currently running containers)
+**docker**
+* **login** - login to dockerhub to push and pull images
+* **tag** *\<image_name\>* *\<username\/repository:tag\>* - give a new tag to image(prepare to push to remository), new tag is created and referenced the parent image
+* **ps** - list containers (default to currently running containers)
     + [--all], [-a] - show all
     + [--quiet], [-q] - display only numeric IDs
     + [--size], [-s] - display total file sizes
-* images
-* run - run a command in a new container
+* **images**
+* **run** - run a command in a new container
     + [--rm] - automatically remove container when it exits
     + [--tty], [-t] - allocate pseudo-tty
     + [--interactive], [-i] - keep stdin open even if not attached
     + [--detach], [-d] - run container in a background
-    + [--publish], [-p] \<host_port\>:\<container_port\> - publish ports from host to container
+    + [--publish], [-p] *\<host_port\>:\<container_port\>* - publish ports from host to container
     + [--volume], [-v] - https://docs.docker.com/storage/bind-mounts/
     + [--mount] - https://docs.docker.com/storage/bind-mounts/
     + https://stackoverflow.com/questions/35550694/what-is-the-purpose-of-the-i-and-t-options-for-the-docker-exec-command/35551071#35551071 - on TTY
-* exec
-* attach
-* start
-* pull - pull(download) an image from a registry, can be used to update an image as well
-* build .
-    + [--tag], [-t] \<name\>:\<tag\> - tag resulting image
+* **exec**
+* **attach**
+* **start**
+* **pull** - pull(download) an image from a registry, can be used to update an image as well
+* **build** .
+    + [--tag], [-t] *\<name\>:\<tag\>* - tag resulting image
 
 ### Links
 
 ------------
 
-# docker swarm and docker node
+## docker swarm and docker node
 
 ...
 A swarm is a group of machines that are running Docker and joined into a cluster. Docker commands are now executed on a whole cluster by a swarm manager.
@@ -101,15 +126,15 @@ Always run docker swarm init and join with port 2377 or leave it blank for defau
 
 ### Commands
 
-docker swarm
-* init - initialize swarm, targeted docker engine becomes a manager; generates two random tokens - manager and worker
+**docker swarm**
+* **init** - initialize swarm, targeted docker engine becomes a manager; generates two random tokens - manager and worker
     + [--advertise-addr] - addvertise address
-* leave - leave a swarm, works without warning for workers
+* **leave** - leave a swarm, works without warning for workers
     [--force] - use it on manager, when swarm wont be used anymore; proper way is to demote manager to worker, then leave the swarm without warnings
 
 docker node
-* ls - list all the nodes that the Docker Swarm manager knows about(used on manager node)
-* ps \<node_name\> - list tasks running on one or more nodes, default to current node
+* **ls** - list all the nodes that the Docker Swarm manager knows about(used on manager node)
+* **ps** *\<node_name\>* - list tasks running on one or more nodes, default to current node
     + $(docker ls -q) - list all tasks in a swarm(better use docker stack ps)
 
 ### Links
@@ -119,26 +144,26 @@ https://www.youtube.com/watch?v=bU2NNFJ-UXA
 
 ------------
 
-# docker stack
+## docker stack
 
 ...
 Single container running in a service is called a _task_.
 
 ### Commands
 
-docker stack
-* deploy \<stack_name\> - deploy a new stack or update an existing one(no need to shut down, just apply changes and run command again)
-    + [--compose-file] [-c] \<path_to_docker-compose.yml\> - path to docker-compose.yml that is docker swarm is used
-* ps \<stack_name\> - view all tasks of a stack
-* ls - lists the stacks
-* rm \<stack_name\> - removes the stack from the swarm(has to be run targeting a manager node) that is services, netwerks and secret associations
+**docker stack**
+* **deploy** *\<stack_name\>* - deploy a new stack or update an existing one(no need to shut down, just apply changes and run command again)
+    + [--compose-file] [-c] *\<path_to_docker-compose.yml\>* - path to docker-compose.yml that is docker swarm is used
+* **ps** *\<stack_name\>* - view all tasks of a stack
+* **ls** - lists the stacks
+* **rm** *\<stack_name\>* - removes the stack from the swarm(has to be run targeting a manager node) that is services, netwerks and secret associations
 
 ### Links
 
 
 ------------
 
-# docker service
+## docker service
 
 ...
 Service can be viewed as a separate part of the app, in docker sense - separate container(piece of software). Service can be scaled through replicas - number of containers running that(same) piece of software.
@@ -146,35 +171,35 @@ Load-balancing is done through round-robin fashion(after last one comes first)
 
 ### Commands
 
-docker service
-* ls - lists services running in the swarm(has to be run targeting a manager node)
-* ps \<service\> - list the tasks of one or more services(has to be run targeting a manager node)
+**docker service**
+* *ls* - lists services running in the swarm(has to be run targeting a manager node)
+* **ps** *\<service\>* - list the tasks of one or more services(has to be run targeting a manager node)
 
 ### Links
 
 
 ------------
 
-# docker-compose
+## docker-compose
 
 ### Commands
 
-docker-compose
-* config - validate and view the Compose file
-* up - build, recreate, start and attach to container
+**docker-compose**
+* **config** - validate and view the Compose file
+* **up** - build, recreate, start and attach to container
     + [--detach], [-d] - set a driver; full list of avaliable drivers at https://docs.docker.com/machine/drivers/
     + [--build] - build images before starting(force to even if they exist)
-* down - stops and removes containers, networks, volumes and images createad by up, external networks and volumes are not removed
-* exec - equivalent of docker exec, allows to run commands in services (by default allocates TTY, example, docker-compose exec web sh)
-* kill - forces conainers to stop by sending SIGKILL, optinally other signals can be sent
-* logs - display logs output from services
+* **down** - stops and removes containers, networks, volumes and images createad by up, external networks and volumes are not removed
+* **exec** - equivalent of docker exec, allows to run commands in services (by default allocates TTY, example, docker-compose exec web sh)
+* **kill** - forces conainers to stop by sending SIGKILL, optinally other signals can be sent
+* **logs** - display logs output from services
     + [--folow], [-f] - follow output
-* pause - pauses running containers of the service, can be unpaused by docker-compose unpause
-* ps - list containers
-* restart - restart all stopped and running services, for changes in Compose file use restart_policy
-* rm - remove stopped service containers
-* scale - sets the number of containers to run for a service; alternatively in Compose file 3. can specify replicas under deploy key, deploy key only works woth docker stack deploy command
-* top - list runnning processes
+* **pause** - pauses running containers of the service, can be unpaused by docker-compose unpause
+* **ps** - list containers
+* **restart** - restart all stopped and running services, for changes in Compose file use restart_policy
+* **rm** - remove stopped service containers
+* **scale** - sets the number of containers to run for a service; alternatively in Compose file 3. can specify replicas under deploy key, deploy key only works woth docker stack deploy command
+* **top** - list running processes
 
 ### Links
 
@@ -258,6 +283,10 @@ Provide defaults for an executing container, can include an executable or can om
 
 Should almost always be used in exec form (like **CMD** ["apache2", "-DFOREGROUND"]), in most other cases should be given an interactive shell, such as bash, python and perl, so that docker run -it python would will get user dropped into usable shell. In rare cases should be used as params to **ENTRYPOINT**
 
+#### LABEL
+
+[to be continued]
+
 #### ENTRYPOINT
 - **ENTRYPOINT** [_"exec", "param1", "param2"_](exec form, preferred)
 - **ENTRYPOINT** command param1 param2 (shell form)
@@ -328,6 +357,10 @@ To really unset **ENV** variable set, use and unset them on the same layer:
 
 Defines a variable that users can pass at build-time to the builder using _docker build --build-arg \<varname\>=\<value\>_(can be viewed by any user with docker hitory command - therefore not recommended for passwords, etc); can optionally include a default value; comes into effect from the line on which it was defined and ends at the end of the build stage - out of scope results in empty string; **ENV** always overried **ARG**; predefined ARGS (excluded from _docker history_ and is not cached) - HTTP_PROXY HTTP_proxy HTTPS_PROXY http_proxy FTP_PROXY ftp_proxy NO_PROXY np_proxy; "cache miss" occured upon first usage, not definition(if value has changed)
 
+#### VOLUME
+
+[to be continued]
+
 #### WORKDIR
 - **WORKDIR** /path/to/workdir
 
@@ -338,6 +371,22 @@ Sets the working directory for any **RUN**, **CMD**, **ENTRYPOINT**, **COPY** an
 - **USER** \<UID\>[\<GID\>]
 
 Sets the user name (or UID) to use when running the image and any **RUN**, **CMD**, **ENTRYPOINT** instructions that follows. Avoid installing or using sudo as it has unpredictable TTY and signal-forwarding behavior. For similar to sudo behavior consider "gosu" (https://github.com/tianon/gosu).
+
+#### ONBUILD
+
+[to be continued]
+
+#### STOPSIGNAL
+
+[to be continued]
+
+#### HEALTHCHECK
+
+[to be continued]
+
+#### SHELL
+
+[to be continued]
 
 ### Links
 
@@ -378,9 +427,23 @@ or in list style:
 	    - var1=value1
 	    - var2=value2
 
+Specifying durations - string format, supports _us_, _ms_, _s_, _m_ and _h_
+
+	2.5s
+	10s
+	1m30s
+	2h32m56s
+
+Specifying byte values - string format, supports _b_, _k_, _m_ and _g_, and alternatives _kb_, _mb_, _gb_
+
+	2b
+	1024kb
+	2048k
+	1gb
+
 ### Instructions
 
-**veriosn** - specify version of compose file to use (f.e. 3, 2, 3.7...)
+**version** - specify version of compose file to use (f.e. 3, 2, 3.7...)
 
 **services** 
 
@@ -393,11 +456,11 @@ Can be specified as a string containing a path to build context or as an object 
 * **args** - environment variables accessible only during the build process (first should specify in Dockerfile using **ARG** instructiona); if value is ommitted then environment variables where the compose file is run is used
 * **cache_from** (v3.2) - a list of images that the engine uses for cache resolution
 
-	build:
-	    context: .
-	    cache_from:
-		- alpine:latest
-		- corp/web_app:3.14
+		build:
+		    context: .
+		    cache_from:
+			- alpine:latest
+			- corp/web_app:3.14
 
 * **labels** (v3.3) - add metadata to the resulting image using Docker labels(https://docs.docker.com/config/labels-custom-metadata/); recommended to use reverse-DNS notation to avoid conflicts
 * **shm_size** (v3.5) - set the size of /dev/shm partition for this build's containers, specify as the number of bytes are a sting representing a byte value(https://docs.docker.com/compose/compose-file/#specifying-byte-values)
@@ -410,17 +473,17 @@ Can be specified as a string containing a path to build context or as an object 
 * **credential_spec** - [to be continued]
 * **depends_on** - express dependancies between services, docker-compose up startes redis and db before web(waits only until they have started, not until the are "ready", to control deploying stage - https://docs.docker.com/compose/startup-order/), docker-compose stop stops web before redis and db; ignored when deploying stack
 
-	version: "3.7"
-	services:
-	    web:
-		build: .
-		depends_on:
-		    - db
-		    - redis
-	    redis:
-		image: redis
-	    db:
-		image: postgres
+		version: "3.7"
+		services:
+		    web:
+			build: .
+			depends_on:
+			    - db
+			    - redis
+		    redis:
+			image: redis
+		    db:
+			image: postgres
 
 #### deploy
 
@@ -436,14 +499,14 @@ Specify configuration related to deployment and running of services. Only takes 
 * **placement** - specify placement of constraints and preferences(more info at https://docs.docker.com/engine/reference/commandline/service_create/#specify-service-placement-preferences-placement-pref)
     + node.role == manager
 
-	deploy:
-	    placement:
-		constaints: [node.role == manager]
+			deploy:
+			    placement:
+				constaints: [node.role == manager]
 
-	deploy:
-	    placement:
-		constaints:
-		    - node.role == manager
+			deploy:
+			    placement:
+				constaints:
+				    - node.role == manager
 
 * **replicas** - specify number of containers
 * **resources** - configure resource constraints, analogoes to docker service create counter part [to be continued]
@@ -577,34 +640,34 @@ Networks to join, referencing entries under the top-level network key
 
 * **aliases** - alternative hostnames for the service on te network, other services can use either service name or this aliases to connect to one of the service's containers; same service can have different aliases on different networks:
 
-	networks:
-	    some-netwerk:
-		aliases:
-		    - alies1
-		    - alies3
-	    other-netwerk:
-		aliases:
-		    - alies2
+		networks:
+		    some-netwerk:
+			aliases:
+			    - alies1
+			    - alies3
+		    other-netwerk:
+			aliases:
+			    - alies2
 
 * **ipv4_address**, **ipv6_address** - specify a static IP address for containers when joining networks; corresponding networks configuration in the top-level networks section must have an ipam block with subnet configurations covering each static address
 
-	version: "3.7"
+		version: "3.7"
 
-	services:
-	  app:
-	    image: nginx:alpine
-	    networks:
-	      app_net:
-		ipv4_address: 172.16.238.10
-		ipv6_address: 2001:3984:3989::10
+		services:
+		  app:
+		    image: nginx:alpine
+		    networks:
+		      app_net:
+			ipv4_address: 172.16.238.10
+			ipv6_address: 2001:3984:3989::10
 
-	networks:
-	  app_net:
-	    ipam:
-	      driver: default
-	      config:
-		- subnet: "172.16.238.0/24"
-		- subnet: "2001:3984:3989::/64"
+		networks:
+		  app_net:
+		    ipam:
+		      driver: default
+		      config:
+			- subnet: "172.16.238.0/24"
+			- subnet: "2001:3984:3989::/64"
 
 #### pid
 
@@ -678,18 +741,38 @@ When working with services, swarms and stacks use named volumes and constraints 
 	    - databolume:/var/lib/mysql
 
 * long syntax (v3.2) - allows additional configuration fields to be added
-    + type: [volume, bind, tmpfs, npipe]
-    + source: source of the mount, path on the host for a bind mount, or name of a volume
-    + target: path in the container
-    + read_only: flag to set as read-only
-    + bind: additional bind options (?)
-    + volumeL additional volume options
-	- nocopy: [true, false] flag to disable copying of data from a container when a volume is created
-    + tmpfs: additional tmpfs options
-	- size: size in bytes
-    + consistency: [consistent(host and container have identical view), cached(read cache, host view is authorative), delegated(read-write cache, container's view is authorative)]
+    + **type**: [volume, bind, tmpfs, npipe]
+    + **source**: source of the mount, path on the host for a bind mount, or name of a volume
+    + **target**: path in the container
+    + **read_only**: flag to set as read-only
+    + **bind**: additional bind options (?)
+    + **volume**: additional volume options
+	- **nocopy**: [true, false] flag to disable copying of data from a container when a volume is created
+    + **tmpfs**: additional tmpfs options
+	- **size**: size in bytes
+    + **consistency**: [**consistent**(host and container have identical view), **cached**(read cache, host view is authorative), **delegated**(read-write cache, container's view is authorative)]
 
-####
+Top-level key
+* **driver**: specify which volume driver should be used (default is local)
+* **driver_opts**: specify a list of options to pass to driver (driver dependent)
+* **external**: [**true**(specifies that volume has been created outside Compose, thus doesnt try to create and raises an error if doesnt exist)]
+* **labels**: [to be continued]
+* **name**: set a custon name, can be used to reference volumes that can contain special character
+
+#### single value
+
+Analogous to docker run counterpart:
+* user
+* working_dir
+* domainname
+* hostname
+* ipc
+* mac_address (legacy)
+* privileged
+* read_only
+* shm_size
+* stdin_open
+* tty
 
 ### Links
 
