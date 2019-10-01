@@ -42,6 +42,36 @@ Go further:
 https://docs.docker.com/network/
 https://runnable.com/docker/basic-docker-networking
 
+Docker's networking subsystem is pluggable, using drivers
+
+### bridge
+
+Docker bridge driver automatically installed on host machine(can provide isolation from containers on other networks). Bridge networks only apply to containers running on the same Docker daemon host. Default bridge networks is created upon Docker startup, newly created containers automatically connect to it unless otherwise specified (user-defined networks are superior to the default one)
+
+Differences between default and user-defined:
+* containers on user-defined network automatically expose all ports to each other, and no ports to outside world; on default network user needs to manually open ports for two containers to communicate, thus close unnecessary ports for outside world by other means
+* user-defined bridges provide automatic DNS resolution between containers; default requires IP, legacy --link option or manipulations in each containers /etc/hosts
+* can easaly configure new network; default requires restart or Docker
+* sharing environment variables can be done using docker-compose or docker swarm service(using secrets and configs)
+
+### host
+
+[to be continued](#https://docs.docker.com/network/host/)
+The container shares the host's networking namespace, and doesn't get its own IP. Can be used for optimization purposes (no NAT translation)
+
+### overlay
+
+[to be continued]
+
+### macvlan
+
+[to be continued]
+
+### docker network
+* **create**
+* **connect**
+* **disconnect**
+
 ## Storage in docker
 
 [to be continued]
