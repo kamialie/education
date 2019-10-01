@@ -20,6 +20,7 @@
     * https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
     * https://daringfireball.net/projects/markdown/syntax
     * https://help.github.com/en/categories/writing-on-github
+    * https://enterprise.github.com/downloads/en/markdown-cheatsheet.pdf
   + Computer hardware
     * https://nsu.ru/xmlui/bitstream/handle/nsu/9054/tanenbaum_AC.pdf
   + Computer science

@@ -1,41 +1,39 @@
-**Docker** :whale:
+# Docker :whale: :package:
 
-
-
-https://docs.docker.com/get-started/part6/ - at the ends links to go deeper
 Go further:
+* [follow up on learning on Docker official website](#https://docs.docker.com/get-started/part6/) (links at the ends)
 * [Awesome docker](https://github.com/veggiemonk/awesome-docker)
 * [Docker craft](https://runnable.com/docker/basic-docker-networking)
 
 # Contents
 
-* [ ] [Networking in docker](#Networking-in-docker)
-* [ ] [Storage in docker](#Storage-in-docker)
-* [ ] [docker-machine](#docker-machine)
-* [ ] [docker](#docker)
+* [ ] [Networking in docker](#networking-in-docker)
+* [ ] [Storage in docker](#storage-in-docker)
+* [docker-machine](#docker-machine)
+* [docker](#docker)
     - [ ] [docker swarm, docker node](#docker-swarm-and-docker-node)
+    - [ ] [docker-compose](#docker-compose)
     - [ ] [docker stack](#docker-stack)
     - [ ] [docker service](#docker-service)
-    - [ ] [docker-compose](#docker-compose)
-* [ ] [Dockerfiles](#Dockerfiles)
-    - [x] [FROM](#FROM)
-    - [x] [RUN](#RUN)
-    - [x] [CMD](#CMD)
-    - [x] [ENTRYPOINT](#ENTRYPOINT)
-    - [x] [USER](#USER)
-    - [x] [ADD](#ADD)
-    - [x] [COPY](#COPY)
-    - [x] [ENV](#ENV)
-    - [x] [ARG](#ARG)
-    - [x] [WORKDIR](#WORKDIR)
-    - [x] [USER](#USER)
-    - [ ] [VOLUME](#VOLUME)
-    - [ ] [ONBUILD](#ONBUILD)
-    - [ ] [STOPSIGNAL](#STOPSIGNAL)
-    - [ ] [HEALTHCHECK](#HEALTHCHECK)
-    - [ ] [SHELL](#SHELL)
-    - [ ] [LABEL](#LABEL)
-* [ ] [Docker compose file](#docker-compose.yml-file)
+* [Dockerfiles](#dockerfiles)
+    - [x] [FROM](#from)
+    - [x] [RUN](#run)
+    - [x] [CMD](#cmd)
+    - [x] [ENTRYPOINT](#entrypoint)
+    - [x] [USER](#user)
+    - [x] [ADD](#add)
+    - [x] [COPY](#copy)
+    - [x] [ENV](#env)
+    - [x] [ARG](#arg)
+    - [x] [WORKDIR](#workdir)
+    - [x] [USER](#user)
+    - [ ] [VOLUME](#volume)
+    - [ ] [ONBUILD](#onbuild)
+    - [ ] [STOPSIGNAL](#stopsignal)
+    - [ ] [HEALTHCHECK](#healthcheck)
+    - [ ] [SHELL](#shell)
+    - [ ] [LABEL](#label)
+* [Docker compose file](#compose-file)
     - [ ] [volumes](#volumes)
 
 ## Networking in docker
@@ -48,6 +46,8 @@ https://runnable.com/docker/basic-docker-networking
 
 [to be continued]
 https://docs.docker.com/storage/
+https://www.ionos.com/community/server-cloud-infrastructure/docker/understanding-and-managing-docker-container-volumes/
+https://stackoverflow.com/questions/30040708/how-to-mount-local-volumes-in-docker-machine
 
 ## docker-machine
 
@@ -77,6 +77,8 @@ Not specifying the name of machine defaults to the name 'default'
 * **upgrade** *\<name\>* - upgrade machine to latest version of Docker(depends on underlying distribution on host); for example if uses Ubuntu, command is similar to sudo apt-get upgrade docker-engine
 * **ssh** *\<machine_name\>* *\<command\>-* login or run a command on a machine using SSH, if no command specified logs in like regular ssh
     + [--native-ssh] - use Go ssh implementation instead of local one; docker by default tries to find local ssh and uses that it does find it
+* **mount** *\<machinename:/path/to/dir\>* - 
+    + [-u] *\<machinename:/path/to/dir\>* - unmount
 
 ### Links
 
@@ -109,9 +111,10 @@ docker [command] --help - brings options list
 * **exec**
 * **attach**
 * **start**
-* **pull** - pull(download) an image from a registry, can be used to update an image as well
 * **build** .
     + [--tag], [-t] *\<name\>:\<tag\>* - tag resulting image
+* **pull** - pull(download) an image from a registry, can be used to update an image as well
+* **push**
 
 ### Links
 
@@ -146,16 +149,32 @@ https://www.youtube.com/watch?v=bU2NNFJ-UXA
 
 ## docker stack
 
-...
+[Overview](#https://docs.docker.com/engine/reference/commandline/stack/)
+Kubernetes is a possible host alongside docker swarm, example and supporting flags [to be continued]
+When deploying stack(compose file) in a swarm the context is taken from [context.go](#https://github.com/docker/swarmkit/blob/master/template/context.go)
+
+```yml
+version: "3"
+services:
+web:
+    image: artnova/pyweb
+    environment:
+	NODENAME: "{{.Node.Hostname}}"
+```
 Single container running in a service is called a _task_.
 
 ### Commands
 
 **docker stack**
-* **deploy** *\<stack_name\>* - deploy a new stack or update an existing one(no need to shut down, just apply changes and run command again)
-    + [--compose-file] [-c] *\<path_to_docker-compose.yml\>* - path to docker-compose.yml that is docker swarm is used
-* **ps** *\<stack_name\>* - view all tasks of a stack
+* **deploy** *\<stack_name\>* - deploy a new stack or update an existing one(no need to shut down, just apply changes and run command again); supports compose file v3.0 and higher
+    + [--compose-file] [-c] *\<path_to_docker-compose.yml\>* - path to docker-compose.yml that is docker swarm is used, can provide multiple files by multiple flags (**docker service ls** to confirm correct creation)
+* **ps** *\<stack_name\>* - view all tasks of a stack, [formatting output](#https://docs.docker.com/engine/reference/commandline/stack_ps/#formatting)
+    + [--quiet], [-q] - only show IDs of the tasks, can be useful to be used with **docker inspect**
+
+		    docker inspect $(docker stack ps -q voting)
+
 * **ls** - lists the stacks
+* **services** - list the services on the stack
 * **rm** *\<stack_name\>* - removes the stack from the swarm(has to be run targeting a manager node) that is services, netwerks and secret associations
 
 ### Links
@@ -182,24 +201,55 @@ Load-balancing is done through round-robin fashion(after last one comes first)
 
 ## docker-compose
 
+[Overview](#https://docs.docker.com/compose/reference/overview/)
+Use **up** to set up and start services the first time, **run** for "one-off" tasks, **start** for restarting previously created containers.
+
 ### Commands
 
 **docker-compose**
 * **config** - validate and view the Compose file
+    + [--services] - print services, one per line
+    + [--volumes] - print volumes one per line
+    + [--quiet], [-q] - only validate, dont print anything
 * **up** - build, recreate, start and attach to container
-    + [--detach], [-d] - set a driver; full list of avaliable drivers at https://docs.docker.com/machine/drivers/
+    + [--detach], [-d] - set a driver; [full list of avaliable drivers](#https://docs.docker.com/machine/drivers/)
     + [--build] - build images before starting(force to even if they exist)
 * **down** - stops and removes containers, networks, volumes and images createad by up, external networks and volumes are not removed
+    + [--rmi] *\<type\>* - remore images, type is either *'all'* (all images used by any service) or *'local'* (only images that dont have custom tag set by the 'image' field
+    + [--volume], [-v] - remove named volumes declared in 'volumes' section and anonymous volumes attached to containers
 * **exec** - equivalent of docker exec, allows to run commands in services (by default allocates TTY, example, docker-compose exec web sh)
+    + [--detach], [-d] - run command in a background
+    + [--privileged] - give extended privileges to the process
+    + [--index]*\<index\>* - index of the container if there are multiple instances of a service (default is 1)
+    + [--workdir], [-w]*\<dir\>* - path to workdor directory for this command
 * **kill** - forces conainers to stop by sending SIGKILL, optinally other signals can be sent
+    + [-s]*\<SIGNAL\>* - SIGNAL to send to the container
 * **logs** - display logs output from services
     + [--folow], [-f] - follow output
-* **pause** - pauses running containers of the service, can be unpaused by docker-compose unpause
+* **pause** - pauses running containers of the service, can be unpaused by **docker-compose unpause**
 * **ps** - list containers
+    + [-quiet], [-q] - only display IDs
+    + [--services] - display services
+    + [--all], [-a] - show all stopped containers
 * **restart** - restart all stopped and running services, for changes in Compose file use restart_policy
 * **rm** - remove stopped service containers
 * **scale** - sets the number of containers to run for a service; alternatively in Compose file 3. can specify replicas under deploy key, deploy key only works woth docker stack deploy command
 * **top** - list running processes
+* **events** - stream container events for every container in the project
+    + [--json] - json object is printed one per line in the following format
+		```json
+		{
+		    "time": "2015-11-20T18:01:03.615550",
+		    "type": "container",
+		    "action": "create",
+		    "id": "213cf7...5fc39a",
+		    "service": "web",
+		    "attributes": {
+			"name": "application_web_1",
+			"image": "alpine:edge"
+		    }
+		}
+		```
 
 ### Links
 
@@ -295,16 +345,18 @@ Configure container that will run as exec; both **CMD** and **ENTRYPOINT** defin
 
 Can be used in combination with a helper script, allowing it to work just like in combination with **CMD** - having default and particular behaviour. Script uses the _exec_ Bash command so that the final running application becomes the container's PID 1, allowing to receive any Unix signals
 
-	#!/bin/bash
-	set -e
-	if [ "$1" = 'postgres' ]; then
-	    chown -R postgres "$PGDATA"
-	    if [ -z "$(ls -A "$PGDATA")" ]; then
-		gosu postgres initdb
-	    fi
-	    exec gosu postgres "$@"
-	fi
-	exec "$@"
+```bash
+#!/bin/bash
+set -e
+if [ "$1" = 'postgres' ]; then
+    chown -R postgres "$PGDATA"
+    if [ -z "$(ls -A "$PGDATA")" ]; then
+	gosu postgres initdb
+    fi
+    exec gosu postgres "$@"
+fi
+exec "$@"
+```
 
 #### EXPOSE
 - **EXPOSE** _\<port\>_ [_<port>/protocol>..._] 
@@ -396,7 +448,7 @@ Sets the user name (or UID) to use when running the image and any **RUN**, **CMD
 ------------
 
 
-# docker-compose.yml file
+# Compose file
 
 docker-compose [-f] \<path\> - specify path to docker-compose.yml file; can specify two, the later is applied over and in addition to previuos files; if nothing is specified docker is looking for docker-compose.yml and docker-compose.overried.yml - must supply at least the first; followed by '-' instructs to read from stdin
 
