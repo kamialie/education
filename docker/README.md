@@ -10,7 +10,7 @@ Go further:
 # Contents
 
 * [Networking in docker](#networking-in-docker)
-    - [ ] [bridge](#bridge)
+    - [x] [bridge](#bridge)
     - [ ] [overlay](#overlay)
     - [x] [host](#host)
     - [ ] [macvlan](#macvlan)
@@ -20,7 +20,7 @@ Go further:
     - [ ] [docker swarm, docker node](#docker-swarm-and-docker-node)
     - [ ] [docker-compose](#docker-compose)
     - [ ] [docker stack](#docker-stack)
-    - [ ] [docker service](#docker-service)
+    - [x] [docker service](#docker-service)
 * [Dockerfiles](#dockerfiles)
     - [x] [FROM](#from)
     - [x] [RUN](#run)
@@ -199,19 +199,24 @@ A swarm is a group of machines that are running Docker and joined into a cluster
 Machines can be physical or virtual, referred as nodes in swarm.
 Always run docker swarm init and join with port 2377 or leave it blank for default(swarm manager port)
 
+Removing nodes from the swarm includes both leaving the swarm with **docker swarm leave**, then removing it from the list on a manager with **docker node rm** *\<node_name\>*
 ### Commands
 
 **docker swarm**
 * **init** - initialize swarm, targeted docker engine becomes a manager; generates two random tokens - manager and worker
     + [--advertise-addr] - addvertise address
 * **leave** - leave a swarm, works without warning for workers
-    [--force] - use it on manager, when swarm wont be used anymore; proper way is to demote manager to worker, then leave the swarm without warnings
+    + [--force] - use it on manager, when swarm wont be used anymore; proper way is to demote manager to worker, then leave the swarm without warnings
 * **join-token** [*manager*, *worker*] - print token to join the existing swarm as manager or a worker (run on manager node)
 
-docker node
+**docker node**
 * **ls** - list all the nodes that the Docker Swarm manager knows about(used on manager node)
 * **ps** *\<node_name\>* - list tasks running on one or more nodes, default to current node
     + $(docker ls -q) - list all tasks in a swarm(better use docker stack ps)
+* **rm** *\<node_name\>* - remove one or more node s from the swarm
+    + [--force], [-f] - force remove
+* **demote** *\<manager_node_name\>* - demote manager to a worker
+* **promote** *\<node_name\>* - promote node to a manager (can be run only on a manager)
 
 ### Links
 
@@ -266,6 +271,15 @@ Load-balancing is done through round-robin fashion(after last one comes first)
 **docker service**
 * *ls* - lists services running in the swarm(has to be run targeting a manager node)
 * **ps** *\<service\>* - list the tasks of one or more services(has to be run targeting a manager node)
+* **logs** - show logs of a service or task
+    + [--follow], [-f] - follow log output
+* **create** - create a service in a swarm (must be run on a manager node)
+    + [--name] *\<service_name\*> - set service name
+    + [--network] *\<network_name\>* - attach a service to an existing network
+    + [--replicas] *\<number\>* - set number of containers for the service
+    + [--publish], [-p] *\<host:service\>* - publish service ports externally to the swarm
+* **rm** *\<service_names\>* - remove one or move services
+* **scale** *\<service_name=number\>* - scale one or more services
 
 ### Links
 
