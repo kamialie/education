@@ -4,10 +4,16 @@ Go further:
 * [follow up on learning on Docker official website](#https://docs.docker.com/get-started/part6/) (links at the ends)
 * [Awesome docker](https://github.com/veggiemonk/awesome-docker)
 * [Docker craft](https://runnable.com/docker/basic-docker-networking)
+* [Docker github documentation](#https://github.com/docker/docker.github.io)
+* [Kubernetes](#https://www.docker.com/products/kubernetes)
 
 # Contents
 
-* [ ] [Networking in docker](#networking-in-docker)
+* [Networking in docker](#networking-in-docker)
+    - [ ] [bridge](#bridge)
+    - [ ] [overlay](#overlay)
+    - [x] [host](#host)
+    - [ ] [macvlan](#macvlan)
 * [ ] [Storage in docker](#storage-in-docker)
 * [docker-machine](#docker-machine)
 * [docker](#docker)
@@ -39,8 +45,10 @@ Go further:
 ## Networking in docker
 
 [to be continued]
-https://docs.docker.com/network/
+[official docs](#https://docs.docker.com/network/)
 https://runnable.com/docker/basic-docker-networking
+[multi-host networking](#https://docs.docker.com/network/overlay-standalone.swarm/)
+[docker swarm reference architecture](#https://success.docker.com/article/networking)
 
 Docker's networking subsystem is pluggable, using drivers
 
@@ -48,20 +56,41 @@ Docker's networking subsystem is pluggable, using drivers
 
 Docker bridge driver automatically installed on host machine(can provide isolation from containers on other networks). Bridge networks only apply to containers running on the same Docker daemon host. Default bridge networks is created upon Docker startup, newly created containers automatically connect to it unless otherwise specified (user-defined networks are superior to the default one)
 
+Default bridge network is called *bridge*(docker0 on host), used to connect containers on a single host. *Host* and *none* arent fully-fledged and only used to start a container connected directly to the Docker daemon host's networking stack, or to start a container with no network devices.
+
 Differences between default and user-defined:
 * containers on user-defined network automatically expose all ports to each other, and no ports to outside world; on default network user needs to manually open ports for two containers to communicate, thus close unnecessary ports for outside world by other means
 * user-defined bridges provide automatic DNS resolution between containers; default requires IP, legacy --link option or manipulations in each containers /etc/hosts
 * can easaly configure new network; default requires restart or Docker
 * sharing environment variables can be done using docker-compose or docker swarm service(using secrets and configs)
 
+Container can connect to more than one bridge network
+
 ### host
 
 [to be continued](#https://docs.docker.com/network/host/)
-The container shares the host's networking namespace, and doesn't get its own IP. Can be used for optimization purposes (no NAT translation)
-
+The container shares the host's networking namespace (directly reachable from host IP), and doesn't get its own IP. Can be used for optimization purposes, when there is a need to handle large range of ports (no NAT translation). Only works on Linux hosts.
+```bash
+docker run --rm -d --network host --name my_nginx nginx
+```
 ### overlay
 
 [to be continued]
+The overlay network creates a distributed network among multiple Docker daemon hosts.
+
+When swarm is initialized or join Docker hosts to an existing swarm, two networks are created on the host:
+1. overlay network called *ingres*, which handles control and data traffic related to swarm services; swarm service connects to it by default if not user-defined is specified
+2. bridge network called *docker_gwbridge*, which connects the individual Docker daemon to the other daemons participating in the swarm; it is a virtual bridge that connects the overlay networks(including ingress) to an individual Docker daemon's physical network, so that traffic can from flow to and from swarm managers and workers; exists in the kernel of a Docker host.
+
+When creating a overlay network for services on manager, docker automatically adds them on worker node when creating a service and removes them when removing a service.
+
+User-defined overlay network also provides DNS translation in contrast to default ingress network.
+
+Standalone containers can also join overlay network, if it was created with *attachable* flag:
+```bash
+docker network create -d overlay --attachable test-net
+docker run -dti --network test-net alpine
+```
 
 ### macvlan
 
@@ -69,8 +98,21 @@ The container shares the host's networking namespace, and doesn't get its own IP
 
 ### docker network
 * **create**
+    + [--attachable] - enable manual container attachment
+    + [--driver], [-d] [*bridge*, *overlay*] - driver to manage the network, default are bridge or overlay, can specify third party pluggins
+    + [--ingress] - create swarm routing-mesh network
+    + [--subnet] - subnet in CIDR format that represents a network segment (bridge network can only have one)
+    + [--gateway] - specify gateway address, if omitted Engine selects it automatically
+    + [--ip-range] - allocate container ip from a sub-range
+    + [--aux-address]
+    + [--opt], [-o] *\<arguments\>* - set driver specific options
+	encrypted=true - option for overlay driver
+* **ls** - list networks in the docker host
 * **connect**
 * **disconnect**
+* **inspect** *\<network_name\>* - display detailed info about one or more networks
+    + [--format], [-f] - format output
+    + [--verbose], [-v] - verbose output
 
 ## Storage in docker
 
@@ -85,13 +127,13 @@ https://stackoverflow.com/questions/30040708/how-to-mount-local-volumes-in-docke
 Tool for provisioning and managing Dockerized hosts (hosts with Docker Engine on them), typically installed on local system, has its own command line client (docker-machine) and the Docker Engine client (docker)
 Docker Engine is a client-server app made if the Docker daemon, REST API, CLI client that talks to the daemon (through REST API wrapper)
 
-Can ssh into machine using "docker-machine ssh \<machine_name\>". To work as root either add sudo upfront or change to root either by "sudo -i" or "sudo su"; login and password for ssh connection - docker - tcuser
+Can ssh into machine using "docker-machine ssh *\<machine_name\>*". To work as root either add sudo upfront or change to root either by "sudo -i" or "sudo su"; login and password for ssh connection - docker - tcuser
 
 Docker autosend bug reports in case of docker-machine create or upgrade faulires, to opt out create .docker/machine/no-error-report file (doesnt have to have any contents)
 
 ### Commands
 
-Not specifying the name of machine defaults to the name 'default'
+Not specifying the name of machine defaults to the name *default*
 
 **docker-machine**
 * **ls** - list available machines
@@ -115,7 +157,7 @@ Not specifying the name of machine defaults to the name 'default'
 
 ## docker
 
-...
+Detach from container - Ctrl + p Ctrl + q
 
 ### Commands
 
@@ -164,6 +206,7 @@ Always run docker swarm init and join with port 2377 or leave it blank for defau
     + [--advertise-addr] - addvertise address
 * **leave** - leave a swarm, works without warning for workers
     [--force] - use it on manager, when swarm wont be used anymore; proper way is to demote manager to worker, then leave the swarm without warnings
+* **join-token** [*manager*, *worker*] - print token to join the existing swarm as manager or a worker (run on manager node)
 
 docker node
 * **ls** - list all the nodes that the Docker Swarm manager knows about(used on manager node)
