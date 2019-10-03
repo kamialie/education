@@ -121,6 +121,31 @@ https://docs.docker.com/storage/
 https://www.ionos.com/community/server-cloud-infrastructure/docker/understanding-and-managing-docker-container-volumes/
 https://stackoverflow.com/questions/30040708/how-to-mount-local-volumes-in-docker-machine
 
+By default all files created inside a container are stored on the writable layer:
+* data doesn't persist when container is deleted
+* writable layer is tightly coupled to the host
+* writing to the writable layer requires a storage driver to manage the filesystem (union filesystem, using Linux kernel - extra abstraction that reduces performance)
+
+### Storage types
+
+#### Volumes
+
+Stored in a part of the host filesystem which is managed by Docker (/var/lib/docker/volumes on Linux). The directory created at this path is what is mounted into the conrainer. Multiple containers can share one volume.
+
+Easy back up data by accessing it on /var/lib/docker/volumes/volume_name.
+
+If empty volume is mounted into directory in the container in which files or directories exist, they are copied over. If container is started with non-existing volume, empty volume is created.
+
+#### Bind mounts
+
+May be stored anywhere on the hot system. The file or directory is referenced by its full path on the host machine. Does not need to exists, will be created on demand. Can affect host's filesytem, as container has full access to it.
+Good for sharing configuration files, source code or artufacts from the host to containers (by default Docker bind mounts /etc/resolv.conf).
+
+#### tmpfs
+
+Stored in the host system's memory only, and are never written to the host filesystem. Isnt persistent on disk, either on the Docker host or within container. Used by container during its lifetime to store non-persistent state or sensitive info (swarm uses tmpfs mounts to mount secrets into service's containers).
+Best usage when you dont want data to persist either on the host or on container, or when writing large amount of non-persistent data
+
 ## docker-machine
 
 ...
@@ -531,6 +556,7 @@ Sets the user name (or UID) to use when running the image and any **RUN**, **CMD
 
 - https://docs.docker.com/engine/reference/builder/
 - https://kapeli.com/cheat_sheets/Dockerfile.docset/Contents/Resources/Documents/index
+- [COPY with --from flag](#https://medium.com/@tonistiigi/advanced-multi-stage-build-patterns-6f741b852fae)
 
 ------------
 
