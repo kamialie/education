@@ -33,3 +33,11 @@ To access variable use '$' in front:
 * <esc> + . - insert last argument of previous command
 
 ### Links
+
+* https://unix.stackexchange.com/questions/4782/how-to-pass-the-output-of-one-command-as-the-command-line-argument-to-another
+* https://superuser.com/questions/110054/custom-vim-highlighting
+* https://brettterpstra.com/2015/07/09/shell-tricks-inputrc-binding-fun/
+* https://brettterpstra.com/2015/07/09/shell-tricks-inputrc-binding-fun/
+* https://github.com/ycm-core/YouCompleteMe#mac-os-x-super-quick-installation
+* https://realpython.com/vim-and-python-a-match-made-in-heaven/
+* https://github.com/junegunn/vim-plug

@@ -9,15 +9,7 @@ https://stackoverflow.com/questions/25631989/sed-insert-line-command-osx
 
 * [sed](#sed)
 * [diff](#diff)
-
-
-
-
-
-
-
-
-
+* [curl](#curl)
 
 ## sed
 
@@ -45,3 +37,9 @@ also see [cmp use](#https://stackoverflow.com/questions/12900538/fastest-way-to-
 ### Flags
 
 * **-brief**, **-q** - output only whether files differ
+
+## curl
+
+### Flags
+
+* **-i**, **--include** - include the HTTP-header in the output
