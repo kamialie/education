@@ -1,11 +1,11 @@
 # Docker :whale: :package:
 
 Go further:
-* [follow up on learning on Docker official website](#https://docs.docker.com/get-started/part6/) (links at the ends)
+* [follow up on learning on Docker official website](https://docs.docker.com/get-started/part6) (links at the ends)
 * [Awesome docker](https://github.com/veggiemonk/awesome-docker)
 * [Docker craft](https://runnable.com/docker/basic-docker-networking)
-* [Docker github documentation](#https://github.com/docker/docker.github.io)
-* [Kubernetes](#https://www.docker.com/products/kubernetes)
+* [Docker github documentation](https://github.com/docker/docker.github.io)
+* [Kubernetes](https://www.docker.com/products/kubernetes)
 
 # Contents
 
