@@ -537,8 +537,11 @@ Sets the working directory for any **RUN**, **CMD**, **ENTRYPOINT**, **COPY** an
 Sets the user name (or UID) to use when running the image and any **RUN**, **CMD**, **ENTRYPOINT** instructions that follows. Avoid installing or using sudo as it has unpredictable TTY and signal-forwarding behavior. For similar to sudo behavior consider "gosu" (https://github.com/tianon/gosu).
 
 #### ONBUILD
+- **ONBUILD** **[INSTRUCTION]**
 
-[to be continued]
+Adds a trigger instruction to be executed at a later time, when current image is used as a base image, as if it was inserted right after **FROM** instruction in the calling Dockerfile.
+All instructions under **ONBUILD** are saved under OnBuild key and can be inspected with **docker inspect** command. Triggers are not inherited by children(not saved under Onbuild key in a resulting image).
+Can not trigger **FROM**
 
 #### STOPSIGNAL
 
