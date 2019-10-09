@@ -176,6 +176,7 @@ Not specifying the name of machine defaults to the name *default*
     + [--native-ssh] - use Go ssh implementation instead of local one; docker by default tries to find local ssh and uses that it does find it
 * **mount** *\<machinename:/path/to/dir\>* - 
     + [-u] *\<machinename:/path/to/dir\>* - unmount
+* **inspect** *\<machine_name\>* - inspect info about a machine
 
 ### Links
 

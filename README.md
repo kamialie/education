@@ -31,6 +31,7 @@
   + http://www.braingames.ru/
   + https://www.youtube.com/watch?v=0ZGbIKd0XrM
   + https://stackoverflow.com/questions/40082346/how-to-check-if-a-file-exists-in-a-shell-script
+  + https://xkcd.com/571/ - commis
 
 - cybersecurity related
   + https://hackerone.com/reports/403417
