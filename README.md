@@ -2,12 +2,12 @@
 
 - Ed suggestions:
   + https://ru.wikipedia.org/wiki/Model-View-ViewModel
-  + https://ru.wikipedia.org/wiki/Команда_(шаблон_проектирования)
-  + https://ru.wikipedia.org/wiki/Реактивное_программирование 
+  + https://ru.wikipedia.org/wiki/Команда\_(шаблон\_проектирования)
+  + https://ru.wikipedia.org/wiki/Реактивное\_программирование 
   + https://ru.wikipedia.org/wiki/Design_Patterns
   + https://ru.wikipedia.org/wiki/GRASP
   + https://habr.com/ru/post/348286/
-  + https://ru.m.wikipedia.org/wiki/SOLID_(объектно-ориентированное_программирование)
+  + https://ru.m.wikipedia.org/wiki/SOLID\_(объектно-ориентированное\_программирование)
 
 - education sources:
   + https://tproger.ru/curriculum/devops/
@@ -32,6 +32,7 @@
   + https://www.youtube.com/watch?v=0ZGbIKd0XrM
   + https://stackoverflow.com/questions/40082346/how-to-check-if-a-file-exists-in-a-shell-script
   + https://xkcd.com/571/ - commis
+  + https://register.ubisoft.com/rabbids-coding/en-US - learning game from Ubisoft
 
 - cybersecurity related
   + https://hackerone.com/reports/403417
@@ -51,7 +52,7 @@
     * http://forkbomb.ru/
 
 - OS:
-  + https://en.wikipedia.org/wiki/Andrew_S._Tanenbaum
+  + https://en.wikipedia.org/wiki/Andrew_S.\_Tanenbaum
 
 - AI:
   + https://habr.com/ru/post/305578/
@@ -70,7 +71,7 @@
   + https://guides.hexlet.io/how-to-prepare-for-interview/?utm_source=vk.com&utm_medium=social&utm_campaign=3-poleznyh-gayda-ot-hexlet-dlya-teh--kto
   + https://guides.hexlet.io/how-to-pass-the-interview/?utm_source=vk.com&utm_medium=social&utm_campaign=3-poleznyh-gayda-ot-hexlet-dlya-teh--kto
   + https://ru.hexlet.io/challenges/intro_to_programming_fizzbuzz
-  + https://ru.wikipedia.org/wiki/Экстремальное_программирование
+  + https://ru.wikipedia.org/wiki/Экстремальное\_программирование
   + https://ru.hexlet.io/pages/recommended-books
   + https://github.com/Hexlet/ru-test-assignments
   + https://ru.hexlet.io/projects

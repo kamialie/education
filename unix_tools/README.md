@@ -10,6 +10,7 @@ https://stackoverflow.com/questions/25631989/sed-insert-line-command-osx
 * [sed](#sed)
 * [diff](#diff)
 * [curl](#curl)
+* [tar](#tar)
 
 ## sed
 
@@ -43,3 +44,14 @@ also see [cmp use](#https://stackoverflow.com/questions/12900538/fastest-way-to-
 ### Flags
 
 * **-i**, **--include** - include the HTTP-header in the output
+
+## tar
+
+Manipulate tape archives
+
+### Flags
+
+**tar**
+
+* **--extract**, **-x** - extract to disk from the archive; if a file with the same name appears more than once, later once overwrite earlier copies
+* **--file**, **-f** *\<file\>* - read the archive or write the archive to the specified file; the filename can be '-' for standard input or output

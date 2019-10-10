@@ -41,3 +41,4 @@ To access variable use '$' in front:
 * https://github.com/ycm-core/YouCompleteMe#mac-os-x-super-quick-installation
 * https://realpython.com/vim-and-python-a-match-made-in-heaven/
 * https://github.com/junegunn/vim-plug
+* https://stackoverflow.com/questions/33177595/what-does-cc-path-to-directory-configure-do - where does bash store this variables
