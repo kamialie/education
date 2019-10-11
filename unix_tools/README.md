@@ -43,7 +43,8 @@ also see [cmp use](#https://stackoverflow.com/questions/12900538/fastest-way-to-
 
 ### Flags
 
-* **-i**, **--include** - include the HTTP-header in the output
+* **--include**, **-i**  - include the HTTP-header in the output
+* **--output**, **-o** *\<file\>* - write output to *\<file\>* instead of stdout. Can specify multiple arguments, order does not matter, just the first **-o** is for the first argument(url), second for the second and so on.
 
 ## tar
 
