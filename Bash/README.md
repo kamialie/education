@@ -1,4 +1,4 @@
-# bash, shell...
+# bash, shell... 📟
 
 [Bash home page](https://www.gnu.org/software/bash/)
 [Brief documentaton](https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html)
@@ -7,9 +7,15 @@ Bash metacharacters(must be quoted or escaped if not intendent to be used): spac
 
 # Contents
 
-* [Quoting](#quoting)
-* [ ] [Variables](#variables)
+* [Shell syntax](#shell-syntax)
+	- [Quoting](#quoting)
+	- [ ] [Variables](#variables)
+* [Shell commands](#shell-commands)
+	- [ ] [Pipelines](#pipelines)
+	- [ ] [Lists of Commands](#lists-of-commands)
 * [Fun stuff](#fun-stuff)
+
+----------
 
 ### Quoting
 
@@ -17,20 +23,101 @@ Bash metacharacters(must be quoted or escaped if not intendent to be used): spac
 
 ANSI-C quoting take the form *\$\'string\'*, for example \t, \n, \octal_number_for_unicode_symbol, etc
 
-Interactive comments are on by default
+Interactive comments are on by default.
+
+----------
 
 ### Variables
 
-To access variable use '$' in front:
-* 0 - name of the schell or shell script
-* $ - ID of the shell
-* ! - ID of the last executed background process(job, pipeline)
-* ? - exit status of the last executed foreground pipeline
-* _ - expands to the last argument of last command executed
+To access variable use '**$**' in front:
+* **0** - name of the schell or shell script
+* **$** - ID of the shell
+* **!** - ID of the last executed background process(job, pipeline)
+* **?** - exit status of the last executed foreground pipeline
+* **_** - expands to the last argument of last command executed
+
+----------
+
+### Shell commands
+
+Simple shell commands consists of the commands itself followd by arguments, separeted by spaces
+
+----------
+
+### Pipelines
+
+The format for a pipeline:
+```bash
+[time [-p]] [!] command1 [ | or |& command2] ...
+```
+
+A pipeline is a sequence of one or more commands separeted by one of the control operators '**|**' or '**|&**'. The output of the each command is connected via a pipe to the input of the next command (connection is performed before any redirections specified by the command).
+
+If '**|&**' is used, command's standard error, in addition to its standard output, is connected to next command input (shorthand for 2>&1 |).
+
+Reserved work *time* causes timing statistics to be printed for the pipeline once it finishes, the **-p** option changes the output to POSIX format.
+
+Each command in a pipeline is executed in its own subshell, which is a separete process. The exit status of a pipeline is the exit status of the last command in the pipeline. If the reserved '**!**' precedes the pipeline, the exit status is the logical negation of the exit status.
+
+----------
+
+### Lists of commands
+
+A list is a sequence of one or more pipelines separeted by one of the operators (optionally terminated by '**;**', '**&**', or a newline):
+
+		;, &, &&, ||
+
+Of the list operators, '**&&**', '**||**' have equal precedence, followed by '**;**', '**&**', which have equal precedence.
+
+If a command is terminated by a control operator '**&**', the shell executes the command asynchronously in a subshell (in the background). The shell doesnt wait for the command to finish and the return status is 0. Command separated by a '**;**' are executed sequentially.
+
+AND example:
+```bash
+command1 && command2
+```
+Second command is executed of first one returns an exit status of zero (success).
+
+OR example:
+```bash
+command1 || command2
+```
+Second command is executed of first one returns a non-zero exit status.
+
+----------
+
+### Compound commands
+
+
+----------
+
+### Looping constructs
+
+'**;**' can be replaced by one or more newlines.
+
+#### until
+```bash
+until test-commands; do consequent-commands; done
+```
+Execute consequent commands as long as test command has an exit status which is not zero. Return status is the return status of the last consequent command, or zero if none was executed.
+
+#### while
+```bash
+while test-commands; do consequent-commands; done
+```
+Same as above.
+
+### for
+```bash
+for name [ [in [words ...] ] ; ] do commands; done
+```
+
+----------
 
 ### Fun stuff
 
-* <esc> + . - insert last argument of previous command
+* \<esc\> + . - insert last argument of previous command
+
+----------
 
 ### Links
 
