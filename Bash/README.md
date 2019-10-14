@@ -1,6 +1,7 @@
 # bash, shell... 📟
 
 [Bash home page](https://www.gnu.org/software/bash/)
+
 [Brief documentaton](https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html)
 
 Bash metacharacters(must be quoted or escaped if not intendent to be used): space, tab, newline, '|', '&', ';', '(', ')', '<', '>'.
@@ -109,7 +110,38 @@ Same as above.
 ### for
 ```bash
 for name [ [in [words ...] ] ; ] do commands; done
+
+for (( expr1 ; expr2 ; expr 3 )) ; do commands ; done
 ```
+
+Expands *words* and execute *commands* once for each member in the resultant list.
+
+### Conditional constructs
+
+#### if
+```bash
+if test-command; then
+    consequent-commands;
+[elif more-test-commands; then
+    more-consequent;]
+[else alternate-consequents;]
+fi
+```
+If clause evaluated when test-commands returns 0 (success status), otherwise elif, else clauses execute in turn.
+
+#### case
+```
+case word in
+    [ [(] pattern [| pattern]...) command-list ;;]...
+esac
+```
+Case will selectively execute command-list to the first pattern that matches *word*. '**|**' is used to separate patterns, '**)**' - to terminate a pattern list.
+
+Each clause (list of patterns and associated command-list) must be terminated with '**;;**', '**;&**', or '**;;&**'. Default case can be denoted with '\*' (common idiom).
+* **;;** - no subsequent matches are attempted after first pattern match
+* **;&** - causes execution to continue
+* **;;&** - shell tests the next clause and executes it on succcessful match
+
 
 ----------
 

@@ -3,6 +3,10 @@
 http://www.yourownlinux.com/2015/04/sed-command-in-linux-append-and-insert-lines-to-file.html
 https://stackoverflow.com/questions/25631989/sed-insert-line-command-osx
 
+man hier - file hierarchy
+[Ctrl][Z] - put the current task to background
+fg - bring the background process back to foreground
+
 **Double-quoted string is processed first by the shell**
 
 # Contents
