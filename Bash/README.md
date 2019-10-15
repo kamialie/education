@@ -14,6 +14,15 @@ Bash metacharacters(must be quoted or escaped if not intendent to be used): spac
 * [Shell commands](#shell-commands)
 	- [ ] [Pipelines](#pipelines)
 	- [ ] [Lists of Commands](#lists-of-commands)
+	- [ ] [Compound commands](#compound-commands)
+		+ [x] [Looping constucts](#looping-constucts)
+		+ [ ] [Conditional constructs](#conditional-constructs)
+			- [x] [if](#if)
+			- [x] [case](#case)
+			- [x] [select](#select)
+			- [x] [((...))](#((...)))
+			- [ ] [[[...]]](#[[...]])
+		+ [x] [Grouping commands](#grouping-commands)
 * [Fun stuff](#fun-stuff)
 
 ----------
@@ -45,7 +54,10 @@ Simple shell commands consists of the commands itself followd by arguments, sepa
 
 ----------
 
+[back to contents](#contents)
+
 ### Pipelines
+[back to contents](#contents)
 
 The format for a pipeline:
 ```bash
@@ -61,6 +73,8 @@ Reserved work *time* causes timing statistics to be printed for the pipeline onc
 Each command in a pipeline is executed in its own subshell, which is a separete process. The exit status of a pipeline is the exit status of the last command in the pipeline. If the reserved '**!**' precedes the pipeline, the exit status is the logical negation of the exit status.
 
 ----------
+
+[back to contents](#contents)
 
 ### Lists of commands
 
@@ -82,14 +96,17 @@ OR example:
 ```bash
 command1 || command2
 ```
-Second command is executed of first one returns a non-zero exit status.
+Second command is executed if first one returns a non-zero exit status.
 
 ----------
 
 ### Compound commands
 
+...
 
 ----------
+
+[back to contents](#contents)
 
 ### Looping constructs
 
@@ -116,6 +133,10 @@ for (( expr1 ; expr2 ; expr 3 )) ; do commands ; done
 
 Expands *words* and execute *commands* once for each member in the resultant list.
 
+----------
+
+[back to contents](#contents)
+
 ### Conditional constructs
 
 #### if
@@ -130,7 +151,7 @@ fi
 If clause evaluated when test-commands returns 0 (success status), otherwise elif, else clauses execute in turn.
 
 #### case
-```
+```bash
 case word in
     [ [(] pattern [| pattern]...) command-list ;;]...
 esac
@@ -142,6 +163,57 @@ Each clause (list of patterns and associated command-list) must be terminated wi
 * **;&** - causes execution to continue
 * **;;&** - shell tests the next clause and executes it on succcessful match
 
+#### select
+```bash
+select name [in words ...]; do commands; done
+```
+The select constructs allow the easy generation of menus.
+
+The set if expanded words is printed on the stderror, preceded with a number (if *in words* is ommitted, the positional parameters are printed). Then PS3 prompt is printed and a line is read from stdin. If the line is number corresponding to the given options, name is set to that value. Answer is saved is **REPLY** variable. Commands are executed until a break command is encountered.
+```bash
+select fname in *;
+do
+	echo you picked $fname \($REPLY\)
+	break;
+done
+```
+
+#### ((...))
+```bash
+((expression))
+```
+
+The arithmetic *expression* is evaluated according to the [Shell Arithmetic](#shell-arithmetic). If the value is non-zero, the return status is 0; otherwise 1. Same as [let build in](#bash-builtins)
+
+#### [[...]]
+
+
+----------
+
+[back to contents](#contents)
+
+### Grouping commands
+```bash
+( list )
+{ list; }
+```
+Bash provides two ways to group commands to be executed as a unit. Redirection may be applied to the entire command [list](#lists-of-commands). Parentheses cause a subshell environment to be created for the command list (variable assignment do not remain), curly braces execute command list in the current shell (semicolon is required for curly braces).
+
+Historical note: braces are reserved words and must be separated from the list by blanks or other meracharacters, parentheses are operators and are always recognized.
+
+----------
+
+[back to contents](#contents)
+
+### Coprocesses
+```bash
+coproc [NAME] command [redirections]
+```
+Coproc is reserved word and forces the shell command to be executed in a subshell (as if '**&**' control operator was specified). Two-way pipe is established between executing shell and the coprocess.
+
+Creates a corpocess named *NAME* (default *COPROC*).
+
+[example explained](https://unix.stackexchange.com/questions/86270/how-do-you-use-the-command-coproc-in-various-shells)
 
 ----------
 
@@ -150,6 +222,8 @@ Each clause (list of patterns and associated command-list) must be terminated wi
 * \<esc\> + . - insert last argument of previous command
 
 ----------
+
+[back to contents](#contents)
 
 ### Links
 
