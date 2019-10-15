@@ -1,0 +1,6 @@
+[submodule "simple-java-maven-app"]
+	path = simple-java-maven-app
+	url = https://github.com/wise-Kaas/simple-java-maven-app.git
+[submodule "mulpibranch-pipeline-project"]
+	path = mulpibranch-pipeline-project
+	url = https://github.com/wise-Kaas/building-a-multibranch-pipeline-project.git
