@@ -23,6 +23,10 @@ Bash metacharacters(must be quoted or escaped if not intendent to be used): spac
 			- [x] [((...))](#((...)))
 			- [ ] [[[...]]](#[[...]])
 		+ [x] [Grouping commands](#grouping-commands)
+	- [ ] [Coprocesses](#coprocesses)
+	- [GNU Parallel](#gnu-parallel)
+* [ ] [Shell functions](#shell-functions)
+* [ ] [Shell parameters](#shell-parameters)
 * [Fun stuff](#fun-stuff)
 
 ----------
@@ -48,16 +52,17 @@ To access variable use '**$**' in front:
 
 ----------
 
-### Shell commands
+[back to contents](#contents)
 
-Simple shell commands consists of the commands itself followd by arguments, separeted by spaces
+## Shell commands
+
+Simple shell commands consists of the commands itself followd by arguments, separeted by spaces.
 
 ----------
 
 [back to contents](#contents)
 
 ### Pipelines
-[back to contents](#contents)
 
 The format for a pipeline:
 ```bash
@@ -214,6 +219,77 @@ Coproc is reserved word and forces the shell command to be executed in a subshel
 Creates a corpocess named *NAME* (default *COPROC*).
 
 [example explained](https://unix.stackexchange.com/questions/86270/how-do-you-use-the-command-coproc-in-various-shells)
+
+----------
+
+[back to contents](#contents)
+
+### GNU Parallel
+
+[to be continued]
+
+----------
+
+[back to contents](#contents)
+
+## Shell functions
+
+[to be continued]
+
+----------
+
+[back to contents](#contents)
+
+## Shell parameters
+
+[to be continued]
+
+----------
+
+[back to contents](#contents)
+
+## Shell expansions
+
+Expansion is performed on the command line after it has been split into tokens. The order is the following:
+1. brace
+2. tilde, parameter and variable, arithmetic, command substitution (left-to-right fashion); on some systems process substitution is also available
+3. word splitting
+4. filename
+
+Quote removal is performed as the last stage.
+
+----------
+
+[back to contents](#contents)
+
+### Brace
+
+Spaces must be escaped if intendent between braces!
+
+```bash
+bash$ echo a{d,c,b}e
+ade ace abe
+```
+
+Comma separeted value will be inserted(not sorted)
+
+```bash
+{x..y[..incr]}
+bash$ echo a{1..4..1}e
+a1e a2e a3e a4e
+```
+
+Expanded inclusive from x to y. When either x or y is preceded by 0, shell attempts to force all items to have the same length(feeding zeros).
+* x, y - either integers or single characters
+* incr - optional, an integer
+
+----------
+
+[back to contents](#contents)
+
+### Tilde
+
+
 
 ----------
 
