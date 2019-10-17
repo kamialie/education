@@ -4,6 +4,8 @@
     + https://jenkins.io/pipeline/getting-started-pipelines/ - getting started with pipelines in jenkins
 	+ [simple java maven example](http://jenkins.io/doc/tutorials/build-a-java-app-with-maven/)
 	+ [multibranch example](https://jenkins.io/doc/tutorials/build-a-multibranch-pipeline-project/)
+	+ [checkout step](https://jenkins.io/doc/pipeline/steps/workflow-scm-step/)
+	+ [jenkins docker image](https://github.com/jenkinsci/docker/blob/master/README.md)
 
 # Contents
 
@@ -14,21 +16,33 @@
 	- [Strings](#string-interpolation)
 	- [Environment variable](#using-environment-variables)
 	- [Credentials](#handling-credentials)
-	- [Parameters](#handing-parameters)
+	- [Parameters](#handling-parameters)
 	- [Post action](#handling-failure)
 	- [ ] [Multiple agents](#using-multiple-agents)
 	- [ ] [Optional step arguments](#optinal-step-argument)
-* [Pipeline syntax](#pipeline syntax)
-	- [ ] [Sections](#section)
-		+ [agent](#agent)
+* [Pipeline syntax](#pipeline-syntax)
+	- Sections
+		+ [ ] [agent](#agent)
 		+ [post](#post)
 		+ [stages](#stages)
 		+ [steps](#steps)
 	- [ ] [Directives](#directives)
+		+ [x] [environment](#environment)
+		+ [ ] [options](#options)
+		+ [ ] [parameters](#parameters)
+		+ [x] [triggers](#triggers)
+		+ [ ] [Jenkins cron syntax](#jenkins-cron-syntax)
+		+ [ ] [stage](#stage)
+		+ [ ] [tools](#tools)
+		+ [ ] [input](#input)
+		+ [ ] [when](#when)
+	- [ ] [Sequencial stages](#sequencial-stages)
+	- [ ] [Parallel stages](#parallel-stages)
+	- [ ] [Scripted pipeline](#scripted-pipeline)
 
 ----------
 
-### Using credentials
+## Using credentials
 
 [Documentation](https://jenkins.io/doc/book/using/using-credentials/)
 
@@ -46,7 +60,7 @@ Types of credentials:
 
 ----------
 
-### Pipeline
+## Pipeline
 
 The definition of a Jenkins Pipeline is either written into text file (Jenkinsfile) or in the web UI. Best practice considers Jenkinsfile.
 
@@ -58,7 +72,7 @@ Pipeline concepts:
 * **Stage** - block which defines a conceptually distinct subset of tasks performed through the entire Pipeline (e.g. "Build", "Test", "Deploy")
 * **Step** - single task (e.g. sh 'make')
 
-#### Pipeline syntax overview
+### Pipeline syntax overview
 
 Declarative Pipeline syntax has pipeline block which definess all the work done
 ```groovy
@@ -104,7 +118,7 @@ Although not required, confining all work inside a node block has advantages
 
 ----------
 
-### Defining a Pipeline
+## Defining a Pipeline
 
 To define Jenkinsfile in SCM (source control management) select *Pipeline script from SCM* option in Pipeline section.
 
@@ -116,7 +130,7 @@ Declarative directive generator is available in the "Pipeline Syntax" page, can 
 
 ----------
 
-### Using Jenkinsfile
+## Using Jenkinsfile
 
 Jenkins has a number of plugins invoking practically any build tool in general use. To invoke commands use *sh* for unix/linux based systems and *bat* for windows.
 
@@ -124,7 +138,7 @@ JUnit plugin can provide reporting and visualization for running tests.
 
 currentBuild variable (e.g. currentBuild.result == 'SUCCESS') can be used to determine what to do in deployment stage.
 
-#### String interpolation
+### String interpolation
 
 ```groovy
 def singleQuoted = 'Hello'
@@ -135,7 +149,7 @@ Single quotes do not support string interpolation (dollar sign insertion), while
 
 ----------
 
-#### Using environment variables
+### Using environment variables
 
 Environment variables are exposed vie global varialbe *env*, which is available from anywhere in Jenkinsfile. Full list is available in Pipeline Syntax page and includes:
 * **BUILD_ID** - current build ID (identical to **BUILD_NUMBER** for Jenkins versions 1.597+)
@@ -165,9 +179,13 @@ pipeline {
 
 Environment variables can also be set dynamically. [to be continued]
 
+Print all environment variable:
+
+		sh 'printenv'
+
 ----------
 
-#### Handling credentials
+### Handling credentials
 
 Declarative Pipeline syntax uses *credentials()* helper method (used with environment directove), which supports secret text, username and password, and secret file credentials.
 
@@ -213,7 +231,7 @@ withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'jenkins-ssh-key-for
 
 ----------
 
-#### Handling parameters
+### Handling parameters
 
 Parameters are defined in parameters directive.
 
@@ -233,15 +251,214 @@ pipeline {
 }
 ```
 
-#### Handling failure
+### Handling failure
 
 [to be continued]
 https://jenkins.io/doc/book/pipeline/jenkinsfile/
 
-#### Using multiple agents
+### Using multiple agents
 
 [to be continued]
 https://jenkins.io/doc/book/pipeline/jenkinsfile/
+
+----------
+
+## Pipeline syntax
+
+Basic statements and expressions in Declarative Pipeline follow same rules as Groovy's syntax except:
+* top level must be a block, pipeline { }
+* each statements on its own line (no semicolon separator)
+* blocks must only consist of sections, directives, steps, or assignment statements
+* property reference statement is treated as no-argument method invocation (e.g. input is treated s input())
+
+----------
+
+### Agent
+
+Specifies where the entire Pipeline or specific stage will execute in the Jenkins environment, depending on where the agent section is placed. Must be defined at the top level inside pipeline block, stage-level usage is optional.
+
+Parameters:
+* any - any available agent
+
+		agent any
+
+* none - when used at the top-level, no global agent will be allocated, thus each stage has to declare its own
+
+		agent none
+
+* label - agent available in the Jenkins environment with the provided label
+
+		agent {
+			label 'my-defined-label'
+		}
+
+* node - same as label, but allows additional options like customWorkspace
+
+		agent {
+			node {
+				label 'labelNmae'
+			}
+		}
+
+* docker
+[to be continued]
+
+* dockerfile
+[to be continued]
+
+* kubernetes
+[to be continued]
+
+Common options - [to be continued]
+
+----------
+
+### Post
+
+Defines one or more additional steps that are run upon the completion of Pipeline's or stage's run (depends on the location of post).
+
+Conditions (options):
+* always
+* changed - if has a different completion status from its previous run
+* fixed - if current is successful and previous was failed or unstable
+* regression - if current is failure, unstable, or aborted and previous one was successful
+* aborted - usually manually aborted
+* failure
+* success
+* unstable - usually caused by test failures, code violations
+* unsuccessful - not successful
+* cleanup - run after all previous steps, regardless of status
+
+----------
+
+### Stages
+
+Contains one or more stage directives.
+
+----------
+
+### Steps
+
+Contains series of one or more steps to be executed
+
+----------
+
+## Directives
+
+### Environment
+
+Specifies a sequence of key-value pairs which will be defined as environment variables for all the steps, or stage-specific (depends on location of directive).
+
+Supports special helper method *credentials* which can be used to access pre-defined Credentials (Secret Text, Secret File, Username and password, SSH with Private Key), more in [credentials section](#handling-credentials)
+
+----------
+
+### Options
+
+Allows configuring Pipelines-specific options from within the Pipeline itself.
+
+Available options:
+* buildDiscarder - persists artifacts and console outut for the specific number of recent Pipeline runs
+
+		options {
+			buildDiscarder(
+				logRotator(
+					numToKeepStr: '1'
+				)
+			)
+		}
+
+* checkoutToSubDirectory - perform automatic source control checkout in a subdirectory of the workspace
+
+		options {
+			checkoutToSubDirectory('foo')
+		}
+
+* disableConcurrentBuild - disallow concurrent executions of the Pipeline, useful for preventing simultaneous accesses to shared resources
+
+		options {
+			disableConcurrentBuild()
+		}
+
+* disableResume - do not let the pipeline ti resume if master restarts
+
+		options {
+			disableResume()
+		}
+
+* newContainerPerStage - [to be continued]
+* overrideIndexTriggers - [to be continued]
+* preserveStashes - [to be continued]
+* quietPeriod - set the quiet period, overriding the global default
+
+		options {
+			quietPeriod(30)
+		}
+
+* retry - retry entire Pipeline the specified number of times
+
+		options {
+			retry(3)
+		}
+
+* skipDefaultCheckout - [to be continued]
+* skipStagesAfterUnstable
+
+		options {
+			skipStagesAfterUnstable()
+		}
+* timeout - set timeout, after which Jenkins aborts the Pipeline
+
+		options {
+			timeout(
+				time: 1,
+				unit: 'HOURS'
+			)
+		}
+
+* timestamps - prepend all console output with the time
+
+		options {
+			timestamps()
+		}
+
+* parallelAlwaysFailFast - [to be continued]
+
+Inside a stage, the steps inside options directive are invoked before entering agent or checking *when* condition. Can only contain retry, timeout, timestamps and Declarative options relevant to a stage, like skipDefaultCheckout.
+
+----------
+
+### Parameters
+
+----------
+
+### Triggers
+
+Defines the automated ways in which the Pipeline should be re-triggers. Defined at top level pipeline block.
+
+* cron - cron-style string to define a regular interval at whick Pipeline should be re-triggered
+
+		triggers {
+			cron('H */4 * * 1-5')
+		}
+
+* pollSCM - cron-style string to define interval at which Jenkins should check for new source changes
+
+		triggers {
+			pollSCM('H */4 * * 1-5')
+		}
+
+* upstream - comma separate string of jobs and a threshhold; when any job finished the minimum threshgold, the Pipeline will be re-triggered.
+
+		triggers {
+			upstream(
+				upstreamProjects: 'job1, job2,
+				threshold: hudson.model.Result.SUCCESS)
+		}
+
+[Trigger examples](https://mohamicorp.atlassian.net/wiki/spaces/DOC/pages/136806413/Triggering+Jenkins+for+Commits+to+a+Specific+Branch)
+
+----------
 
 ### Usefuls tools, techniques
 
