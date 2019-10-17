@@ -42,6 +42,10 @@ Go further:
 * [Docker compose file](#compose-file)
     - [ ] [volumes](#volumes)
 
+# Docker?
+
+Docker containers are very much like virtual machines, but the main difference is that docker only isolates applications, meaning all of the containers on the server run on the same server's operation system. That, in result, requires fewer resource that virtual machines (low-level operating system tasks). In an example of virtual machine application scaling these tasks would be duplicated. On macOS and Windows Docker requires Linux virtual machine to run containers, since docker directly communicates with Linux kernel.
+
 ## Networking in docker
 
 [to be continued]
@@ -108,8 +112,8 @@ docker run -dti --network test-net alpine
     + [--opt], [-o] *\<arguments\>* - set driver specific options
 	encrypted=true - option for overlay driver
 * **ls** - list networks in the docker host
-* **connect**
-* **disconnect**
+* **connect** - connect container to a software-defined network
+* **disconnect** - disconnect container to a software-defined network
 * **inspect** *\<network_name\>* - display detailed info about one or more networks
     + [--format], [-f] - format output
     + [--verbose], [-v] - verbose output
@@ -324,6 +328,10 @@ Use **up** to set up and start services the first time, **run** for "one-off" ta
     + [--services] - print services, one per line
     + [--volumes] - print volumes one per line
     + [--quiet], [-q] - only validate, dont print anything
+* **build** - create images required for the services it contains
+    + [--parallel] - build images in parallel
+    + [--force-rm] - always remove intermediate containers
+    + [--no-cache] - do not cache when build the image
 * **up** - build, recreate, start and attach to container
     + [--detach], [-d] - set a driver; [full list of avaliable drivers](#https://docs.docker.com/machine/drivers/)
     + [--build] - build images before starting(force to even if they exist)
