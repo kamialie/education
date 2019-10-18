@@ -46,6 +46,25 @@ Go further:
 
 Docker containers are very much like virtual machines, but the main difference is that docker only isolates applications, meaning all of the containers on the server run on the same server's operation system. That, in result, requires fewer resource that virtual machines (low-level operating system tasks). In an example of virtual machine application scaling these tasks would be duplicated. On macOS and Windows Docker requires Linux virtual machine to run containers, since docker directly communicates with Linux kernel.
 
+Installing docker on Linux:
+* prepare package manager and prerequisite packages:
+```bash
+apt-get -y install apt-transport-https ca-certificates curl
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \ $(lsb_release -cs) stable"
+sudo apt-get update
+```
+* install docker:
+```bash
+apt-get -y install docker-ce
+```
+* add new user to avoid root access:
+```bash
+sudo groupadd docker
+sudo usermode -aG docker $USER
+```
+
 ## Networking in docker
 
 [to be continued]
@@ -187,7 +206,11 @@ Not specifying the name of machine defaults to the name *default*
 
 ## docker
 
+Docker images are templates that are used to create containers. One image can be build on top of another. Repository images can be tagged to specify a version (separete the name from a tag using a colon, e.g. alpine:3.4, default is latest).
+
 Detach from container - Ctrl + p Ctrl + q
+
+When stopping containers using **docker stop** docker waits 10 seconds by default(after sending SIGTERM) before it sends a SIGKILL.
 
 ### Commands
 
@@ -201,7 +224,7 @@ docker [command] --help - brings options list
     + [--quiet], [-q] - display only numeric IDs
     + [--size], [-s] - display total file sizes
 * **images**
-* **run** - run a command in a new container
+* **run** - run a command in a new container(shorthand for **pull** (if needed), **create**, and **start** commands.
     + [--rm] - automatically remove container when it exits
     + [--tty], [-t] - allocate pseudo-tty
     + [--interactive], [-i] - keep stdin open even if not attached
@@ -215,8 +238,11 @@ docker [command] --help - brings options list
 * **start**
 * **build** .
     + [--tag], [-t] *\<name\>:\<tag\>* - tag resulting image
+    + [--file], [-f] - name of the Dockerfile, default PATH/Dockerfile
 * **pull** - pull(download) an image from a registry, can be used to update an image as well
 * **push**
+* **diff**
+* **commit**
 
 ### Links
 
@@ -235,6 +261,8 @@ Removing nodes from the swarm includes both leaving the swarm with **docker swar
 **docker swarm**
 * **init** - initialize swarm, targeted docker engine becomes a manager; generates two random tokens - manager and worker
     + [--advertise-addr] - addvertise address
+* **join** *\<host:port\>* - join a swarm
+    + [--token] *\<token\>* - token for entry (different for worker and manager)
 * **leave** - leave a swarm, works without warning for workers
     + [--force] - use it on manager, when swarm wont be used anymore; proper way is to demote manager to worker, then leave the swarm without warnings
 * **join-token** [*manager*, *worker*] - print token to join the existing swarm as manager or a worker (run on manager node)
@@ -245,6 +273,11 @@ Removing nodes from the swarm includes both leaving the swarm with **docker swar
     + $(docker ls -q) - list all tasks in a swarm(better use docker stack ps)
 * **rm** *\<node_name\>* - remove one or more node s from the swarm
     + [--force], [-f] - force remove
+* **update** *\<node\>* - update metadata about a node (availabilty, labels, roles...)
+    + [--availability] - active, pause or drain
+    + [--label-add] *\<label\>* - add a label
+    + [--label-rm] *\<label\>* - remove a label
+    + [--role] - worker or manager
 * **demote** *\<manager_node_name\>* - demote manager to a worker
 * **promote** *\<node_name\>* - promote node to a manager (can be run only on a manager)
 
@@ -299,7 +332,7 @@ Load-balancing is done through round-robin fashion(after last one comes first)
 ### Commands
 
 **docker service**
-* *ls* - lists services running in the swarm(has to be run targeting a manager node)
+* **ls** - lists services running in the swarm(has to be run targeting a manager node)
 * **ps** *\<service\>* - list the tasks of one or more services(has to be run targeting a manager node)
 * **logs** - show logs of a service or task
     + [--follow], [-f] - follow log output
@@ -483,6 +516,11 @@ exec "$@"
 - **EXPOSE** _\<port\>_ [_<port>/protocol>..._] 
 
 Informs Docker that the container listens on the specified network port at runtime(doesn't actually publish them, use -p flag of docker run to publish or -P to publish all exposed port randomly), defaults to TCP(can specify UDP)
+
+Default is tcp, can also specify udp:
+
+	EXPOSE 80/tcp
+	EXPOSE 4242/udp
 
 #### ADD
 - **ADD** _\<src>... \<dest\>_
