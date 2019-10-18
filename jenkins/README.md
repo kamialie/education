@@ -1,11 +1,12 @@
-## Topic links
+# Jenkins 👨🏼‍🍳
 
-- Extra:
-    + https://jenkins.io/pipeline/getting-started-pipelines/ - getting started with pipelines in jenkins
-	+ [simple java maven example](http://jenkins.io/doc/tutorials/build-a-java-app-with-maven/)
-	+ [multibranch example](https://jenkins.io/doc/tutorials/build-a-multibranch-pipeline-project/)
-	+ [checkout step](https://jenkins.io/doc/pipeline/steps/workflow-scm-step/)
-	+ [jenkins docker image](https://github.com/jenkinsci/docker/blob/master/README.md)
+## Get started
+
+* [get started with pipelines in jenkins](https://jenkins.io/pipeline/getting-started-pipelines)
+* [simple java maven example](http://jenkins.io/doc/tutorials/build-a-java-app-with-maven/)
+* [multibranch example](https://jenkins.io/doc/tutorials/build-a-multibranch-pipeline-project/)
+* [checkout step](https://jenkins.io/doc/pipeline/steps/workflow-scm-step/)
+* [jenkins docker image](https://github.com/jenkinsci/docker/blob/master/README.md)
 
 # Contents
 
@@ -25,20 +26,21 @@
 		+ [ ] [agent](#agent)
 		+ [post](#post)
 		+ [stages](#stages)
-		+ [steps](#steps)
-	- [ ] [Directives](#directives)
+		+ [ ] [steps](#steps)
+	- [Directives](#directives)
 		+ [x] [environment](#environment)
 		+ [ ] [options](#options)
 		+ [ ] [parameters](#parameters)
 		+ [x] [triggers](#triggers)
-		+ [ ] [Jenkins cron syntax](#jenkins-cron-syntax)
-		+ [ ] [stage](#stage)
-		+ [ ] [tools](#tools)
+		+ [x] [Jenkins cron syntax](#jenkins-cron-syntax)
+		+ [x] [tools](#tools)
 		+ [ ] [input](#input)
-		+ [ ] [when](#when)
+		+ [x] [when](#when)
 	- [ ] [Sequencial stages](#sequencial-stages)
 	- [ ] [Parallel stages](#parallel-stages)
 	- [ ] [Scripted pipeline](#scripted-pipeline)
+* [Plugins](#plugins)
+* [Other cool features](#other-cool-features)
 
 ----------
 
@@ -72,7 +74,9 @@ Pipeline concepts:
 * **Stage** - block which defines a conceptually distinct subset of tasks performed through the entire Pipeline (e.g. "Build", "Test", "Deploy")
 * **Step** - single task (e.g. sh 'make')
 
-### Pipeline syntax overview
+----------
+
+### [Pipeline syntax overview](https://jenkins.io/doc/book/pipeline/syntax)
 
 Declarative Pipeline syntax has pipeline block which definess all the work done
 ```groovy
@@ -271,6 +275,8 @@ Basic statements and expressions in Declarative Pipeline follow same rules as Gr
 * blocks must only consist of sections, directives, steps, or assignment statements
 * property reference statement is treated as no-argument method invocation (e.g. input is treated s input())
 
+**Following is for Declarative syntax!**
+
 ----------
 
 ### Agent
@@ -335,11 +341,31 @@ Conditions (options):
 
 Contains one or more stage directives.
 
+Stage directive goes in stages section and should contain a steps section, and optional stage-specific directives (e.g. agent section).
+```groovy
+pipeline {
+	agent any
+	stages {
+		stage('Example') {
+			steps {
+				echo 'Hello'
+			}
+		}
+	}
+}
+```
+
 ----------
 
 ### Steps
 
-Contains series of one or more steps to be executed
+Contains series of one or more steps to be executed.
+
+[Pipeline Steps reference](#https://jenkins.io/doc/pipeline/steps/)
+
+### script
+
+Takes a block of Scripted Pipeline and executes that in the Declarative Pipeline.
 
 ----------
 
@@ -460,7 +486,148 @@ Defines the automated ways in which the Pipeline should be re-triggers. Defined 
 
 ----------
 
-### Usefuls tools, techniques
+### Jenkins cron syntax
+
+Five specifiers separeted by tab or space are as follows:
+* **MINUTE** - minutes within the hour (0-59)
+* **HOUR** - the hour of the day (0-23)
+* **DOM** - day of the month (1-31)
+* **MONTH** - the month (1-12)
+* **DOW** - day of the week (0-7 wher 0 and 7 are Sunday)
+
+To specify multiple values:
+* \* - specifies all possible values
+* M-N - specify range of values
+* M-N/X or \*/X - steps by intervals of X through the range
+* A,B, ..., Z - enumerate over multiple values
+
+To allow periodically scheduled taks to produce even load use **H** ("hash", of the job name, thus persistent for one job) wherever possible (e.g. 0 0 * * * high load at midnight, H H * * * still once a day, but not all at the same time). **H** can be used with ranges too (e.g. H H(0-7) * * * - some time between 12am to 7:59an).
+
+Convinient aliases - @yearly, @annually, @monthly, @weekly, @daily, @midnight, @hourly, e.g. @hourly is any time during the hour, @midniht is sometime between 12am to 2:59am.
+
+----------
+
+### tools
+
+Section defining tools to autoinstall and put on the PATH (ignored if *agent none* is specified. Defined at the top-level pipeline section
+
+Supported tools: maven, jdk, gradle (?)
+
+----------
+
+### input
+
+Allows to prompt for input using input step.
+
+----------
+
+### when
+
+Determines whether the shage should be executed depending on the given condition. Must at least contain one condition.
+
+More complex conditional structures can be built using - *not*, *allOf*, *anyOf*.
+
+Built-in conditions:
+* **branch** - execute the stage when the specified branch in being built. Works only on multibranch Pipeline.
+```groovy
+when {
+	branch 'master'
+}
+```
+* **buildingTag** - execute when the build is building a tag
+```groovy
+when {
+	buildingTag()
+}
+```
+* **changelog** - execute if the build's SCM changelog containes given regular expression pattern.
+```groovy
+when {
+	changelog '.*^\\[DEPENDENCY\\} .+$'
+}
+```
+* **changeset** - [to be continued]
+* **changeRequest** - [to be continued]
+* **environment** - when specified variable is set to the given value
+```groovy
+when {
+	environment name: 'DEPLOY_TO', value: 'production'
+}
+```
+* **equals** - when the expected value is equal to the actual value
+```groovy
+when {
+	equals expected: 2, actual: currentBuild.number
+}
+```
+* **expression** - [to be continued]
+* **tag** - [to be continued]
+* **not** - execute when the nested condition is false
+```groovy
+when {
+	not {
+		branch 'master'
+	}
+}
+```
+* **anyOf** - execute when any condition is true
+```groovy
+when {
+	anyOf {
+		branch 'master';
+		branch 'staging'
+	}
+}
+```
+* **allOf** - execute when all nested conditions are true
+```groovy
+when {
+	anyOf {
+		branch 'master';
+		branch 'stagin'
+	}
+}
+```
+
+* **triggeredBy** - execute when the current build has been triggered by the param given
+```groovy
+when {
+	triggeredBy ['SCMTrigger', 'TimerTrigger', UpstreamCause', [cause: "UserIdCause", detail: "vlinde"]]
+}
+```
+
+By default when is evaluated after entering agent for that stage, can be changed by setting **beforeAgent** to true:
+```groovy
+when {
+	beforeAgent true
+}
+```
+
+Check **beforeInput** specifier (same as above, but for input).
+
+----------
+
+## Sequential stages
+
+Stages may be nested within other in sequential order. A stage can have only one of **steps**, **parallel**, **stages**.
+
+## Parallel
+
+Nested stages cannot contain further **parallel** stages themselves. Any stage containing **parallel** cannot contain **agent** or **tools**.
+
+To force parallel stages to be aborted when one of them fails add **failFast true** to the stage containing **parallel**. Can also add **parallelsAlwaysFailFast()** in options section of the pipeline.
+
+----------
+
+## Scripted Pipeline
+
+[tobe continued]
+
+----------
+
+### Other cool features
+
+* [Development tools(cli)](https://jenkins.io/blog/2017/05/18/pipeline-dev-tools/)
 
 * timeouts, retries...
 ```groovy
