@@ -361,7 +361,7 @@ pipeline {
 
 Contains series of one or more steps to be executed.
 
-[Pipeline Steps reference](#https://jenkins.io/doc/pipeline/steps/)
+[Pipeline Steps reference](https://jenkins.io/doc/pipeline/steps/)
 
 ### script
 
@@ -592,7 +592,7 @@ when {
 * **triggeredBy** - execute when the current build has been triggered by the param given
 ```groovy
 when {
-	triggeredBy ['SCMTrigger', 'TimerTrigger', UpstreamCause', [cause: "UserIdCause", detail: "vlinde"]]
+	triggeredBy ['user', 'SCMTrigger', 'TimerTrigger', 'UpstreamCause', [cause: "UserIdCause", detail: "vlinde"]]
 }
 ```
 
@@ -604,6 +604,9 @@ when {
 ```
 
 Check **beforeInput** specifier (same as above, but for input).
+
+* https://issues.jenkins-ci.org/browse/JENKINS-48320?page=com.atlassian.jira.plugin.system.issuetabpanels%3Aall-tabpanel
+* https://issues.jenkins-ci.org/browse/JENKINS-46894
 
 ----------
 
