@@ -27,6 +27,17 @@ Bash metacharacters(must be quoted or escaped if not intendent to be used): spac
 	- [GNU Parallel](#gnu-parallel)
 * [ ] [Shell functions](#shell-functions)
 * [ ] [Shell parameters](#shell-parameters)
+* [Shell expansions](#shell-expansions)
+	- [x] [Brace](#brace)
+	- [x] [Tilde](#tilde)
+	- [ ] [Parameter](#parameter)
+	- [x] [Command](#command-substitution)
+	- [x] [Arithmetic](#arithmetic)
+	- [ ] [Word splitting](#word-splitting)
+	- [ ] [Filename](#filename)
+	- [ ] [Pattern matching](#pattern-matching)
+	- [x] [Quote removal](#quote-removal)
+* [Redirections](#redirections)
 * [Fun stuff](#fun-stuff)
 
 ----------
@@ -289,8 +300,100 @@ Expanded inclusive from x to y. When either x or y is preceded by 0, shell attem
 
 ### Tilde
 
+If a word begins with unquoted '~', all characters up to first unquoted slash(or all characters if no slashes) are considered a *tilde-prefix*. If none of the characters in the *tilde-prefix* are quoted, prefix is treated as a *login name*. If it is null, tilde is replaced with HOME shell variable, it unset, the home directory of the user executing the command, otherwise associated login name home directory.
 
+If characters are in the tilde-prefix is a number (N), optionally prefixed by a '+' or a '-', tilde-prefix is replaced with corresponding element from the directory stack, as it would be displayed with [dirs](the-directory-stack) build-in
 
+Each variable assignment is checked for unquoted tilde-prefixes following a ':' or the first '=' - in these cases tilde expanstion is also preformed.
+
+Examples:
+* ~ - value of $HOME
+* ~/forr - $HOME/foo
+* ~fred/foo - subdirectory of the home directory of the user fred
+* ~+/foo - $PWD/foo
+* ~-/foor - $OLDPWD/foo
+* ~N or ~+N - string that would be displayed by 'dirs +N'
+* ~-N - string that would be displayed by 'dirs -N'
+
+----------
+
+[back to contents](#contents)
+
+### Parameter
+
+[to be continued]
+
+----------
+
+[back to contents](#contents)
+
+### Command substitution
+```bash
+$(command)
+
+or
+
+$`command`
+```
+
+The output of the command replaces the command itself. Command is executed in subshell, trailing new lines are deleted (embedded newlines are not deleted, but may be removed during word splitting).
+
+Old-style backquote from retains literal meaning of backslashes (except when followed by '$', '\`', or '\\'). In paranthesis form all characters make up the command, none is treated specially.
+
+Command substututions may be nested (with old-style escape inner backquotes with backslashes).
+
+----------
+
+[back to contents](#contents)
+
+### Arithmetic
+```bash
+$(( expression ))
+```
+
+Evaluates the expression and substitutes the result. Expression is treated as if it is within double quotes, all tokens undergo parameter and variable expanstion, command substitution, and quote removal.
+
+----------
+
+[back to contents](#contents)
+
+### Process
+
+[to be continued]
+
+----------
+
+[back to contents](#contents)
+
+### Word splitting
+
+[to be continued]
+
+----------
+
+[back to contents](#contents)
+
+### Filename
+
+[to be continued]
+
+----------
+
+[back to contents](#contents)
+
+### Pattern matching
+
+[to be continued]
+
+----------
+
+[back to contents](#contents)
+
+### Quote removal
+
+After all preceding expansions, all unquoted occurences of ' \\ ', ' ' ', ' " ' that did not match one of the above expansions are removed
+
+[to be continued]
 ----------
 
 ### Fun stuff
