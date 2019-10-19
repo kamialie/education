@@ -16,7 +16,7 @@ Go further:
     - [ ] [macvlan](#macvlan)
 * [ ] [Storage in docker](#storage-in-docker)
 * [docker-machine](#docker-machine)
-* [docker](#docker)
+* [docker cli](#docker-cli)
     - [ ] [docker swarm, docker node](#docker-swarm-and-docker-node)
     - [ ] [docker-compose](#docker-compose)
     - [ ] [docker stack](#docker-stack)
@@ -45,6 +45,8 @@ Go further:
 # Docker?
 
 Docker containers are very much like virtual machines, but the main difference is that docker only isolates applications, meaning all of the containers on the server run on the same server's operation system. That, in result, requires fewer resource that virtual machines (low-level operating system tasks). In an example of virtual machine application scaling these tasks would be duplicated. On macOS and Windows Docker requires Linux virtual machine to run containers, since docker directly communicates with Linux kernel.
+
+Docker images are templates that are used to create containers. One image can be build on top of another. Repository images can be tagged to specify a version (separete the name from a tag using a colon, e.g. alpine:3.4, default is latest).
 
 Installing docker on Linux:
 * prepare package manager and prerequisite packages:
@@ -204,9 +206,7 @@ Not specifying the name of machine defaults to the name *default*
 ### Links
 
 
-## docker
-
-Docker images are templates that are used to create containers. One image can be build on top of another. Repository images can be tagged to specify a version (separete the name from a tag using a colon, e.g. alpine:3.4, default is latest).
+## docker cli
 
 Detach from container - Ctrl + p Ctrl + q
 
@@ -300,7 +300,7 @@ services:
 web:
     image: artnova/pyweb
     environment:
-	NODENAME: "{{.Node.Hostname}}"
+        NODENAME: "{{.Node.Hostname}}"
 ```
 Single container running in a service is called a _task_.
 
@@ -450,6 +450,8 @@ Further configuration - https://docs.gitlab.com/omnibus/README.html#installation
 
 ### Instructions
 
+----------
+
 #### FROM
 - **FROM** _\<image\>_ [**AS** _\<name\>_]
 - **FROM** _\<image\>:\<tag\>_ [**AS** _\<name\>_]
@@ -465,6 +467,8 @@ Optionally a name can be given to a new build stage by adding **AS** _name_, the
 
 Alpine is the recommended base image - currently under 5MB
 
+----------
+
 #### RUN
 - **RUN** _\<command\>_ (shell form) - defaults to _/bin/sh -c_ on Linux; can use \ to break line
 - **RUN** [_"exec", "param1", "param2"_](exec form) - parsed as JSON array, that is must use double-quotes; doesn't invoke command shell, so **RUN** ["echo", "$HOME"] wont be substituted, run with shell or use shell form
@@ -477,6 +481,7 @@ Avoid using apt-get upgrade and dist-upgrade, as many essential packages from pa
 	    package-one \
 	    package-two 
 
+----------
 
 #### CMD
 - **CMD** [_"exec", "param1", "param2"_] (exec form)
@@ -487,9 +492,13 @@ Provide defaults for an executing container, can include an executable or can om
 
 Should almost always be used in exec form (like **CMD** ["apache2", "-DFOREGROUND"]), in most other cases should be given an interactive shell, such as bash, python and perl, so that docker run -it python would will get user dropped into usable shell. In rare cases should be used as params to **ENTRYPOINT**
 
+----------
+
 #### LABEL
 
 [to be continued]
+
+----------
 
 #### ENTRYPOINT
 - **ENTRYPOINT** [_"exec", "param1", "param2"_](exec form, preferred)
@@ -512,6 +521,8 @@ fi
 exec "$@"
 ```
 
+----------
+
 #### EXPOSE
 - **EXPOSE** _\<port\>_ [_<port>/protocol>..._] 
 
@@ -521,6 +532,8 @@ Default is tcp, can also specify udp:
 
 	EXPOSE 80/tcp
 	EXPOSE 4242/udp
+
+----------
 
 #### ADD
 - **ADD** _\<src>... \<dest\>_
@@ -539,6 +552,8 @@ Copies new files, directories or remote files from \<src\> and adds them to the 
 
 For best image size results prefer curl or wget over **ADD** (can later delete unnecessary files and avoid adding extra layer)
 
+----------
+
 #### COPY
 - **COPY** _\<src>... \<dest\>_
 - **COPY** ["_\<src>_",... "_\<dest\>_"]
@@ -546,6 +561,8 @@ For best image size results prefer curl or wget over **ADD** (can later delete u
 Copies new files or directories from \<src\> and adds them to the filesystem at the path \<dest\>, same rules as **ADD** apply to **COPY**
 
 **COPY** is generally preferred over **ADD** as it is more transparent and provides basic functionality. **ADD** best usage is for local tar extraction. In case of multiple Dockerfile steps, **COPY** them individually - results in fewer cache invalidations, as each **COPY** is on seperate layer.
+
+----------
 
 #### ENV
 - **ENV** _\<key\>_ _\<value\>_ - sets a single variable to a value, entire string after the first space(after key) will be treated as the \<value\>
@@ -563,25 +580,35 @@ To really unset **ENV** variable set, use and unset them on the same layer:
 
 **ENV** and **ARG** usage - https://vsupalov.com/docker-arg-env-variable-guide/#arg-and-env-availability
 
+----------
+
 #### ARG
 - **ARG** _\<name\>[=\<default\>]_ 
 
 Defines a variable that users can pass at build-time to the builder using _docker build --build-arg \<varname\>=\<value\>_(can be viewed by any user with docker hitory command - therefore not recommended for passwords, etc); can optionally include a default value; comes into effect from the line on which it was defined and ends at the end of the build stage - out of scope results in empty string; **ENV** always overried **ARG**; predefined ARGS (excluded from _docker history_ and is not cached) - HTTP_PROXY HTTP_proxy HTTPS_PROXY http_proxy FTP_PROXY ftp_proxy NO_PROXY np_proxy; "cache miss" occured upon first usage, not definition(if value has changed)
 
+----------
+
 #### VOLUME
 
 [to be continued]
+
+----------
 
 #### WORKDIR
 - **WORKDIR** /path/to/workdir
 
 Sets the working directory for any **RUN**, **CMD**, **ENTRYPOINT**, **COPY** and **ADD** instructions, if doesnt exist it is created; can resolve previously set **ENV** variables
 
+----------
+
 #### USER
 - **USER** \<user\>[\<group\>
 - **USER** \<UID\>[\<GID\>]
 
 Sets the user name (or UID) to use when running the image and any **RUN**, **CMD**, **ENTRYPOINT** instructions that follows. Avoid installing or using sudo as it has unpredictable TTY and signal-forwarding behavior. For similar to sudo behavior consider "gosu" (https://github.com/tianon/gosu).
+
+----------
 
 #### ONBUILD
 - **ONBUILD** **[INSTRUCTION]**
@@ -590,17 +617,25 @@ Adds a trigger instruction to be executed at a later time, when current image is
 All instructions under **ONBUILD** are saved under OnBuild key and can be inspected with **docker inspect** command. Triggers are not inherited by children(not saved under Onbuild key in a resulting image).
 Can not trigger **FROM**
 
+----------
+
 #### STOPSIGNAL
 
 [to be continued]
+
+----------
 
 #### HEALTHCHECK
 
 [to be continued]
 
+----------
+
 #### SHELL
 
 [to be continued]
+
+----------
 
 ### Links
 
