@@ -29,7 +29,7 @@ Stream editor
 ### Examples
 
 var=smth
-sed -i '' "*\<number\>*s/.\*/$var/" test.txt - substitute given number with a variable; if variable contains '/' user different separator - '|'; same with a instead of a means append, i means insert
+sed -i '' "*\<number\>*s/.\*/$var/" test.txt - substitute given number with a variable; if variable contains '/' user different separator - '|'; same with a instead of i means append, i means insert
 
 
 ## diff

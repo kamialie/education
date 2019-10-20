@@ -217,13 +217,10 @@ When stopping containers using **docker stop** docker waits 10 seconds by defaul
 docker [command] --help - brings options list
 
 **docker**
-* **login** - login to dockerhub to push and pull images
-* **tag** *\<image_name\>* *\<username\/repository:tag\>* - give a new tag to image(prepare to push to remository), new tag is created and referenced the parent image
 * **ps** - list containers (default to currently running containers)
     + [--all], [-a] - show all
     + [--quiet], [-q] - display only numeric IDs
     + [--size], [-s] - display total file sizes
-* **images**
 * **run** - run a command in a new container(shorthand for **pull** (if needed), **create**, and **start** commands.
     + [--rm] - automatically remove container when it exits
     + [--tty], [-t] - allocate pseudo-tty
@@ -233,16 +230,42 @@ docker [command] --help - brings options list
     + [--volume], [-v] - https://docs.docker.com/storage/bind-mounts/
     + [--mount] - https://docs.docker.com/storage/bind-mounts/
     + https://stackoverflow.com/questions/35550694/what-is-the-purpose-of-the-i-and-t-options-for-the-docker-exec-command/35551071#35551071 - on TTY
-* **exec**
-* **attach**
 * **start**
+* **attach**
+* **exec**
+* **cp** */<container_name\>*:*\<src_path\> \<dest_path\>* (or vice versa) - copy files/folders between a container and the local filesystem, container can be stopped or running (details are below)
+    + [--follow-link], [-L] - always follow symbol link in SRC_PATH (otherwise link itself is copied)
+* **diff** - inspect changes to files or directories on a container's filesystem (based on image it was built from):
+    + **A** - file or directory was added
+    + **D** - file or directory was deleted
+    + **C** - file or directory was changed (for folders that is file was added or removed from it)
+* **images** - list images
+    + [--quiet], [-q] - only show numeric IDs
+* **pull** - pull(download) an image from a registry, can be used to update an image as well
 * **build** .
     + [--tag], [-t] *\<name\>:\<tag\>* - tag resulting image
     + [--file], [-f] - name of the Dockerfile, default PATH/Dockerfile
-* **pull** - pull(download) an image from a registry, can be used to update an image as well
-* **push**
-* **diff**
-* **commit**
+* **commit** *\<container_name\>* *[\<repository:tag\>]* - create a new image from a container's changes
+* **tag** *\<image_name\>* *\<username\/repository:tag\>* - give a new tag to image(prepare to push to remository), new tag is created and referenced the parent image
+* **login** - login to dockerhub to push and pull images
+    + [--username], [-u] *\<user_name\>*
+    + [--password], [-p] *\<password\>*
+    + [--password-sdtin] - accept password from stdin (thus not appear in shell history or logs), e.g. cat ~/my_password.txt | docker login -u user --password-stdin
+* **logout** [*\<server\>*] - logout from registry
+* **push** *\<image_name\>* - push an image to repository or registry
+
+Copy rules:
+* *\<src_path\>* is a file:
+    + *\<dest_path\>* doesnt exist - file is saved to a created *\<dest_path\>*
+    + *\<dest_path\>* doesnt exist and ends with '/' - error
+    + *\<dest_path\>* exists and is a file - contents are overwritten
+    + *\<dest_path\>* exists and is a directory - file is copied to the directory useing source name
+* *\<src_path\>* is a directory:
+    + *\<dest_path\>* doesnt exist - *\<dest_path\>* is created and the source contents of the source are copied over
+    + *\<dest_path\>* exists and is a file - error
+    + *\<dest_path\>* exists and is a directory:
+	- *\<src_path\>* doesnt end with '/.' - source directory is copied into dest
+	- *\<src_path\>* ends with '/.' - contents are copied over
 
 ### Links
 
