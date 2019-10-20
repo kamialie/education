@@ -1,9 +1,0 @@
-more operators:
-    > x is y - x is the same as y
-    > x not y - x is nit the same as y
-
-conditional execution
-    > pass - statement that does nothing
-    > elif - else if in python
-    > try / except - just like if / else, if error occures in try block, execution immediatly moves to the except block, otherwise except is ignored
-    > not - like '!' in C (may be)
