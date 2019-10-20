@@ -1,8 +1,0 @@
-Difference between Docker Machine and Docker Engine
-    > Engine - client-server application made up of the Docker daemon, REST API,
-        CLI client that talks to the daemon (through REST API wrapper); accepts
-        commands such as docker run <image>, docker ps...
-    > Machine - tool for provisioning and managing Dockerized hosts (hosts with
-        Docker Engine on them), typically installed on local system, has its own
-        command line client (docker-machine) and the Docker Engine client, docker;
-        The Dockerized hosts are sometimes reffered to as, managed "machines"
