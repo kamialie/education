@@ -461,6 +461,8 @@ Docker offers a reserved, miminal image, _scratch_, as starting point for buildi
 		  subversion	
 - decouple applications - create separate images for database, web server, etc
 
+teamspeak server - https://www.hostinger.com/tutorials/how-to-make-a-teamspeak-3-server/
+
 Building ruby on rails docker image https://medium.com/@lemuelbarango/ruby-on-rails-smaller-docker-images-bff240931332, https://ncona.com/2017/09/getting-rails-to-run-in-an-alpine-container/
 
 Building gitlab image manually https://docs.gitlab.com/ee/install/installation.html, https://about.gitlab.com/install/#debian, https://packages.gitlab.com/gitlab/gitlab-ce/install
