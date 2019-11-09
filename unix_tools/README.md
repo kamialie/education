@@ -2,6 +2,7 @@
 
 http://www.yourownlinux.com/2015/04/sed-command-in-linux-append-and-insert-lines-to-file.html
 https://stackoverflow.com/questions/25631989/sed-insert-line-command-osx
+[Makefile](https://www.gnu.org/software/make/manual/)
 
 man hier - file hierarchy
 [Ctrl][Z] - put the current task to background
