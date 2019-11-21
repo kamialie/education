@@ -39,6 +39,7 @@ Bash metacharacters(must be quoted or escaped if not intendent to be used): spac
 	- [x] [Quote removal](#quote-removal)
 * [Redirections](#redirections)
 * [Fun stuff](#fun-stuff)
+* [Bash prompt](#bash-prompt)
 
 ----------
 
@@ -414,3 +415,16 @@ After all preceding expansions, all unquoted occurences of ' \\ ', ' ' ', ' " ' 
 * https://realpython.com/vim-and-python-a-match-made-in-heaven/
 * https://github.com/junegunn/vim-plug
 * https://stackoverflow.com/questions/33177595/what-does-cc-path-to-directory-configure-do - where does bash store this variables
+
+----------
+
+[back to contents](#contents)
+
+### Bash prompt
+
+
+### Links
+
+* [bash rc not source automatically](https://apple.stackexchange.com/questions/12993/why-doesnt-bashrc-run-automatically)
+* [basic customization](https://www.ostechnix.com/hide-modify-usernamelocalhost-part-terminal/)
+* [more on customization](https://www.cyberciti.biz/tips/howto-linux-unix-bash-shell-setup-prompt.html)
