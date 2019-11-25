@@ -14,7 +14,13 @@ Go further:
     - [ ] [overlay](#overlay)
     - [x] [host](#host)
     - [ ] [macvlan](#macvlan)
+    - [ ] [docker network command](#docker-network)
 * [ ] [Storage in docker](#storage-in-docker)
+	- Storage types
+		+ [Volumes](#volumes)
+		+ [Bind mounts](#bind-mounts)
+		+ [tmpfs](#tmpfs)
+	- [docker volume command](#docker-volume)
 * [docker-machine](#docker-machine)
 * [docker cli](#docker-cli)
     - [ ] [docker swarm, docker node](#docker-swarm-and-docker-node)
@@ -75,13 +81,15 @@ https://runnable.com/docker/basic-docker-networking
 [multi-host networking](#https://docs.docker.com/network/overlay-standalone.swarm/)
 [docker swarm reference architecture](#https://success.docker.com/article/networking)
 
-Docker's networking subsystem is pluggable, using drivers
+Docker's networking subsystem is pluggable, using drivers.
+
+Good example of creating couple user-defined networks for an application: couple containers running the application, one running the database. All containers are connected to the backend network, while application containers are also connected to front-end, where load-balancer will also be connected (its single port, which is exposed to the host will map requests to one of the application containers)
 
 ### bridge
 
 Docker bridge driver automatically installed on host machine(can provide isolation from containers on other networks). Bridge networks only apply to containers running on the same Docker daemon host. Default bridge networks is created upon Docker startup, newly created containers automatically connect to it unless otherwise specified (user-defined networks are superior to the default one)
 
-Default bridge network is called *bridge*(docker0 on host), used to connect containers on a single host. *Host* and *none* arent fully-fledged and only used to start a container connected directly to the Docker daemon host's networking stack, or to start a container with no network devices.
+Default bridge network is called *bridge*(docker0 on host), used to connect containers on a single host. *Host* and *none* arent fully-fledged and only used to start a container connected directly to the Docker daemon host's networking stack, or to start a container with no network devices (thus completely isolate container).
 
 Differences between default and user-defined:
 * containers on user-defined network automatically expose all ports to each other, and no ports to outside world; on default network user needs to manually open ports for two containers to communicate, thus close unnecessary ports for outside world by other means
@@ -146,10 +154,15 @@ https://docs.docker.com/storage/
 https://www.ionos.com/community/server-cloud-infrastructure/docker/understanding-and-managing-docker-container-volumes/
 https://stackoverflow.com/questions/30040708/how-to-mount-local-volumes-in-docker-machine
 
+
+Files required to run the application and the data files that applications generates are separeted in Docker world. To make data persist no matter what you do with containers - use docker volumes.
+
 By default all files created inside a container are stored on the writable layer:
 * data doesn't persist when container is deleted
 * writable layer is tightly coupled to the host
 * writing to the writable layer requires a storage driver to manage the filesystem (union filesystem, using Linux kernel - extra abstraction that reduces performance)
+
+Check [docker run with volume option](#docker-cli) to see how to connect container to existing volume.
 
 ### Storage types
 
@@ -170,6 +183,20 @@ Good for sharing configuration files, source code or artufacts from the host to 
 
 Stored in the host system's memory only, and are never written to the host filesystem. Isnt persistent on disk, either on the Docker host or within container. Used by container during its lifetime to store non-persistent state or sensitive info (swarm uses tmpfs mounts to mount secrets into service's containers).
 Best usage when you dont want data to persist either on the host or on container, or when writing large amount of non-persistent data
+
+### docker volume
+
+docker create *\<volume_name\>* and docker create --name *\<volume_name\>* do the same thing!
+
+* **create** 
+	- [--name] *\<volume_name\>* - specify volume name (if not specified, docker generates a random name)
+	- [--driver], [-d] - specify volume driver name, defaults to *local*
+	- [--opt], [-o] - set driver specific options
+* **ls**
+	- [--quiet], [-q] - only display volume names
+* **inspect** *\<volume_name\>* - display detailed information on one or more volumes, can be useful to inspect if an image uses volumes
+* **rm** *\<volume_name\>* - remove one or more volumes
+	- [--force], [-f] - force removal
 
 ## docker-machine
 
@@ -227,13 +254,19 @@ docker [command] --help - brings options list
     + [--interactive], [-i] - keep stdin open even if not attached
     + [--detach], [-d] - run container in a background
     + [--publish], [-p] *\<host_port\>:\<container_port\>* - publish ports from host to container
-    + [--volume], [-v] - https://docs.docker.com/storage/bind-mounts/
+    + [--volume], [-v] [*\<absolute_directory_path_on_host\>* or *\<volume_name\>*]:*\<absolute_path_in_container\>* - bind mount a volume, attach a filesystem mount to the container, tells docker to store data in the left argument (either directory on the host or volume). Good use includes binding configuration files, that you want to persist on the host. Use of mount option is preferable. [more info](https://docs.docker.com/storage/bind-mounts/)
     + [--mount] - https://docs.docker.com/storage/bind-mounts/
+	+ [--network] *\<network_name\>* - connect container to the network (can also specify ip with --ip option).
+	+ [--ip] *\<ip\>* - specify ip for container
     + https://stackoverflow.com/questions/35550694/what-is-the-purpose-of-the-i-and-t-options-for-the-docker-exec-command/35551071#35551071 - on TTY
+* **logs** *\<container_name\>* - fetch the logs of a container
+	+ [--details] - show extra details
+	+ [--follow], [-f] - follow log output
+	+ [--timestamps], [-t] - show timestamps
 * **start**
 * **attach**
 * **exec**
-* **cp** */<container_name\>*:*\<src_path\> \<dest_path\>* (or vice versa) - copy files/folders between a container and the local filesystem, container can be stopped or running (details are below)
+* **cp** *\<container_name\>*:*\<src_path\> \<dest_path\>* (or vice versa) - copy files/folders between a container and the local filesystem, container can be stopped or running (details are below)
     + [--follow-link], [-L] - always follow symbol link in SRC_PATH (otherwise link itself is copied)
 * **diff** - inspect changes to files or directories on a container's filesystem (based on image it was built from):
     + **A** - file or directory was added
