@@ -731,7 +731,7 @@ Use **up** to set up and start services the first time, **run** for "one-off" ta
     + [--all], [-a] - show all stopped containers
 * **restart** - restart all stopped and running services, for changes in Compose file use restart_policy
 * **rm** - remove stopped service containers
-* **scale** *\<service_name\>*:*\<number\>*- sets the number of containers to run for a service; alternatively in Compose file 3. can specify replicas under deploy key, deploy key only works woth docker stack deploy command
+* **scale** *\<service_name\>*=*\<number\>*- sets the number of containers to run for a service; alternatively in Compose file 3. can specify replicas under deploy key, deploy key only works woth docker stack deploy command
 * **top** - list running processes
 * **events** - stream container events for every container in the project
     + [--json] - json object is printed one per line in the following format
