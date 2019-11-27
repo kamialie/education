@@ -24,7 +24,6 @@ Go further:
 * [docker-machine](#docker-machine)
 * [docker cli](#docker-cli)
     - [ ] [docker swarm, docker node](#docker-swarm-and-docker-node)
-    - [ ] [docker-compose](#docker-compose)
     - [ ] [docker stack](#docker-stack)
     - [x] [docker service](#docker-service)
 * [Dockerfiles](#dockerfiles)
@@ -45,7 +44,8 @@ Go further:
     - [ ] [HEALTHCHECK](#healthcheck)
     - [ ] [SHELL](#shell)
     - [ ] [LABEL](#label)
-* [Docker compose file](#compose-file)
+* [Docker compose](#docker-compose)
+    - [ ] [docker-compose](#docker-compose-command)
     - [ ] [volumes](#volumes)
 
 # Docker?
@@ -405,67 +405,6 @@ Load-balancing is done through round-robin fashion(after last one comes first)
 
 ------------
 
-## docker-compose
-
-[Overview](#https://docs.docker.com/compose/reference/overview/)
-Use **up** to set up and start services the first time, **run** for "one-off" tasks, **start** for restarting previously created containers.
-
-### Commands
-
-**docker-compose**
-* **config** - validate and view the Compose file
-    + [--services] - print services, one per line
-    + [--volumes] - print volumes one per line
-    + [--quiet], [-q] - only validate, dont print anything
-* **build** - create images required for the services it contains
-    + [--parallel] - build images in parallel
-    + [--force-rm] - always remove intermediate containers
-    + [--no-cache] - do not cache when build the image
-* **up** - build, recreate, start and attach to container
-    + [--detach], [-d] - set a driver; [full list of avaliable drivers](#https://docs.docker.com/machine/drivers/)
-    + [--build] - build images before starting(force to even if they exist)
-* **down** - stops and removes containers, networks, volumes and images createad by up, external networks and volumes are not removed
-    + [--rmi] *\<type\>* - remore images, type is either *'all'* (all images used by any service) or *'local'* (only images that dont have custom tag set by the 'image' field
-    + [--volume], [-v] - remove named volumes declared in 'volumes' section and anonymous volumes attached to containers
-* **exec** - equivalent of docker exec, allows to run commands in services (by default allocates TTY, example, docker-compose exec web sh)
-    + [--detach], [-d] - run command in a background
-    + [--privileged] - give extended privileges to the process
-    + [--index]*\<index\>* - index of the container if there are multiple instances of a service (default is 1)
-    + [--workdir], [-w]*\<dir\>* - path to workdor directory for this command
-* **kill** - forces conainers to stop by sending SIGKILL, optinally other signals can be sent
-    + [-s]*\<SIGNAL\>* - SIGNAL to send to the container
-* **logs** - display logs output from services
-    + [--folow], [-f] - follow output
-* **pause** - pauses running containers of the service, can be unpaused by **docker-compose unpause**
-* **ps** - list containers
-    + [-quiet], [-q] - only display IDs
-    + [--services] - display services
-    + [--all], [-a] - show all stopped containers
-* **restart** - restart all stopped and running services, for changes in Compose file use restart_policy
-* **rm** - remove stopped service containers
-* **scale** - sets the number of containers to run for a service; alternatively in Compose file 3. can specify replicas under deploy key, deploy key only works woth docker stack deploy command
-* **top** - list running processes
-* **events** - stream container events for every container in the project
-    + [--json] - json object is printed one per line in the following format
-		```json
-		{
-		    "time": "2015-11-20T18:01:03.615550",
-		    "type": "container",
-		    "action": "create",
-		    "id": "213cf7...5fc39a",
-		    "service": "web",
-		    "attributes": {
-			"name": "application_web_1",
-			"image": "alpine:edge"
-		    }
-		}
-		```
-
-### Links
-
-
-------------
-
 # Dockerfiles
 
 For running option look for [docker build] command above. Valid Dockerfile must start with a FROM instuction.
@@ -704,11 +643,13 @@ Can not trigger **FROM**
 ------------
 
 
-# Compose file
+# Docker compose
+
+Docker compose is a separete tool that allows you to create all parts of a single application automatically: containers, volumes, networks, etc. It accepts a docker-compse.yml file, where one describes the components of "infrastructure".
 
 docker-compose [-f] \<path\> - specify path to docker-compose.yml file; can specify two, the later is applied over and in addition to previuos files; if nothing is specified docker is looking for docker-compose.yml and docker-compose.overried.yml - must supply at least the first; followed by '-' instructs to read from stdin
 
-Network, volume and service definitions are applied to each container respectively (analogy to docker netwrok create, docker volume create)
+Network, volume and service definitions are applied to each container respectively (analogy to docker netwrok create, docker volume create). All parts are prefixed with the directory name containing configuration file (docker-compose.yml) to ensure different compose files can create the same name networks, volumes, containers, etc (to change this behaviour check out -p flag of the docker-compose command).
 
 Not supported for docker stack deploy:
 * build
@@ -749,11 +690,76 @@ Specifying byte values - string format, supports _b_, _k_, _m_ and _g_, and alte
 	2048k
 	1gb
 
+## docker-compose command
+
+[Overview](https://docs.docker.com/compose/reference/overview/)
+
+Use **up** to set up and start services the first time, **run** for "one-off" tasks, **start** for restarting previously created containers.
+
+### Commands
+
+**docker-compose**
+* [--file], [-f] *\<file_name\>* - specify alternate compose file (defaults to *docker-compose.yml*)
+* [--project-name], [-p] *\<name\>* - specify alternate project name (defaults to directory name where compose file resides)
+* **config** - validate and view the Compose file
+    + [--services] - print services, one per line
+    + [--volumes] - print volumes one per line
+    + [--quiet], [-q] - only validate, dont print anything
+* **build** - create images required for the services it contains
+    + [--parallel] - build images in parallel
+    + [--force-rm] - always remove intermediate containers
+    + [--no-cache] - do not cache when build the image
+* **up** [*\<service_name, ...\>*] - build, recreate, start and attach to container. Can optionally pass service name(s) to start services selectively.
+    + [--detach], [-d] - set a driver; [full list of avaliable drivers](https://docs.docker.com/machine/drivers/)
+    + [--build] - build images before starting(force to even if they exist)
+* **down** - stops and removes containers, networks, volumes and images createad by up, external networks and volumes are not removed
+    + [--rmi] *\<type\>* - remore images, type is either *'all'* (all images used by any service) or *'local'* (only images that dont have custom tag set by the 'image' field
+    + [--volume], [-v] - remove named volumes declared in 'volumes' section and anonymous volumes attached to containers
+* **exec** - equivalent of docker exec, allows to run commands in services (by default allocates TTY, example, docker-compose exec web sh)
+    + [--detach], [-d] - run command in a background
+    + [--privileged] - give extended privileges to the process
+    + [--index]*\<index\>* - index of the container if there are multiple instances of a service (default is 1)
+    + [--workdir], [-w]*\<dir\>* - path to workdor directory for this command
+* **kill** - forces conainers to stop by sending SIGKILL, optinally other signals can be sent
+    + [-s]*\<SIGNAL\>* - SIGNAL to send to the container
+* **logs** - display logs output from services
+    + [--folow], [-f] - follow output
+* **pause** - pauses running containers of the service, can be unpaused by **docker-compose unpause**
+* **ps** - list containers
+    + [-quiet], [-q] - only display IDs
+    + [--services] - display services
+    + [--all], [-a] - show all stopped containers
+* **restart** - restart all stopped and running services, for changes in Compose file use restart_policy
+* **rm** - remove stopped service containers
+* **scale** *\<service_name\>*:*\<number\>*- sets the number of containers to run for a service; alternatively in Compose file 3. can specify replicas under deploy key, deploy key only works woth docker stack deploy command
+* **top** - list running processes
+* **events** - stream container events for every container in the project
+    + [--json] - json object is printed one per line in the following format
+		```json
+		{
+		    "time": "2015-11-20T18:01:03.615550",
+		    "type": "container",
+		    "action": "create",
+		    "id": "213cf7...5fc39a",
+		    "service": "web",
+		    "attributes": {
+			"name": "application_web_1",
+			"image": "alpine:edge"
+		    }
+		}
+		```
+
+### Links
+
+
+------------
+
+
 ### Instructions
 
 **version** - specify version of compose file to use (f.e. 3, 2, 3.7...)
 
-**services** 
+**services** - denotes a section where services (distinct containers) are described.
 
 #### build
 
@@ -779,7 +785,7 @@ Can be specified as a string containing a path to build context or as an object 
 * **configs** - grant access to configs [to be continued]
 * **container_name** - specify custom name, cant be scaled(cause ever container name must be unique), ignored when deploying stack
 * **credential_spec** - [to be continued]
-* **depends_on** - express dependancies between services, docker-compose up startes redis and db before web(waits only until they have started, not until the are "ready", to control deploying stage - https://docs.docker.com/compose/startup-order/), docker-compose stop stops web before redis and db; ignored when deploying stack
+* **depends_on** - express dependancies between services, docker-compose up starts redis and db before web(waits only until they have started, not until the are "ready", to control deploying stage - https://docs.docker.com/compose/startup-order/), docker-compose stop stops web before redis and db; ignored when deploying stack
 
 		version: "3.7"
 		services:
@@ -1028,6 +1034,8 @@ Override the default ulimits for a container, can either specify a single limit 
 [to be continued]
 
 #### volumes
+
+Section that describes the volumes that will be used by containers.
 
 Mount host paths or named volumes, specified as sub-options to a service. Can mount a host path as part of a definition for a single service, for reusable volume across multiple services define a named volume in top-level volume key(service, swarms, stack files).
 
