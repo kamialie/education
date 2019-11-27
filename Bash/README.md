@@ -270,6 +270,8 @@ Expansion is performed on the command line after it has been split into tokens. 
 
 Quote removal is performed as the last stage.
 
+[Tilde expansion not perfomed inside double quotes.](https://unix.stackexchange.com/questions/151850/why-doesnt-the-tilde-expand-inside-double-quotes) Also read about expansions above - almost all symbols reserve their literal meaning except several ones.
+
 ----------
 
 [back to contents](#contents)
