@@ -40,6 +40,7 @@
 	- [ ] [Parallel stages](#parallel-stages)
 	- [ ] [Scripted pipeline](#scripted-pipeline)
 * [Plugins](#plugins)
+	- [Bitbucket server notifier](#bitbucket-server-notifier)
 * [Other cool features](#other-cool-features)
 
 ----------
@@ -523,7 +524,7 @@ Allows to prompt for input using input step.
 
 ### when
 
-Determines whether the shage should be executed depending on the given condition. Must at least contain one condition.
+Determines whether the stage should be executed depending on the given condition. Must at least contain one condition.
 
 More complex conditional structures can be built using - *not*, *allOf*, *anyOf*.
 
@@ -628,7 +629,25 @@ To force parallel stages to be aborted when one of them fails add **failFast tru
 
 ----------
 
-### Other cool features
+## Plugins
+
+### Bitbucket server notifier
+
+* https://jenkins.io/doc/pipeline/steps/stashNotifier/
+* https://github.com/jenkinsci/stashnotifier-plugin/issues/160
+* https://bitbucket.org/blog/how-to-configure-stash-notifier-in-pipelines-to-view-build-status
+
+----------
+
+### Git parameter
+
+* [doc](https://wiki.jenkins.io/display/JENKINS/Git+Parameter+Plugin)
+* [alternative](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=2ahUKEwiq9ufasq3mAhWnyqYKHVX8AssQFjAAegQIAhAB&url=https%3A%2F%2Fwiki.jenkins.io%2Fdisplay%2FJENKINS%2FList%2BGit%2BBranches%2BParameter%2BPlugin&usg=AOvVaw1iPyzC3Z83GmsrSNsZp7LK)
+* [issue example](https://issues.jenkins-ci.org/browse/JENKINS-54062?page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel&showAll=true)
+
+----------
+
+## Other cool features
 
 * [Development tools(cli)](https://jenkins.io/blog/2017/05/18/pipeline-dev-tools/)
 
@@ -701,3 +720,13 @@ pipeline {
     }
 }
 ```
+* show produced archive on gui -
+[example](https://medium.com/@gustavo.guss/jenkins-archive-artifact-save-file-in-pipeline-ac6d8b569c2c), 
+[docs](https://jenkins.io/doc/pipeline/steps/core/#code-archiveartifacts-code-archive-the-artifacts)
+```groovy
+post {
+	archiveArtifacts artifacts: "artifact_path"	
+}
+```
+* create zip file - 
+[docs](https://jenkins.io/doc/pipeline/steps/pipeline-utility-steps/#zip-create-zip-file)
