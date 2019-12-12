@@ -307,18 +307,23 @@ Copy rules:
 ## docker swarm and docker node
 
 ...
-A swarm is a group of machines that are running Docker and joined into a cluster. Docker commands are now executed on a whole cluster by a swarm manager.
+A swarm is a group of machines that are running Docker and joined into a cluster. Each server is know as a node, and can be either a manager of worker (slave). Each Docker commands are now executed on a whole cluster by a swarm manager.
 Machines can be physical or virtual, referred as nodes in swarm.
 Always run docker swarm init and join with port 2377 or leave it blank for default(swarm manager port)
 
 Removing nodes from the swarm includes both leaving the swarm with **docker swarm leave**, then removing it from the list on a manager with **docker node rm** *\<node_name\>*
+
+When deploying containers for a project (application), database container doesn't fit to swarm model - any container can be easily replicated by starting ne w containers and be easily moved accross the nodes. Thus, you may want to create database service with a constraint flag to be created on a specific node (also with volume flag, etc). Use constraints to control which nodes will be assigned containers (by hostname, role, label, etc).
+
+[alternative is Kubernetes](https://kubernetes.io)
+
 ### Commands
 
 **docker swarm**
 * **init** - initialize swarm, targeted docker engine becomes a manager; generates two random tokens - manager and worker
     + [--advertise-addr] - addvertise address
 * **join** *\<host:port\>* - join a swarm
-    + [--token] *\<token\>* - token for entry (different for worker and manager)
+    + [--token] *\<token\>* - token for entry (different for worker and manager); acquire token with **join-token** command below
 * **leave** - leave a swarm, works without warning for workers
     + [--force] - use it on manager, when swarm wont be used anymore; proper way is to demote manager to worker, then leave the swarm without warnings
 * **join-token** [*manager*, *worker*] - print token to join the existing swarm as manager or a worker (run on manager node)
@@ -397,8 +402,10 @@ Load-balancing is done through round-robin fashion(after last one comes first)
     + [--network] *\<network_name\>* - attach a service to an existing network
     + [--replicas] *\<number\>* - set number of containers for the service
     + [--publish], [-p] *\<host:service\>* - publish service ports externally to the swarm
-* **rm** *\<service_names\>* - remove one or move services
 * **scale** *\<service_name=number\>* - scale one or more services
+* **update** *\<service_name\>* - changes the configuration of a service after it has been created
+	+ [--publish-add] *\<outside:inside\>* **or** published=*\<outside\>*, target=*\<inside\>* - add or update a port mapping, arguments are numbers
+* **rm** *\<service_names\>* - remove one or move services
 
 ### Links
 
