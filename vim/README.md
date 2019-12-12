@@ -184,6 +184,7 @@ Highlight region in vim, then [:][fold] - fold lines
 - https://stackoverflow.com/questions/29192124/how-to-color-function-call-in-vim-syntax-highlighting
 - https://stackoverflow.com/questions/736701/class-function-names-highlighting-in-vim
 - https://stackoverflow.com/questions/37777417/how-to-use-vim-key-bindings-with-visual-studio-code-vim-extension - exit key mapping in vscode for vim extension:
+- http://vimdoc.sourceforge.net/htmldoc/options.html#'statusline', http://vimdoc.sourceforge.net/htmldoc/windows.html#status-line - status line
 
 
 ## Installation on systems
