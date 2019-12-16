@@ -30,7 +30,8 @@ Stream editor
 ### Examples
 
 var=smth
-sed -i '' "*\<number\>*s/.\*/$var/" test.txt - substitute given number with a variable; if variable contains '/' user different separator - '|'; same with a instead of i means append, i means insert
+
+sed **-i** ' ' "\<number\>s/.\*/$var/" \<target_file\> - substitute given line (number) with a variable, second argument is a regex, current example is substitute whole line; if variable contains '/' use different separator - '|'; same with **-a** means append, **-i** means insert
 
 
 ## diff
