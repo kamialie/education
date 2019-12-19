@@ -31,8 +31,9 @@ Stream editor
 
 var=smth
 
-sed **-i** ' ' "\<number\>s/.\*/$var/" \<target_file\> - substitute given line (number) with a variable, second argument is a regex, current example is substitute whole line; if variable contains '/' use different separator - '|'; same with **-a** means append, **-i** means insert
+sed **-i** '' "\<number\>s/.\*/$var/" \<target_file\> - substitute given line (number) with a variable, second argument is a regex, current example is substitute whole line; if variable contains '/' use different separator - '|'; same with **-a** means append, **-i** means insert
 
+sed **-i** '' '/pattern to match/d' \<target_file\> - delete lines matching patterns
 
 ## diff
 
