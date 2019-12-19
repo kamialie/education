@@ -23,9 +23,9 @@ Go further:
 	- [docker volume command](#docker-volume)
 * [docker-machine](#docker-machine)
 * [docker cli](#docker-cli)
-    - [ ] [docker swarm, docker node](#docker-swarm-and-docker-node)
     - [ ] [docker stack](#docker-stack)
     - [x] [docker service](#docker-service)
+    - [ ] [docker swarm, docker node](#docker-swarm-and-docker-node)
 * [Dockerfiles](#dockerfiles)
     - [x] [FROM](#from)
     - [x] [RUN](#run)
@@ -45,7 +45,7 @@ Go further:
     - [ ] [SHELL](#shell)
     - [ ] [LABEL](#label)
 * [Docker compose](#docker-compose)
-    - [ ] [docker-compose](#docker-compose-command)
+    - [ ] [docker-compose tool](#docker-compose-tool)
     - [ ] [volumes](#volumes)
 
 # Docker?
@@ -304,16 +304,88 @@ Copy rules:
 
 ------------
 
+## docker stack
+
+[Overview](#https://docs.docker.com/engine/reference/commandline/stack/)
+
+Kubernetes is a possible host alongside docker swarm, example and supporting flags [to be continued]
+
+Docker stack commands is required to run in a swarm mode. The context for compose file is taken from [context.go](#https://github.com/docker/swarmkit/blob/master/template/context.go)
+
+Works only with compose file version 3!
+
+```yml
+version: "3"
+services:
+web:
+    image: artnova/pyweb
+    environment:
+        NODENAME: "{{.Node.Hostname}}"
+```
+Single container running in a service is called a _task_. Collection of services that make ap an application is called a _stack_.
+
+### Commands
+
+**docker stack**
+* **deploy** *\<stack_name\>* - deploy a new stack or update an existing one(no need to shut down, just apply changes and run command again); supports compose file v3.0 and higher
+    + [--compose-file], [-c] *\<path_to_docker-compose.yml\>* - path to docker-compose.yml, can provide multiple files by multiple flags (**docker service ls** to confirm correct creation)
+* **ps** *\<stack_name\>* - view all tasks of a stack, [formatting output](#https://docs.docker.com/engine/reference/commandline/stack_ps/#formatting)
+    + [--quiet], [-q] - only show IDs of the tasks, can be useful to be used with **docker inspect**
+
+		    docker inspect $(docker stack ps -q voting)
+
+* **ls** - lists the stacks
+* **services** - list the services on the stack
+* **rm** *\<stack_name\>* - removes the stack from the swarm(has to be run targeting a manager node) that is services, networks and secret associations
+
+### Links
+
+[Difference with docker-compose tool](https://vsupalov.com/difference-docker-compose-and-docker-stack/)
+
+------------
+
+## docker service
+
+Service can be viewed as a separate part of the app, in docker sense - separate container(piece of software). Service can be scaled through replicas - number of containers running that(same) piece of software.
+
+Load-balancing is done through round-robin fashion(after last one comes first) (or ingress load balancing?)
+
+### Commands
+
+**docker service**
+* **ls** - lists services running in the swarm(has to be run targeting a manager node)
+* **ps** *\<service\>* - list the tasks of one or more services(has to be run targeting a manager node)
+* **logs** - show logs of a service or task
+    + [--follow], [-f] - follow log output
+* **create** - create a service in a swarm (must be run on a manager node)
+	+ [--mode] [replicated | global] - defaults to **replicated**, which means service runs as many containers as needed, **global** sets one container to each active node in the swarm
+    + [--name] *\<service_name\>* - set service name
+    + [--network] *\<network_name\>* - attach a service to an existing network
+    + [--replicas] *\<number\>* - set number of containers for the service
+    + [--publish], [-p] *\<host:service\>* - publish service ports externally to the swarm
+* **scale** *\<service_name=number\>* - scale one or more services
+* **update** *\<service_name\>* - changes the configuration of a service after it has been created
+	+ [--publish-add] *\<outside:inside\>* *\<service_name\>* **or** published=*\<outside\>*, target=*\<inside\>* - add or update a port mapping, arguments are numbers
+	+ [--publish-rm] *\<outside:inside\>* - remove a port mapping, arguments are numbers
+* **rm** *\<service_names\>* - remove one or move services
+
+### Links
+
+------------
+
 ## docker swarm and docker node
 
 ...
 A swarm is a group of machines that are running Docker and joined into a cluster. Each server is know as a node, and can be either a manager of worker (slave). Each Docker commands are now executed on a whole cluster by a swarm manager.
 Machines can be physical or virtual, referred as nodes in swarm.
+
 Always run docker swarm init and join with port 2377 or leave it blank for default(swarm manager port)
 
 Removing nodes from the swarm includes both leaving the swarm with **docker swarm leave**, then removing it from the list on a manager with **docker node rm** *\<node_name\>*
 
 When deploying containers for a project (application), database container doesn't fit to swarm model - any container can be easily replicated by starting ne w containers and be easily moved accross the nodes. Thus, you may want to create database service with a constraint flag to be created on a specific node (also with volume flag, etc). Use constraints to control which nodes will be assigned containers (by hostname, role, label, etc).
+
+Docker service command run against swarm is reflected on all nodes - for example post being exposed from service to outside world is done on all nodes, meaning any request recieved to specified port will be recieved by Docker and sent to one of the containers in the service. (ingress load balancing)
 
 [alternative is Kubernetes](https://kubernetes.io)
 
@@ -335,8 +407,10 @@ When deploying containers for a project (application), database container doesn'
 * **rm** *\<node_name\>* - remove one or more node s from the swarm
     + [--force], [-f] - force remove
 * **update** *\<node\>* - update metadata about a node (availabilty, labels, roles...)
-    + [--availability] - active, pause or drain
-    + [--label-add] *\<label\>* - add a label
+    + [--availability] [activea | pause | drain] *\<node_name\>* - let the manager know about changes; is done before taking out node for "maintenance", manager is now able to rebuild, rebalance the services; **pause** tells manager not to assign new containers, **drain** stops existsing containers and doesnt assign new ones
+	+ [--force] - try out the example at page 140 in Essential docker
+	+ [--image] - update images for containers, is done by stopping each container in turn (to speed up the process run **docker service --update-parallelism** command)
+	+ [--label-add] *\<label\>* - add a label
     + [--label-rm] *\<label\>* - remove a label
     + [--role] - worker or manager
 * **demote** *\<manager_node_name\>* - demote manager to a worker
@@ -346,69 +420,6 @@ When deploying containers for a project (application), database container doesn'
 
 https://docs.docker.com/engine/reference/commandline/swarm_init/
 https://www.youtube.com/watch?v=bU2NNFJ-UXA
-
-------------
-
-## docker stack
-
-[Overview](#https://docs.docker.com/engine/reference/commandline/stack/)
-Kubernetes is a possible host alongside docker swarm, example and supporting flags [to be continued]
-When deploying stack(compose file) in a swarm the context is taken from [context.go](#https://github.com/docker/swarmkit/blob/master/template/context.go)
-
-```yml
-version: "3"
-services:
-web:
-    image: artnova/pyweb
-    environment:
-        NODENAME: "{{.Node.Hostname}}"
-```
-Single container running in a service is called a _task_.
-
-### Commands
-
-**docker stack**
-* **deploy** *\<stack_name\>* - deploy a new stack or update an existing one(no need to shut down, just apply changes and run command again); supports compose file v3.0 and higher
-    + [--compose-file] [-c] *\<path_to_docker-compose.yml\>* - path to docker-compose.yml that is docker swarm is used, can provide multiple files by multiple flags (**docker service ls** to confirm correct creation)
-* **ps** *\<stack_name\>* - view all tasks of a stack, [formatting output](#https://docs.docker.com/engine/reference/commandline/stack_ps/#formatting)
-    + [--quiet], [-q] - only show IDs of the tasks, can be useful to be used with **docker inspect**
-
-		    docker inspect $(docker stack ps -q voting)
-
-* **ls** - lists the stacks
-* **services** - list the services on the stack
-* **rm** *\<stack_name\>* - removes the stack from the swarm(has to be run targeting a manager node) that is services, netwerks and secret associations
-
-### Links
-
-
-------------
-
-## docker service
-
-...
-Service can be viewed as a separate part of the app, in docker sense - separate container(piece of software). Service can be scaled through replicas - number of containers running that(same) piece of software.
-Load-balancing is done through round-robin fashion(after last one comes first)
-
-### Commands
-
-**docker service**
-* **ls** - lists services running in the swarm(has to be run targeting a manager node)
-* **ps** *\<service\>* - list the tasks of one or more services(has to be run targeting a manager node)
-* **logs** - show logs of a service or task
-    + [--follow], [-f] - follow log output
-* **create** - create a service in a swarm (must be run on a manager node)
-    + [--name] *\<service_name\*> - set service name
-    + [--network] *\<network_name\>* - attach a service to an existing network
-    + [--replicas] *\<number\>* - set number of containers for the service
-    + [--publish], [-p] *\<host:service\>* - publish service ports externally to the swarm
-* **scale** *\<service_name=number\>* - scale one or more services
-* **update** *\<service_name\>* - changes the configuration of a service after it has been created
-	+ [--publish-add] *\<outside:inside\>* **or** published=*\<outside\>*, target=*\<inside\>* - add or update a port mapping, arguments are numbers
-* **rm** *\<service_names\>* - remove one or move services
-
-### Links
-
 
 ------------
 
@@ -652,12 +663,6 @@ Can not trigger **FROM**
 
 # Docker compose
 
-Docker compose is a separete tool that allows you to create all parts of a single application automatically: containers, volumes, networks, etc. It accepts a docker-compse.yml file, where one describes the components of "infrastructure".
-
-docker-compose [-f] \<path\> - specify path to docker-compose.yml file; can specify two, the later is applied over and in addition to previuos files; if nothing is specified docker is looking for docker-compose.yml and docker-compose.overried.yml - must supply at least the first; followed by '-' instructs to read from stdin
-
-Network, volume and service definitions are applied to each container respectively (analogy to docker netwrok create, docker volume create). All parts are prefixed with the directory name containing configuration file (docker-compose.yml) to ensure different compose files can create the same name networks, volumes, containers, etc (to change this behaviour check out -p flag of the docker-compose command).
-
 Not supported for docker stack deploy:
 * build
 * cgroup_parent
@@ -697,9 +702,15 @@ Specifying byte values - string format, supports _b_, _k_, _m_ and _g_, and alte
 	2048k
 	1gb
 
-## docker-compose command
+## docker-compose tool
 
 [Overview](https://docs.docker.com/compose/reference/overview/)
+
+Docker compose is a separete tool (used to be separate Python project) that allows you to create all parts of a single application automatically: containers, volumes, networks, etc. Under hood it uses docker engine APT to perform necessary steps. It accepts a docker-compose.yml file, where one describes the components of "infrastructure". [Read more about difference of docker-compose tool and built-in docker stack](https://vsupalov.com/difference-docker-compose-and-docker-stack/)
+
+docker-compose [-f] \<path\> - specify path to docker-compose.yml file; can specify two, the later is applied over and in addition to previuos files; if nothing is specified docker is looking for docker-compose.yml and docker-compose.overried.yml - must supply at least the first; followed by '-' instructs to read from stdin
+
+Network, volume and service definitions are applied to each container respectively (analogy to docker network create, docker volume create). All parts are prefixed with the directory name containing configuration file (docker-compose.yml) to ensure different compose files can create the same name networks, volumes, containers, etc (to change this behaviour check out -p flag of the docker-compose command).
 
 Use **up** to set up and start services the first time, **run** for "one-off" tasks, **start** for restarting previously created containers.
 
