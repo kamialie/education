@@ -37,23 +37,17 @@ Configuration variables that control all aspects of Git can be stored in three d
 
 This information is added to every commit.
 
-----------
-
 ### Editor
 
 Git uses specified editor when user to type in a message. If not configured, system's default is used.
 
 **git config --global core.editor vim**
 
-----------
-
 ### Checking settings
 
 **git config --list** - vew all settings
 **git config <setting>** - check specific setting
 **git config --show-origin <setting>** - show setting as well as where Git took it from
-
-----------
 
 ## Help
 
@@ -82,15 +76,7 @@ Commands to get man pages:
 - end pattern with slash (/) to specify a directory
 	+ build/ - ignore all files in any directory named build
 - negate pattern by starting it with an exclamation point (!)
-	+ \*.a
-	+ !lib.a - do track lib.a, even though you ignore \*.a files
-- use 2 asterics (\*\*) to match nested directories
-	+ doc/\*\*/\*.pdf - ignore all pdf files in the doc/ directory and all its subdirectories
-
-**git diff** - see exactly what lines were changed and about to be committed/not staged yet, only shows changes that are not staged
-	+ [--staged], [--cached] - shows what is going to the next commit (difference between last commit and staged changes)
-
-----------
-
-# Stuff to check out
-- **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
+	+ *.a
+	+ !lib.a - do track lib.a, even though you ignore *.a files
+- use 2 asterics (**) to match nested directories
+	+ doc/**/*.pdf - ignore all pdf files in the doc/ directory and all its subdirectories
