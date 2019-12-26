@@ -87,8 +87,10 @@ Commands to get man pages:
 - use 2 asterics (\*\*) to match nested directories
 	+ doc/\*\*/\*.pdf - ignore all pdf files in the doc/ directory and all its subdirectories
 
-**git diff** - see exactly what lines were changed but not staged yet (that is changes with staged area and local directory)
-	+ [--staged], [--cached] - shows what is going to the next commit (difference between last commit and staged changes)
+**git diff** - shows what lines that were changed but not staged yet (that is changes with staged area and local directory)
+	+ [--staged], [--cached] - shows lines that were changed and staged(difference between last commit and staged changes)
+
+**git difftool** - allows for graphical view in configured editor, run **git difftool --tool-help** to get more details
 
 ----------
 
