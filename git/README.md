@@ -92,6 +92,10 @@ Commands to get man pages:
 
 **git difftool** - allows for graphical view in configured editor, run **git difftool --tool-help** to get more details
 
+**git commit** - commits staged changes, with no arguments launches the chosen (--global core.editor) editor - lines starting with **#** will be ignored
+	+ [-v] - in addition to default call adds the output of **diff** command
+	+ [-m] \<message\> - alternative, commit message
+	+ [-a] - skip the staging area - automatically add all files that are already tracked 
 
 ----------
 
