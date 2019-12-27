@@ -95,7 +95,13 @@ Commands to get man pages:
 **git commit** - commits staged changes, with no arguments launches the chosen (--global core.editor) editor - lines starting with **#** will be ignored
 	+ [-v] - in addition to default call adds the output of **diff** command
 	+ [-m] \<message\> - alternative, commit message
-	+ [-a] - skip the staging area - automatically add all files that are already tracked 
+	+ [-a] - skip the staging area - automatically add all files that are already tracked (does not include new (untracked) files)
+
+**git rm** \<file\> - remove file from working directory and stage the removal
+	+ [--cached] \<file\> - remove file from stagin area, but not from working directory (for example forgot to add to gitignore)
+	+ **git rm** log/\\\*.log - can pass files, directories and file-glob patterns, backslash before start in necessary, as git applies its own filename expansion in addition to shell's expansion
+
+**git mv** \<file_from\> \<file_to\> - convenience command, applies **mv**, removal of old name and staging of new new (will appear as **renamed** in **git status**)
 
 ----------
 
