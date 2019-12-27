@@ -92,6 +92,7 @@ Commands to get man pages:
 
 **git difftool** - allows for graphical view in configured editor, run **git difftool --tool-help** to get more details
 
+
 ----------
 
 # Stuff to check out
