@@ -33,6 +33,7 @@ Configuration variables that control all aspects of Git can be stored in three d
 ### Identity
 
 **git config --global user.name** "name"
+
 **git config --global user.email** email
 
 This information is added to every commit.
@@ -50,7 +51,9 @@ Git uses specified editor when user to type in a message. If not configured, sys
 ### Checking settings
 
 **git config --list** - vew all settings
+
 **git config <setting>** - check specific setting
+
 **git config --show-origin <setting>** - show setting as well as where Git took it from
 
 ----------
@@ -73,9 +76,11 @@ Commands to get man pages:
 
 ## Recording changes to the repository
 
-- **git status** - determine status of all files in the current repository, can be tracked (unmodified | modified | stages) or untracked
-	+ [--short], [-s] - short version; ? - new files, A - added to staged area, M - modified files; 1 column - staged area, 2 column - working tree
-- **git add <file>** - adding files to the next commit (new | modified | resolve conflicts)
+**git status** - determine status of all files in the current repository, can be tracked (unmodified | modified | stages) or untracked
+
++ [--short], [-s] - short version; ? - new files, A - added to staged area, M - modified files; 1 column - staged area, 2 column - working tree
+
+**git add <file>** - adding files to the next commit (new | modified | resolve conflicts)
 
 .gitignore - add files or patterns to ignore, [examples](https://github.com/github/gitignore), it is possible to have multiple gitignores in subdirectories, which will only apply to files under that directory
 - start pattern with slash (/) to avoid recursivity
@@ -90,20 +95,20 @@ Commands to get man pages:
 
 **git diff** - shows what lines that were changed but not staged yet (that is changes with staged area and local directory)
 
-	+ [--staged], [--cached] - shows lines that were changed and staged(difference between last commit and staged changes)
++ [--staged], [--cached] - shows lines that were changed and staged(difference between last commit and staged changes)
 
 **git difftool** - allows for graphical view in configured editor, run **git difftool --tool-help** to get more details
 
 **git commit** - commits staged changes, with no arguments launches the chosen (--global core.editor) editor - lines starting with **#** will be ignored
 
-	+ [-v] - in addition to default call adds the output of **diff** command
-	+ [-m] \<message\> - alternative, commit message
-	+ [-a] - skip the staging area - automatically add all files that are already tracked (does not include new (untracked) files)
++ [-v] - in addition to default call adds the output of **diff** command
++ [-m] \<message\> - alternative, commit message
++ [-a] - skip the staging area - automatically add all files that are already tracked (does not include new (untracked) files)
 
 **git rm** \<file\> - remove file from working directory and stage the removal
 
-	+ [--cached] \<file\> - remove file from stagin area, but not from working directory (for example forgot to add to gitignore)
-	+ **git rm** log/\\\*.log - can pass files, directories and file-glob patterns, backslash before start in necessary, as git applies its own filename expansion in addition to shell's expansion
++ [--cached] \<file\> - remove file from stagin area, but not from working directory (for example forgot to add to gitignore)
++ **git rm** log/\\\*.log - can pass files, directories and file-glob patterns, backslash before start in necessary, as git applies its own filename expansion in addition to shell's expansion
 
 **git mv** \<file_from\> \<file_to\> - convenience command, applies **mv**, removal of old name and staging of new new (will appear as **renamed** in **git status**)
 
