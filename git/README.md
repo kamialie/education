@@ -66,6 +66,8 @@ Commands to get man pages:
 - **man git-<verb>**
 - **git <verb> -h** - consice "help" output, refresher
 
+----------
+
 # Git basics
 
 ## Getting a git repository
@@ -108,7 +110,7 @@ Commands to get man pages:
 **git rm** \<file\> - remove file from working directory and stage the removal
 
 + [--cached] \<file\> - remove file from stagin area, but not from working directory (for example forgot to add to gitignore)
-+ **git rm** log/\\\*.log - can pass files, directories and file-glob patterns, backslash before start in necessary, as git applies its own filename expansion in addition to shell's expansion
+	- log/\\\*.log - can pass files, directories and file-glob patterns, backslash before start in necessary, as git applies its own filename expansion in addition to shell's expansion
 
 **git mv** \<file_from\> \<file_to\> - convenience command, applies **mv**, removal of old name and staging of new new (will appear as **renamed** in **git status**)
 
@@ -116,9 +118,38 @@ Commands to get man pages:
 
 ## Viewing the commit history
 
-**git log** - with no arguments lists all commits in chronological order (from most recent to later ones)
+**git log** - with no arguments lists all commits in chronological order (from most recent to later ones); pretty option with oneline or format specifiers work particularly useful with graph option
 
-	+ [-patch], [-p] \<number\> - show difference introduced in each commit, optional number can be passed to specify number of entries
++ [-patch], [-p] - show difference introduced in each commit
++ [--stat] - summarizing option - what is change, how much, etc
++ [--shortstat] - same as above, but obviously short
++ [--pretty]=[oneline | short | full | fuller | format] - outline info in different format than the default; all except *format* are builtins, while format lets you create your own (see below)
+	- git log --pretty=format:"%h - %an, %ar : %s" - example
+	- %H - commit hash
+	- %h - abbreviated form
+	- %T - tree hash
+	- %t - abbreviated form
+	- %P - parent hashes
+	- %p - abbreviated form
+	- %an - author name
+	- %ae - ... email
+	- %ad - ... date
+	- %ar - ... date, relative
+	- %cn - commiter name
+	- %ce - ... email
+	- %cd - ... date
+	- %cr - ... date, relative
+	- %s - subject
++ [--graph] - nice little ASCII graph
++ [--name-only] - show the names of file modified after each commit info
++ [--name-status] - same as above with added/modified/deleted info as well
++ [--abbrev-commit] - abbreviated form for checksum
++ [--relative-date] - display date in relative format
++ [--oneline] - shorthand for --pretty=oneline --abbrev-commit together
+
+----------
+
+## Limiting log output
 
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
