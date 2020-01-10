@@ -68,7 +68,8 @@ Commands to get man pages:
 ## Getting a git repository
 
 **git init** - creates subdirectory (.git), repository skeleton
-**git clone <url> [directory]** - copy existing repository to local machine, optional directory argument, where repository will be created
+
+**git clone \<url\> [directory]** - copy existing repository to local machine, optional directory argument, where repository will be created
 
 ## Recording changes to the repository
 
@@ -76,7 +77,7 @@ Commands to get man pages:
 	+ [--short], [-s] - short version; ? - new files, A - added to staged area, M - modified files; 1 column - staged area, 2 column - working tree
 - **git add <file>** - adding files to the next commit (new | modified | resolve conflicts)
 
-.gitirnore - add files or patterns to ignore, [examples](https://github.com/github/gitignore), it is possible to have multiple gitignores in subdirectories, which will only apply to files under that directory
+.gitignore - add files or patterns to ignore, [examples](https://github.com/github/gitignore), it is possible to have multiple gitignores in subdirectories, which will only apply to files under that directory
 - start pattern with slash (/) to avoid recursivity
 	+ /TODO - only ignore TODO file in the current directory, not subdir/TODO
 - end pattern with slash (/) to specify a directory
@@ -88,22 +89,31 @@ Commands to get man pages:
 	+ doc/\*\*/\*.pdf - ignore all pdf files in the doc/ directory and all its subdirectories
 
 **git diff** - shows what lines that were changed but not staged yet (that is changes with staged area and local directory)
+
 	+ [--staged], [--cached] - shows lines that were changed and staged(difference between last commit and staged changes)
 
 **git difftool** - allows for graphical view in configured editor, run **git difftool --tool-help** to get more details
 
 **git commit** - commits staged changes, with no arguments launches the chosen (--global core.editor) editor - lines starting with **#** will be ignored
+
 	+ [-v] - in addition to default call adds the output of **diff** command
 	+ [-m] \<message\> - alternative, commit message
 	+ [-a] - skip the staging area - automatically add all files that are already tracked (does not include new (untracked) files)
 
 **git rm** \<file\> - remove file from working directory and stage the removal
+
 	+ [--cached] \<file\> - remove file from stagin area, but not from working directory (for example forgot to add to gitignore)
 	+ **git rm** log/\\\*.log - can pass files, directories and file-glob patterns, backslash before start in necessary, as git applies its own filename expansion in addition to shell's expansion
 
 **git mv** \<file_from\> \<file_to\> - convenience command, applies **mv**, removal of old name and staging of new new (will appear as **renamed** in **git status**)
 
 ----------
+
+## Viewing the commit history
+
+**git log** - with no arguments lists all commits in chronological order (from most recent to later ones)
+
+	+ [-patch], [-p] \<number\> - show difference introduced in each commit, optional number can be passed to specify number of entries
 
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
