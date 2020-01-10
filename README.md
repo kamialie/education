@@ -33,6 +33,7 @@
   + https://stackoverflow.com/questions/40082346/how-to-check-if-a-file-exists-in-a-shell-script
   + https://xkcd.com/571/ - commis
   + https://register.ubisoft.com/rabbids-coding/en-US - learning game from Ubisoft
+  + https://requestbin.com/ - check url requests
 
 - cybersecurity related
   + https://hackerone.com/reports/403417
@@ -75,3 +76,8 @@
   + https://ru.hexlet.io/pages/recommended-books
   + https://github.com/Hexlet/ru-test-assignments
   + https://ru.hexlet.io/projects
+
+- English
+  + Lynne Truss
+	* "the girl's like spaghetti'
+	* "Eats, Shoots and Leaves"
