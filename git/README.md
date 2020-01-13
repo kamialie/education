@@ -61,7 +61,7 @@ Git uses specified editor when user to type in a message. If not configured, sys
 ## Help
 
 Commands to get man pages:
-- `git help <verb>`
+- **git help \<verb\>**
 - **git <verb> --help**
 - **man git-\<verb\>**
 - **git <verb> -h** - consice "help" output, refresher
@@ -80,11 +80,14 @@ Commands to get man pages:
 
 **git status** - determine status of all files in the current repository, can be tracked (unmodified | modified | stages) or untracked
 
-+ [--short], [-s] - short version; ? - new files, A - added to staged area, M - modified files; 1 column - staged area, 2 column - working tree
+- `[--short], [-s]` - short version; 1 column is staged area, 2 column - working tree; corresponding signs are:
+	+ **?** - new files
+	+ **A** - added to staged area
+	+ **M** - modified files
 
 **git add <file>** - adding files to the next commit (new | modified | resolve conflicts)
 
-.gitignore - add files or patterns to ignore, [examples](https://github.com/github/gitignore), it is possible to have multiple gitignores in subdirectories, which will only apply to files under that directory
+`.gitignore` - add files or patterns to ignore, [examples](https://github.com/github/gitignore), it is possible to have multiple gitignores in subdirectories, which will only apply to files under that directory
 - start pattern with slash (/) to avoid recursivity
 	+ /TODO - only ignore TODO file in the current directory, not subdir/TODO
 - end pattern with slash (/) to specify a directory
@@ -97,19 +100,19 @@ Commands to get man pages:
 
 **git diff** - shows what lines that were changed but not staged yet (that is changes with staged area and local directory)
 
-+ [--staged], [--cached] - shows lines that were changed and staged(difference between last commit and staged changes)
++ `[--staged], [--cached]` - shows lines that were changed and staged(difference between last commit and staged changes)
 
 **git difftool** - allows for graphical view in configured editor, run **git difftool --tool-help** to get more details
 
 **git commit** - commits staged changes, with no arguments launches the chosen (--global core.editor) editor - lines starting with **#** will be ignored
 
-+ [-v] - in addition to default call adds the output of **diff** command
-+ [-m] \<message\> - alternative, commit message
-+ [-a] - skip the staging area - automatically add all files that are already tracked (does not include new (untracked) files)
++ `[-v]` - in addition to default call adds the output of **diff** command
++ `[-m]` \<message\> - alternative, commit message
++ `[-a]` - skip the staging area - automatically add all files that are already tracked (does not include new (untracked) files)
 
 **git rm** \<file\> - remove file from working directory and stage the removal
 
-+ [--cached] \<file\> - remove file from stagin area, but not from working directory (for example forgot to add to gitignore)
++ `[--cached] \<file\>` - remove file from stagin area, but not from working directory (for example forgot to add to gitignore)
 	- log/\\\*.log - can pass files, directories and file-glob patterns, backslash before start in necessary, as git applies its own filename expansion in addition to shell's expansion
 
 **git mv** \<file_from\> \<file_to\> - convenience command, applies **mv**, removal of old name and staging of new new (will appear as **renamed** in **git status**)
@@ -120,11 +123,11 @@ Commands to get man pages:
 
 **git log** - with no arguments lists all commits in chronological order (from most recent to later ones); pretty option with oneline or format specifiers work particularly useful with graph option
 
-+ [-patch], [-p] - show difference introduced in each commit
-+ [--stat] - summarizing option - what is change, how much, etc
-+ [--shortstat] - same as above, but obviously short
-+ [--pretty]=[oneline | short | full | fuller | format] - outline info in different format than the default; all except *format* are builtins, while format lets you create your own (see below)
-	- git log --pretty=format:"%h - %an, %ar : %s" - example
++ `[-patch], [-p]` - show difference introduced in each commit
++ `[--stat]` - summarizing option - what is change, how much, etc
++ `[--shortstat]` - same as above, but obviously short
++ `[--pretty]=[oneline | short | full | fuller | format]` - outline info in different format than the default; all except *format* are builtins, while format lets you create your own (see below)
+	- `git log --pretty=format:"%h - %an, %ar : %s"` - example
 	- %H - commit hash
 	- %h - abbreviated form
 	- %T - tree hash
@@ -140,12 +143,12 @@ Commands to get man pages:
 	- %cd - ... date
 	- %cr - ... date, relative
 	- %s - subject
-+ [--graph] - nice little ASCII graph
-+ [--name-only] - show the names of file modified after each commit info
-+ [--name-status] - same as above with added/modified/deleted info as well
-+ [--abbrev-commit] - abbreviated form for checksum
-+ [--relative-date] - display date in relative format
-+ [--oneline] - shorthand for --pretty=oneline --abbrev-commit together
++ `[--graph]` - nice little ASCII graph
++ `[--name-only]` - show the names of file modified after each commit info
++ `[--name-status]` - same as above with added/modified/deleted info as well
++ `[--abbrev-commit]` - abbreviated form for checksum
++ `[--relative-date]` - display date in relative format
++ `[--oneline]` - shorthand for --pretty=oneline --abbrev-commit together
 
 ----------
 
