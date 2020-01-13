@@ -96,7 +96,7 @@ Commands to get man pages:
 	+ `*.a`
 	+ `!lib.a` - do track lib.a, even though you ignore \*.a files
 - use 2 asterics (\*\*) to match nested directories
-	+ `doc/\*\*/\*.pdf` - ignore all pdf files in the doc/ directory and all its subdirectories
+	+ `doc/**/*.pdf` - ignore all pdf files in the doc/ directory and all its subdirectories
 
 **git diff** - shows what lines that were changed but not staged yet (that is changes with staged area and local directory)
 
@@ -113,7 +113,7 @@ Commands to get man pages:
 **git rm** \<file\> - remove file from working directory and stage the removal
 
 + `[--cached] \<file\>` - remove file from stagin area, but not from working directory (for example forgot to add to gitignore)
-	- log/\\\*.log - can pass files, directories and file-glob patterns, backslash before start in necessary, as git applies its own filename expansion in addition to shell's expansion
+	- `log/\*.log` - can pass files, directories and file-glob patterns, backslash before start in necessary, as git applies its own filename expansion in addition to shell's expansion
 
 **git mv** \<file_from\> \<file_to\> - convenience command, applies **mv**, removal of old name and staging of new new (will appear as **renamed** in **git status**)
 
