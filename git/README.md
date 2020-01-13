@@ -61,9 +61,9 @@ Git uses specified editor when user to type in a message. If not configured, sys
 ## Help
 
 Commands to get man pages:
-- **git help <verb>**
+- `**git help \<verb\>**`
 - **git <verb> --help**
-- **man git-<verb>**
+- **man git-\<verb\>**
 - **git <verb> -h** - consice "help" output, refresher
 
 ----------
