@@ -48,6 +48,10 @@ also see [cmp use](#https://stackoverflow.com/questions/12900538/fastest-way-to-
 
 ## curl
 
+[basic info](https://gist.github.com/subfuzion/08c5d85437d5d4f00e58)
+
+When sending POST request with a **-L** flag (redirection), the follow up request (if needed) will be GET, instead of POST.
+
 ### Flags
 
 * **--include**, **-i**  - include the HTTP-header in the output
@@ -58,6 +62,9 @@ also see [cmp use](#https://stackoverflow.com/questions/12900538/fastest-way-to-
 * **--silent**, **-s** - silent or quiet, dont show progress meter or error messages
 * **--show-error**, **-S** - when used with **-s** makes curl show the error message
 * **--user**, **-u** *\<user:password\>* - specify user, password for server authentication. If only passed user, curl will prompt for password
+* **--data**, **-d** \<data\> - sends specified data in a POST request; can send data directly or read from a file - to specify a while add **@** in front, for example -d "@filename.json"; two formats are available:
+	- application/x-www-form-urlencoded - param-value pairs seperated by **&** sign, "param1:value1&param2:value2"
+	- application/json - usual json, '{"key":"value"}'
 
 ## tar
 
