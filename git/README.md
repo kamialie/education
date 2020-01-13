@@ -174,7 +174,9 @@ Commands to get man pages:
 		+ git commit -m "initial commit"
 		+ git add forgotten_file
 		+ git commit --amend
+
 **git reset \<reference\> \<path/to/file/or/directory\>** - reset the specified file, thus its becomes unstaged
+
 **git checkout -- \<path/to/file/or/directory\>** - unmodify a file, revert it to last commit
 
 # Stuff to check out
