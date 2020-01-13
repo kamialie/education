@@ -24,9 +24,9 @@ Three main states that a file can have:
 ## Setup
 
 Configuration variables that control all aspects of Git can be stored in three different places:
-- /etc/gitconfig file - values are applied to every user on the system and all their repositories; pass [--system] option to **git config** to operate on values from this file specifically
-- ~/.gitconfig or ~/.config/git/config file - values specific to user; pass [--global] option to **git config** to operate on this file, affects all repositories of the user
-- .git/config (file in the repository) - specific to single repository; [--local] option is the default, should be located in corresponding repository
+- `/etc/gitconfig` file - values are applied to every user on the system and all their repositories; pass `[--system]` option to **git config** to operate on values from this file specifically
+- `~/.gitconfig` or `~/.config/git/config` file - values specific to user; pass `[--global]` option to **git config** to operate on this file, affects all repositories of the user
+- `.git/config` (file in the repository) - specific to single repository; `[--local]` option is the default, should be located in corresponding repository
 
 **git config --list --show-origin** - view all settings and there they are coming from
 
