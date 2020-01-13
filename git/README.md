@@ -170,7 +170,8 @@ Commands to get man pages:
 ## Undoing things
 
 **git commit**
-	+ `[--amend]` - redo last commit (in case of forgeting to add some files, changing commit message, making additional changes), in other words take the staging area and uses it for the commit (actually takes last commit away, creates new one and pushes it over); example:
+
++ `[--amend]` - redo last commit (in case of forgeting to add some files, changing commit message, making additional changes), in other words take the staging area and uses it for the commit (actually takes last commit away, creates new one and pushes it over); example:
 		+ git commit -m "initial commit"
 		+ git add forgotten_file
 		+ git commit --amend
