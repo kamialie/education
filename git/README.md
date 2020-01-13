@@ -89,14 +89,14 @@ Commands to get man pages:
 
 `.gitignore` - add files or patterns to ignore, [examples](https://github.com/github/gitignore), it is possible to have multiple gitignores in subdirectories, which will only apply to files under that directory
 - start pattern with slash (/) to avoid recursivity
-	+ /TODO - only ignore TODO file in the current directory, not subdir/TODO
+	+ `/TODO` - only ignore TODO file in the current directory, not subdir/TODO
 - end pattern with slash (/) to specify a directory
-	+ build/ - ignore all files in any directory named build
+	+ `build/` - ignore all files in any directory named build
 - negate pattern by starting it with an exclamation point (!)
-	+ \*.a
-	+ !lib.a - do track lib.a, even though you ignore \*.a files
+	+ `*.a`
+	+ `!lib.a` - do track lib.a, even though you ignore \*.a files
 - use 2 asterics (\*\*) to match nested directories
-	+ doc/\*\*/\*.pdf - ignore all pdf files in the doc/ directory and all its subdirectories
+	+ `doc/\*\*/\*.pdf` - ignore all pdf files in the doc/ directory and all its subdirectories
 
 **git diff** - shows what lines that were changed but not staged yet (that is changes with staged area and local directory)
 
