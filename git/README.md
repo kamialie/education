@@ -178,7 +178,31 @@ Commands to get man pages:
 
 **git reset \<reference\> \<path/to/file/or/directory\>** - reset the specified file, thus its becomes unstaged
 
++ git reset HEAD some_file - example
+
 **git checkout -- \<path/to/file/or/directory\>** - unmodify a file, revert it to last commit
+
+----------
+
+## Working with remotes
+
+Remote repositories are version of the project that are hosted elsewhere (can be remote server, network, internet, even local machine).
+
+Origin - default name Git gives to the server you clone from
+
+**git remote** - list remote servers you have configured
+
++ `[-v]` - show URLs as well
++ `add <shortname> <url>` - add a remote
++ `show <remote>` - see more info about particular remote
++ `rename <old_name> <new_name>` - rename remotes short name (changes references as well - <old_name>/master to <new_name>/master
++ `remove <remote>` or `rm <remote>` - remove remote, all remote-tracking branches and configs are deleted as well
+
+Git fetch pulls down all data from the remote project that you dont have locally. After it you have all references to all branches locally and cna merge or inspect at any time. Does not merge data automatically. If current branch is set up to track a remote branch, then **git pull** automatically does **git fetch** and then tries to merge the changes.
+
+**git fetch \<remote\>** - get the data from the remote server
+
+**git push origin master** - example, push changes to remote master branch
 
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
