@@ -154,5 +154,18 @@ Commands to get man pages:
 
 ## Limiting log output
 
+- `-<n>` - where n is an integer show last `n` commits
+- `[--since]` or `[--until]` - specify the date; can accept different formats:
+	+ "2.weeks"
+	+ "2009-01-15"
+	+ "2 years 1 day 3 minutes ago"
+- `[--author]` - show commits from particular author
+- `[--grep]` - search for keywords in the commit messages
+- `[-S] <string>` - Git's "pickaxe" option, takes a string and show only those commits that changed number of occurences
+- `[--] /path/to/file/or/directory` - output commits that introduced a change to those files
+- `[--no-merges]` - not merge commits
+
+----------
+
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
