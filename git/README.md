@@ -220,7 +220,7 @@ Types of tags:
 **git tag \<pattern\>** - list existing tags, optional pattern (enclosed in double quotes) can be passed as well
 
 + `[--list], [-l]` - act like default for entire list of tags; if pattern is supplied flag is mandatory for desiered behavior
-+ `[-a] <tag_name> <commit_checksum>` - create annotated tag; optional \<commit_checksum\> parameter to tag past commits
++ `[-a] <tag_name> <commit_checksum>` - create annotated tag; optional \<commit_checksum\> parameter to tag past commits (short or full version of checksum)
 + `[-m] <message>` - specify taggin mesage
 + `[-d] <tag_name>` - remove a tag locally
 
