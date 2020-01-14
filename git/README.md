@@ -204,5 +204,36 @@ Git fetch pulls down all data from the remote project that you dont have locally
 
 **git push origin master** - example, push changes to remote master branch
 
+----------
+
+## Tagging
+
+Tags are used to explicitly mark certain points in history.
+
+To create a lightweight tag dont pass any additional options - `git tag v1.4-lw`
+
+Types of tags:
+
++ lightweight - just like branch that doesn't change, in other words pointed to specific commit
++ annotated - stored as full object in Git database (checksummed as well), since it contains additional information - tagger name, email, and date. (can also be signed and verified by GNU Privacy Guard (GPG))
+
+**git tag \<pattern\>** - list existing tags, optional pattern (enclosed in double quotes) can be passed as well
+
++ `[--list], [-l]` - act like default for entire list of tags; if pattern is supplied flag is mandatory for desiered behavior
++ `[-a] <tag_name> <commit_checksum>` - create annotated tag; optional \<commit_checksum\> parameter to tag past commits
++ `[-m] <message>` - specify taggin mesage
++ `[-d] <tag_name>` - remove a tag locally
+
+**git show \<tag_name\>** - show the tag data alongside the commit info
+
+**git push \<remote_name\>**
+
++  `<tag_name>` - push tag to remote server
++ `--tags` - push all tags at once (pushes both types of tags)
++ `--delete <tag_name>` - remove tag from remote server
++ `:ref/tags/<tag_name>` - way to interpret - read the value before colon as null, thus pushing null == deleting tag
+
+**git checkout \<tag_name\>** - checkout to the commit by passing a tag that points to it
+
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
