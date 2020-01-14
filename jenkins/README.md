@@ -731,8 +731,10 @@ post {
 * create zip file - [docs](https://jenkins.io/doc/pipeline/steps/pipeline-utility-steps/#zip-create-zip-file)
 * mail - [Email-ext plugin](https://wiki.jenkins.io/display/JENKINS/Email-ext+plugin) or [Mailer](https://wiki.jenkins.io/display/JENKINS/Mailer) with example which is below
 ```groovy
-mail(to: "${MAILING_LIST}",
+mail(
+	to: "${MAILING_LIST}",
 	cc: "${TESTERS_LIST}",
 	subject: "mail_subject",
-	body: "mail_body");
+	body: "mail_body"
+)
 ```
