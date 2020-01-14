@@ -235,5 +235,21 @@ Types of tags:
 
 **git checkout \<tag_name\>** - checkout to the commit by passing a tag that points to it
 
+----------
+
+## Git Aliases
+
+Simple as any other aliasing - just replace "long" command with you alias!
+
+**git config --global alias.\<alias\> \<command\>** - if command consists of multiple arguments, its best to enclose them in single quotes
+
+Good examples:
+
++ `git config --global alias.co checkout`
++ `git config --global alias.br branch`
++ `git config --global alias.ci commit`
++ `git config --global alias.st status`
++ `git config --global alias.last 'log -1 HEAD'`
+
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
