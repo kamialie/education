@@ -67,6 +67,8 @@ Press while in normal mode:
 + `[Ctrl][f]` - jump down full screen
 + `[Ctrl][b]` - jump up full screen
 + `<number> [[gg] | [G]]` - go to the specified line
++ `[-]` - go the previous line (beginning)
++ `[+]` - go to the next line (beginning)
 + `[0]` - go to beginning of line
 + `[$]` - go to end of line
 + `[^]` - go to the first non blank character on the line
@@ -84,7 +86,7 @@ Press while in normal mode:
 	* `[b]` - same as above but bottom most
 + `[Ctrl][o]` - go to the previous jump (be careful with what is considered to be a jump in vim - hjkl      are not jumps)
 + `[Ctrl][i]` - go to the next jump
-
++ `[K]` - find a reference to the function under cursor
 
 ### Editing
 
@@ -98,7 +100,7 @@ Press while in normal mode:
 + `[d]` - delete operator
 	* `[w]` - until next word, excluding first character
 	* `[e]` - until next word, including first character
-	* `[i]` - inside; for example `di“` - delete a everything inside quotes; works the same with `[c]`
+	* `[i]` - inside; for example `di“` - delete everything inside quotes; works the same with `[c]`
 		- `[p]` - paragraph
 		- `[t]` - tags
 		- `["]` - quotes
@@ -123,6 +125,7 @@ Press while in normal mode:
 + While in insert mode:
 	* `[Ctrl][r]<register>` - insert text from specified register (register is any lowercase letter)
 	* `[Ctrl][r][a]` - insert text from dot register (dot register holds last modification you made in insert mode
++ `[J]` - append line below to the current (physically move it)
 
 
 ### Search and substitution
@@ -134,53 +137,57 @@ Press while in normal mode:
 	* [N] - go to previous occurrence
 + `[?]<text>` - same as previous, but backwards
 + `[:][s][/]<old>[/]<new>` - substitute first occurrence of  ‘old’ by ‘new’ (type `[%]` instead of `[:]` upfront for entire file)
-	* `[/]` - additional options, concatinaate to command parent command (above); options below can be used separetely or together
+	* `[/]` - additional options, concatinate to command parent command (above); options below can be used separetely or together
 		- `[g]` - all in current line
 		- `[c] - confirm before doing
 		- `:s/i/o/gc` - substitute all occurences of `i` by `o` in the current line and ask confirmation before doing each substitution
 + `[:]<number>[,]<number>` - apply next operation in between lines specified
-+ `[\*]` - highlights all occurrences of the current word under cursor
++ `[*]` - highlights all occurrences of the current word under cursor
 + `[:noh]` - turn off highlighting
 
 
-- Back to the future
-	+ [u] - undo last command
-	+ [U] - return current line to its original form
-	+ [Ctrl-R] - undo undos
+### Back to the future
+
++ `[u]` - undo last command
++ `[U]` - return current line to its original form
++ `[Ctrl][r]` - undo undos
 
 
-* Labels and folders
-	+ [mb][%][zf’b] - fold lines
-	+ [za] - open/close toggle
-	+ [zo] - open folding
-	+ [zc] - close folding
-	+ [zd] - delete folding
-Highlight region in vim, then [:][fold] - fold lines
-	+ {number}[,]{number}[fo] - same as previous, folder in between lines specified (toggle is same)
-	+ [m][any lowercase character] - create local label
-	+ [m][any uppercase letter] - create global label
-	+ [`][label] - go to the label created before
-		* `[`][`]` - go to last jump
+### Labels and folders
+
+Highlight region in vim, then `[[:][fold] | [zf]]` - fold lines
+
+`fo` - is short for `fold`
+
++ `<number>[,]<number>[fo]` - same as previous, folder in between lines specified (toggle is same)
++ `[,][+]<number>[fo]` - fold current line and lines passed relative to it (below it)
++ [mb][%][zf’b] - fold lines !dont try this, needs checking!
++ `[za]` - open/close toggle
++ `[zo]` - open folding
++ `[zc]` - close folding
++ `[zd]` - delete folding
++ `[m][any_lowercase_character]` - create local label
++ `[m][any_uppercase_letter]` - create global label
++ `[\`][label]` - go to the label created before
+	* `[\`][\`]` - go to last jump
 
 
-- Macros:
-	+ [q]{letter}[command sequence][q] - record macros
-		* [@]{letter} - apply to the current cursor location
-		* [@@] - rerun last macros
-	+ Control N or Control P - autocomplete
-	+ Control X Control N - autocomplete only in current file
-	+ Control X control F - autocomplete for filenames
-	+ [-] - go the previous line (beginning)
-	+ [+] - go to the next line (beginning)
-	+ [K] - find a reference to the function under cursor
-	+ [J] - append line below to the current (physically move it)
+### Macros:
+
++ `[q]<letter>[command sequence][q]` - record macros
+	* `[@]<letter>` - apply to the current cursor location
+	* `[@@]` - rerun last macros
++ `[[Ctrl][N] | [Ctrl][P]]` - autocomplete
++ `[Ctrl][X] [Ctrl][N]` - autocomplete only in current file
++ `[Ctrl][X] [Ctrl][F]` - autocomplete for filenames
 
 
-* Fun stuff:
-	* [Operation] {count} [motion] - for example, [d2w] - deletes next two words
-	* [:!][shell_command] - run shell command within vim
-	* [:make] - trigger make within your vim!
-	* [Ctrl-R][=][expression] - calculator in vim!!! Use it in insert mode - result will be printed in file
+### Fun stuff:
+
++ `[[Operation]<count>[motion]]` - for example, [d2w] - deletes next two words
++ `[:!][shell_command]` - run shell command within vim
++ `[:make]` - trigger make within your vim!
++ `[Ctrl][R][=][expression]` - calculator in vim!!! Use it in insert mode - result will be printed in file
 
 
 ## Plugins
