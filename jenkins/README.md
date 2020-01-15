@@ -41,6 +41,7 @@
 	- [ ] [Scripted pipeline](#scripted-pipeline)
 * [Plugins](#plugins)
 	- [Bitbucket server notifier](#bitbucket-server-notifier)
+	- [Git](#git-plugin)
 	- [Git parameter](#git-parameter)
 	- [Copy artifact](#copy-artifact)
 * [Other cool features](#other-cool-features)
@@ -641,13 +642,31 @@ To force parallel stages to be aborted when one of them fails add **failFast tru
 
 ----------
 
+### Git plugin
+
+Lets you checkout to specific branch, etc. Just read it :)
+
+* [doc](https://jenkins.io/doc/pipeline/steps/git/)
+
+---------
+
 ### Git parameter
 
-Lets you choose the git branch, tags aor revision in the project (if you want to pass a parameter, like specific git branch to build)
+Lets you choose the git branch, tags or revision in the project (if you want to pass a parameter, like specific git branch to build)
 
 * [doc](https://wiki.jenkins.io/display/JENKINS/Git+Parameter+Plugin)
 * [alternative](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=2ahUKEwiq9ufasq3mAhWnyqYKHVX8AssQFjAAegQIAhAB&url=https%3A%2F%2Fwiki.jenkins.io%2Fdisplay%2FJENKINS%2FList%2BGit%2BBranches%2BParameter%2BPlugin&usg=AOvVaw1iPyzC3Z83GmsrSNsZp7LK)
 * [issue example](https://issues.jenkins-ci.org/browse/JENKINS-54062?page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel&showAll=true)
+```groovy
+parameters {
+    gitParameter    branchFilter: 'origin/(.*)',
+                    defaultValue: 'default',
+                    name: 'BRANCH',
+                    type: 'PT_BRANCH',
+                    useRepository: '.*build-verification-tests.git',
+                    sortMode: 'ASCENDING'
+}
+```
 
 ----------
 
