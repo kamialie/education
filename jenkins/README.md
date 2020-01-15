@@ -751,9 +751,14 @@ pipeline {
 }
 ```
 * archive artifact
+
 [example](https://medium.com/@gustavo.guss/jenkins-archive-artifact-save-file-in-pipeline-ac6d8b569c2c), 
 [docs](https://jenkins.io/doc/pipeline/steps/core/),
 [recording tests and artifacts](https://jenkins.io/doc/pipeline/tour/tests-and-artifacts/)
+
+Preserves the prefix, if supplied not the subject itsself, but including path to it.
+
+Fingerprint options saves the metadata about the artifact. See more info in docs above.
 ```groovy
 post {
 	archiveArtifacts artifacts: "artifact_path"	
