@@ -2,6 +2,10 @@
 
 ## Hot keys
 
++ <> tags refer to user input:
+	- <number> - insert number consisting [0-9]
+	- <symbol> - alphanumber symbol
++ [argument | argument] - or, choose one of the options enclosed in square brackets
 
 ### File/buffer manipulaton:
 
@@ -13,8 +17,8 @@
 + `[:bp]` - go to previous buffer
 + `[:vs]` - open new buffer vertically
 + `[:sp]` - open new buffer horizontally
-+ `[Ctrl-w]` then [arrows] or [hjkl] or [w] - move to another buffer
-+ `[Ctrl-w]` then [Shift] [hjkl] - move current buffer elsewhere
++ `[Ctrl][w] [[arrows] | [hjkl] | [w]]` - move to another buffer
++ `[Ctrl][w] [Shift] [hjkl]` - move current buffer elsewhere
 + `[:tabe] <file>` - open file in another tab (to open multiple files in tabs add -p flag)
 	* `[gt]` - go to the next tab
 	* `[gT]` - go to previous tab
@@ -62,7 +66,7 @@ Press while in normal mode:
 + `[Ctrl][u]` - jump up half screen
 + `[Ctrl][f]` - jump down full screen
 + `[Ctrl][b]` - jump up full screen
-+ `<number> [gg] or [G]` - go to the specified line
++ `<number> [[gg] | [G]]` - go to the specified line
 + `[0]` - go to beginning of line
 + `[$]` - go to end of line
 + `[^]` - go to the first non blank character on the line
@@ -78,61 +82,65 @@ Press while in normal mode:
 	* `[z]` - center current line
 	* `[t]` - make current line the top most
 	* `[b]` - same as above but bottom most
-+ `[Ctrl-o]` - go to the previous jump (be careful with what is considered to be a jump in vim - hjkl      are not jumps)
-+ `[Ctrl-i]` - go to the next jump
++ `[Ctrl][o]` - go to the previous jump (be careful with what is considered to be a jump in vim - hjkl      are not jumps)
++ `[Ctrl][i]` - go to the next jump
 
 
-* Editing
-	+ [r] {letter} - replace letter under cursor
-	+ [R] - enter replace mode, every typed character deletes existing one
-	+ [v] - enter visual mode
-	+ [Ctrl] [v] - enter visual block mode
-	+ [C] - erase from cursor till end of line and enter insert mode
-	+ [cc] - erase current line and enter insert mode
-	+ [ce] - delete current word and go to insert mode
-	+ [d] - delete operator
-		* [w] - until next word, excluding first character
-		* [e] - until next word, including first character
-	+ [i] - inside
-		* {p} - paragraph
-		* {t} - tags
-	For example [d][i]{“} - delete a everything inside quotes
+### Editing
+
++ `[r] <letter>` - replace letter under cursor
++ `[R]` - enter replace mode, every typed character deletes existing one
++ `[v]` - enter visual mode
++ `[Ctrl][v]` - enter visual block mode
++ `[C]` - erase from cursor till end of line and enter insert mode
++ `[cc]` - erase current line and enter insert mode
++ `[ce]` - delete current word and go to insert mode
++ `[d]` - delete operator
+	* `[w]` - until next word, excluding first character
+	* `[e]` - until next word, including first character
+	* `[i]` - inside; for example `di“` - delete a everything inside quotes; works the same with `[c]`
+		- `[p]` - paragraph
+		- `[t]` - tags
+		- `["]` - quotes
 
 
-* Copy/paste/cut
-	+ [yy] or [Y] - copy current line
-	+ [dd] or [D] - cut current line
-	+ [y] or [d]
-		* [j] or [arrow down] - copy/cut current and line below
-		* [k] or [arrow up] - copy/cut current and line above
-	+ [:]{start}[,]{end}[y] or [d] - copy or cut line between lines start and end (included)
-	+ You can also copy/cut till label - just create a label somewhere, then use [y][`]{label}
-	+ [p] - paste line under cursor
-	+ [P] - paste line before cursor
-	+ [\x] - cut character under cursor
-	+ [“]{letter}[command] - specify the buffer for the command
-		* {_} - underscore, empty buffer
-	+ {number}[operation] - do operation number of times
-	+ [.] - repeat last operation in a whole
-	+ [:read] {filename} - yank and paste everything from specified file into current buffer
-	+ While in insert mode:
-		* [Ctrl-r]{register} - insert text from specified register (register is any lowercase letter)
-		* [Ctrl-r][a] - insert text from dot register (dot register holds last modification you made in insert mode
+### Copy/paste/cut
+
++ `[[yy] | [Y]]` - copy current line
++ [[dd] | [D]] - cut current line
++ [[y] | [d]] - copy or cut
+	* `[[j] | [arrow down]]` - current and line below
+	* `[[k] | [arrow up]]` - current and line above
++ `[:]<start>[,]<end>[[y] | [d]]` - copy or cut line between lines start and end (included); you can also copy/cut till label - just create a label somewhere, then use `[y][`]<label>`
++ `[p]` - paste line under cursor
++ `[P]` - paste line before cursor
++ `[x]` - cut character under cursor
++ `[“]<letter>[command]` - specify the buffer for the command
+	* `[\_]` - underscore, empty buffer
++ `<number>[operation]` - do operation number of times
++ `[.]` - repeat last operation in a whole
++ `[:read] <filename>` - yank and paste everything from specified file into current buffer
++ While in insert mode:
+	* `[Ctrl][r]<register>` - insert text from specified register (register is any lowercase letter)
+	* `[Ctrl][r][a]` - insert text from dot register (dot register holds last modification you made in insert mode
 
 
-* Search and substitution
-	+ [\*] -  go to next occurence of the word under cursor
-	+ [/]{text} - got to the first character of first occurence of text in file starting from cursor location
-		* [\c] - turn on ignore case search for just one search
-		* [n] - go to next occurence
-		* [N] - go to previous occurrence
-	+ [?]{text} - same as previous, but backwards
-	+ [:][s][/]{old}[/]{new} - substitute first occurrence of  ‘old’ by ‘new’(% upfront for entire file)
-	+ [/][g] - all in current line
-	+ [c] - confirm before doing
-	+ [:]{number}[,]{number} - apply next operation in between lines specified
-	+ [\*] - highlights all occurrences of the current word under cursor
-	+ [:noh] - turn off highlighting
+### Search and substitution
+
++ `[\*]` -  go to next occurence of the word under cursor
++ [/]{text} - got to the first character of first occurence of text in file starting from cursor location
+	* [\c] - turn on ignore case search for just one search
+	* [n] - go to next occurence
+	* [N] - go to previous occurrence
++ `[?]<text>` - same as previous, but backwards
++ `[:][s][/]<old>[/]<new>` - substitute first occurrence of  ‘old’ by ‘new’ (type `[%]` instead of `[:]` upfront for entire file)
+	* `[/]` - additional options, concatinaate to command parent command (above); options below can be used separetely or together
+		- `[g]` - all in current line
+		- `[c] - confirm before doing
+		- `:s/i/o/gc` - substitute all occurences of `i` by `o` in the current line and ask confirmation before doing each substitution
++ `[:]<number>[,]<number>` - apply next operation in between lines specified
++ `[\*]` - highlights all occurrences of the current word under cursor
++ `[:noh]` - turn off highlighting
 
 
 - Back to the future
@@ -152,7 +160,7 @@ Highlight region in vim, then [:][fold] - fold lines
 	+ [m][any lowercase character] - create local label
 	+ [m][any uppercase letter] - create global label
 	+ [`][label] - go to the label created before
-		* [`][`] - go to last jump
+		* `[`][`]` - go to last jump
 
 
 - Macros:
