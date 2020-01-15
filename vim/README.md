@@ -130,7 +130,7 @@ Press while in normal mode:
 
 ### Search and substitution
 
-+ `[*]` -  go to next occurence of the word under cursor; also highlights all occureneces
++ `[*]` -  go to next occurence of the word under cursor; also highlights all occureneces \*
 + `[/]<text>` - got to the first character of first occurence of text in file starting from cursor location
 	* `[\c]` - turn on ignore case search for just one search
 	* `[n]` - go to next occurence
