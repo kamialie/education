@@ -109,8 +109,8 @@ Press while in normal mode:
 ### Copy/paste/cut
 
 + `[[yy] | [Y]]` - copy current line
-+ [[dd] | [D]] - cut current line
-+ [[y] | [d]] - copy or cut
++ `[[dd] | [D]]` - cut current line
++ `[[y] | [d]]` - copy or cut
 	* `[[j] | [arrow down]]` - current and line below
 	* `[[k] | [arrow up]]` - current and line above
 + `[:]<start>[,]<end>[[y] | [d]]` - copy or cut line between lines start and end (included); you can also copy/cut till label - just create a label somewhere, then use `[y][`]<label>`
@@ -139,7 +139,7 @@ Press while in normal mode:
 + `[:][s][/]<old>[/]<new>` - substitute first occurrence of  ‘old’ by ‘new’ (type `[%]` instead of `[:]` upfront for entire file)
 	* `[/]` - additional options, concatinate to command parent command (above); options below can be used separetely or together
 		- `[g]` - all in current line
-		- `[c] - confirm before doing
+		- `[c]` - confirm before doing
 		- `:s/i/o/gc` - substitute all occurences of `i` by `o` in the current line and ask confirmation before doing each substitution
 + `[:]<number>[,]<number>` - apply next operation in between lines specified
 + `[:noh]` - turn off highlighting
