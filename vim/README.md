@@ -130,11 +130,11 @@ Press while in normal mode:
 
 ### Search and substitution
 
-+ `[\*]` -  go to next occurence of the word under cursor
-+ [/]{text} - got to the first character of first occurence of text in file starting from cursor location
-	* [\c] - turn on ignore case search for just one search
-	* [n] - go to next occurence
-	* [N] - go to previous occurrence
++ `[*]` -  go to next occurence of the word under cursor; also highlights all occureneces
++ `[/]<text>` - got to the first character of first occurence of text in file starting from cursor location
+	* `[\c]` - turn on ignore case search for just one search
+	* `[n]` - go to next occurence
+	* `[N]` - go to previous occurrence
 + `[?]<text>` - same as previous, but backwards
 + `[:][s][/]<old>[/]<new>` - substitute first occurrence of  ‘old’ by ‘new’ (type `[%]` instead of `[:]` upfront for entire file)
 	* `[/]` - additional options, concatinate to command parent command (above); options below can be used separetely or together
@@ -142,7 +142,6 @@ Press while in normal mode:
 		- `[c] - confirm before doing
 		- `:s/i/o/gc` - substitute all occurences of `i` by `o` in the current line and ask confirmation before doing each substitution
 + `[:]<number>[,]<number>` - apply next operation in between lines specified
-+ `[*]` - highlights all occurrences of the current word under cursor
 + `[:noh]` - turn off highlighting
 
 
