@@ -41,6 +41,8 @@
 	- [ ] [Scripted pipeline](#scripted-pipeline)
 * [Plugins](#plugins)
 	- [Bitbucket server notifier](#bitbucket-server-notifier)
+	- [Git parameter](#git-parameter)
+	- [Copy artifact](#copy-artifact)
 * [Other cool features](#other-cool-features)
 
 ----------
@@ -641,11 +643,20 @@ To force parallel stages to be aborted when one of them fails add **failFast tru
 
 ### Git parameter
 
+Lets you choose the git branch, tags aor revision in the project (if you want to pass a parameter, like specific git branch to build)
+
 * [doc](https://wiki.jenkins.io/display/JENKINS/Git+Parameter+Plugin)
 * [alternative](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=2ahUKEwiq9ufasq3mAhWnyqYKHVX8AssQFjAAegQIAhAB&url=https%3A%2F%2Fwiki.jenkins.io%2Fdisplay%2FJENKINS%2FList%2BGit%2BBranches%2BParameter%2BPlugin&usg=AOvVaw1iPyzC3Z83GmsrSNsZp7LK)
 * [issue example](https://issues.jenkins-ci.org/browse/JENKINS-54062?page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel&showAll=true)
 
 ----------
+
+### Copy artifact
+
+Copy artifact from another job (or same one if you like); should be created by createArtifact first; [Copy Artifact Plugin](https://wiki.jenkins.io/display/JENKINS/Copy+Artifact+Plugin)
+```groovy
+copyArtifacts(projectName: 'sourceproject');
+```
 
 ## Other cool features
 
@@ -720,9 +731,10 @@ pipeline {
     }
 }
 ```
-* show produced archive on gui -
+* archive artifact
 [example](https://medium.com/@gustavo.guss/jenkins-archive-artifact-save-file-in-pipeline-ac6d8b569c2c), 
-[docs](https://jenkins.io/doc/pipeline/steps/core/#code-archiveartifacts-code-archive-the-artifacts)
+[docs](https://jenkins.io/doc/pipeline/steps/core/),
+[recording tests and artifacts](https://jenkins.io/doc/pipeline/tour/tests-and-artifacts/)
 ```groovy
 post {
 	archiveArtifacts artifacts: "artifact_path"	
@@ -738,12 +750,3 @@ mail(
 	body: "mail_body"
 )
 ```
-* artifacts
-	+ [Archive the artifacts - Core](https://jenkins.io/doc/pipeline/steps/core/), [archive artifacts examples](https://medium.com/@gustavo.guss/jenkins-archive-artifact-save-file-in-pipeline-ac6d8b569c2c), [recording tests and artifacts](https://jenkins.io/doc/pipeline/tour/tests-and-artifacts/)
-	```groovy
-	archiveArtifacts artifacts: 'teste.js'
-	```
-	+ [Copy Artifact Plugin](https://wiki.jenkins.io/display/JENKINS/Copy+Artifact+Plugin), example:
-	```groovy
-	copyArtifacts(projectName: 'sourceproject');
-	```
