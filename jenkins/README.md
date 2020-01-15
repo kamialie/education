@@ -738,3 +738,12 @@ mail(
 	body: "mail_body"
 )
 ```
+* artifacts
+	+ [Archive the artifacts - Core](https://jenkins.io/doc/pipeline/steps/core/), [archive artifacts examples](https://medium.com/@gustavo.guss/jenkins-archive-artifact-save-file-in-pipeline-ac6d8b569c2c), [recording tests and artifacts](https://jenkins.io/doc/pipeline/tour/tests-and-artifacts/)
+	```groovy
+	archiveArtifacts artifacts: 'teste.js'
+	```
+	+ [Copy Artifact Plugin](https://wiki.jenkins.io/display/JENKINS/Copy+Artifact+Plugin), example:
+	```groovy
+	copyArtifacts(projectName: 'sourceproject');
+	```
