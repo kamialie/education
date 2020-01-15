@@ -3,79 +3,83 @@
 ## Hot keys
 
 
-- File/buffer manipulaton:
-	+ [:w] - save file
-	+ [:q!] - quit without saving changes
-	+ [:w] {file_name} - save current buffer as file_name
-	+ [:e] - edit specified buffer
-	+ [:bn] - go to next buffer
-	+ [:bp] - go to previous buffer
-	+ [:vs] - open new buffer vertically
-	+ [:sp] - open new buffer horizontally
-	+ [Ctrl-w] then [arrows] or [hjkl] or [w] - move to another buffer
-	+ [Ctrl-w] then [Shift] [hjkl] - move current buffer elsewhere
-	+ [:tabe]{file} - open file in another tab (to open multiple files in tabs add -p flag)
-		* [gt] - go to the next tab
-        * [gT] - go to previous tab
-        * {i}[gt] - go to ith tab
-	+ [:tabm] [number] - move current tab elsewhere
-	+ [:tabs] - list all files in tabs
-	+ [:tabo] - close all tabs except current
-	+ [:tabc] - close current tab
-		* {i} - close ith tab
-	+ [qa] - close all buffers/tabs
-	+ [:mks]{session_name}- save a session with tabs for next login
-        * vim -S session_name - open session
-        * vim -p file1 file2 file3 - open 3 files at ones in tabs
-	+ [:mks!]{session_name} - save changes to session (if you added/deleted tabs)
-	+ [:ls] - list current buffers
-	+ [:b] - go to the next buffer
-        	* {substring} - unique filename substring will make it jump to that buffer
+### File/buffer manipulaton:
+
++ `[:w]` - save file
++ `[:q!]` - quit without saving changes
++ `[:w] <file_name>` - save current buffer as file_name
++ `[:e]` - edit specified buffer
++ `[:bn]` - go to next buffer
++ `[:bp]` - go to previous buffer
++ `[:vs]` - open new buffer vertically
++ `[:sp]` - open new buffer horizontally
++ `[Ctrl-w]` then [arrows] or [hjkl] or [w] - move to another buffer
++ `[Ctrl-w]` then [Shift] [hjkl] - move current buffer elsewhere
++ `[:tabe] <file>` - open file in another tab (to open multiple files in tabs add -p flag)
+	* `[gt]` - go to the next tab
+	* `[gT]` - go to previous tab
+	* `<i>[gt]` - go to ith tab
++ `[:tabm] <number>` - move current tab elsewhere
++ `[:tabs]` - list all files in tabs
++ `[:tabo]` - close all tabs except current
++ `[:tabc]` - close current tab
+	* `<i>` - close ith tab
++ `[qa]` - close all buffers/tabs
++ `[:mks] <session_name>` - save a session with tabs for next login
+	* vim -S session_name - open session
+	* vim -p file1 file2 file3 - open 3 files at ones in tabs
++ `[:mks!] <session_name>` - save changes to session (if you added/deleted tabs)
++ `[:ls]` - list current buffers
++ `[:b]` - go to the next buffer
+	* `<substring>` - unique filename substring will make it jump to that buffer
 
 
-* Insert mode enter
-	+ [i] - under cursor
-	+ [I] - at the beginning of line
-	+ [a] - after cursor
-	+ [A] - at the end of line
-	+ [o] - new line under cursor
-	+ [O] - new line above cursor
-	+ [s] - delete character and insert
-	+ [S] - delete line and insert
+### Insert mode enter
 
+Press while in normal mode:
 
-* Motion
-	+ [w] - go to the beginning of next word
-	+ [b] - go to the beginning of previous word
-	+ [e] - go to the end of current(next) word
-	+ [gg] - go to start of file
-	+ [G] - go to end of file
-	+ [Ctrl][e] - scroll down
-	+ [Ctrl][y] -scroll up
-	+ [Ctrl][d] - jump down half screen
-	+ [Ctrl][u] - jump up half screen
-	+ [Ctrl][f] - jump down full screen
-	+ [Ctrl][b] - jump up full screen
-	+ {number} [gg] or [G] - go to the specified line
-	+ [0] - go to beginning of line
-	+ [$] - go to end of line
-	+ [^] - go to the first non blank character on the line
-	+ [%] - go to matching bracket, quotes
-	+ [f]{symbol} - go to specified symbol in the current line
-		* [;] - move to the next one
-		* [,] - move to the previous one
-	+ [F]{symbol} - same as f, but backwards
-	+ [t]{symbol} - same as f, but go to one symbol before specified
-	+ [T]{symbol} - same as t, but backwards
-	+ [H] - go to the top of the screen
-	+ [M] - go to the middle of file
-	+ [L] - go to the last line
-	+ [z]
-		* [z] - center current line
-		* [t] - top current line
-		* [b] - send current line to the bottom
-	+ [Ctrl-o] - go to the previous jump (be careful with what is considered to be a jump in vim - hjkl      are not jumps)
-	+ [Ctrl-i] - go to the next jump
++ `[i]` - under cursor
++ `[I]` - at the beginning of line
++ `[a]` - after cursor
++ `[A]` - at the end of line
++ `[o]` - new line under cursor
++ `[O]` - new line above cursor
++ `[s]` - delete character and insert
++ `[S]` - delete line and insert
+
+### Motion
+
+Press while in normal mode:
+
++ `[w]` - go to the beginning of next word
++ `[b]` - go to the beginning of previous word
++ `[e]` - go to the end of current(next) word
++ `[gg]` - go to start of file
++ `[G]` - go to end of file
++ `[Ctrl][e]` - scroll down
++ `[Ctrl][y]` -scroll up
++ `[Ctrl][d]` - jump down half screen
++ `[Ctrl][u]` - jump up half screen
++ `[Ctrl][f]` - jump down full screen
++ `[Ctrl][b]` - jump up full screen
++ `<number> [gg] or [G]` - go to the specified line
++ `[0]` - go to beginning of line
++ `[$]` - go to end of line
++ `[^]` - go to the first non blank character on the line
++ `[%]` - go to matching bracket, quotes
++ `[f]<symbol>` - go to specified symbol in the current line; then use `[;]` or `[,]` to more the next or previous one respectively
++ `[F]<symbol>` - same as f, but backwards
++ `[t]<symbol>` - same as f, but go to one symbol before specified
++ `[T]<symbol>` - same as t, but backwards
++ `[H]` - go to the top of the screen
++ `[M]` - go to the middle of file
++ `[L]` - go to the last line
++ `[z]`
+	* `[z]` - center current line
+	* `[t]` - make current line the top most
+	* `[b]` - same as above but bottom most
++ `[Ctrl-o]` - go to the previous jump (be careful with what is considered to be a jump in vim - hjkl      are not jumps)
++ `[Ctrl-i]` - go to the next jump
 
 
 * Editing
