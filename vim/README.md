@@ -168,8 +168,8 @@ Highlight region in vim, then `[[:][fold] | [zf]]` - fold lines
 + `[zd]` - delete folding
 + `[m][any_lowercase_character]` - create local label
 + `[m][any_uppercase_letter]` - create global label
-+ `[\`][label]` - go to the label created before
-	* `[\`][\`]` - go to last jump
++ ``[`][label]`` - go to the label created before
+	* ``[`][`]`` - go to last jump
 
 
 ### Macros:
