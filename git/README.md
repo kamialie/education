@@ -263,13 +263,15 @@ Good examples:
 
 Thus when git stages files, it computes checksums for each file and stores that version of the file in the Git repository (blob). When git performs commit command, it checksums each subdirectory of the project and stores them as a tree object. Commit objects contains commit metadata and pointers to the trees
 
-**git branch <name>** - create a new branch; actually creates a new pointer to the commit you are currently on
+**git branch** - list all local branches
+
+**git branch \<name\>** - create a new branch; actually creates a new pointer to the commit you are currently on
 
 To keep track where you are currently on Git uses special pointer `HEAD` - it shows where you are on in the local repository.
 
 **git checkout <tag | commit | branch>** - switch to the provided commit, branch (moves `HEAD`)
 
-**git checkout -b <name>** - create and switch to a branch at the same time
+**git checkout -b \<name\>** - create and switch to a branch at the same time
 
 Summary: creatig a branch in Git is just writing small metadata file, which acts like a pointer to commit.
 
