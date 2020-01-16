@@ -277,6 +277,19 @@ Summary: creatig a branch in Git is just writing small metadata file, which acts
 
 ## Basic branching and merging
 
+The below examples contain following setup: one branch checkout out from master to do additional work. Some work was committed to this additional branch and now source branch is what you want to merge(additional branch) and target branch (master) is where you want to merge it
+
+Performing merge can lead to 2 cases :
+
++ source branch can be reach by following target branch's commit history, that is source branch was directly ahead of target branch - this case lead to fast-forward "merge", git just moves the pointer ahead
++ source branch have diverged from target branch and there are no conflicts, so git creates new snapshot (merge commit), which results from two tips of branches and their common ancestor
++ source branch have diverged from target branch and there are some conflits, so git pauses and until you resolve conflicts (then you can add-commit the work); list unmerged files by running `git status`
+
+**git mergetool** - open graphical tool to resolve conflicts, append tool name to use other than default
+**git mergetool --tool-help** - get help (for example tool is not configured)
+
+**git branch -d <name>** - delete branch
+
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
 - **git stash push path/to/file** - stash individual file
