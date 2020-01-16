@@ -251,5 +251,31 @@ Good examples:
 + `git config --global alias.st status`
 + `git config --global alias.last 'log -1 HEAD'`
 
+----------
+
+# Git Branching
+
+## Branches in a nutshell
+
++ Blob - represents the metadata for individual file
++ Tree - lists the contents of the directory and specifies wich file name are stored as which blobs
++ Commit - contains the pointer to the tree and all commit metadata; if its not a root commit, it also contains pointers to parent(s)
+
+Thus when git stages files, it computes checksums for each file and stores that version of the file in the Git repository (blob). When git performs commit command, it checksums each subdirectory of the project and stores them as a tree object. Commit objects contains commit metadata and pointers to the trees
+
+**git branch <name>** - create a new branch; actually creates a new pointer to the commit you are currently on
+
+To keep track where you are currently on Git uses special pointer `HEAD` - it shows where you are on in the local repository.
+
+**git checkout <tag | commit | branch>** - switch to the provided commit, branch (moves `HEAD`)
+
+**git checkout -b <name>** - create and switch to a branch at the same time
+
+Summary: creatig a branch in Git is just writing small metadata file, which acts like a pointer to commit.
+
+----------
+
+## Basic branching and merging
+
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
