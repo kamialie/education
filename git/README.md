@@ -279,3 +279,5 @@ Summary: creatig a branch in Git is just writing small metadata file, which acts
 
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
+- **git stash push path/to/file** - stash individual file
+- **git stash -p** - ask before every stash
