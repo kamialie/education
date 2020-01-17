@@ -4,6 +4,28 @@
 
 # Contents
 
++ [Get started](#git-get-started)
+	- [Setup](#setup)
+		* [Identity](#indentity)
+		* [Editor](#indentity)
+		* [Checking settings](#checking-settings)
+	- [Help](#help)
++ [Git basics](#git-basics)
+	- [Getting a git repository](#getting-a-git-repository)
+	- [Recording changes to the repository](#Recording-changes-to-the-repository)
+	- [Viewing the commit history](#viewing-the-commit-history)
+	- [Limiting log output](#limiting-log-output)
+	- [Undoing things](#undoing-things)
+	- [Working with remotes](#working-with-remotes)
+	- [Tagging](#tagging)
+	- [Git Aliases](#git-Aliases)
++ [Branching](#branching)
+	- [Branches in a nutshell](#branches-in-a-nutshell)
+	- [Basic branching and merging](#basic-branching-and-merging)
+	- [Branch management](#branch-management)
+	- [Remote branches](#remote-branches)
+	- [Rebasing](#rebasing)
+
 ----------
 
 # Git get started
