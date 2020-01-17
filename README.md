@@ -56,11 +56,14 @@ Git uses specified editor when user needs to type in a message. If not configure
 + **git config --global core.editor vim**
 
 Checking settings:
-
 + **git config --list** - view all settings
 + **git config <setting>** - check specific setting
 + **git config --show-origin <setting>** - show setting as well as where Git took it from
 + **git config --list --show-origin** - view all settings and there they are coming from
+
+Turn on autocompletion in bash:
++ move git-completion.bash file to home directory
++ source it to bashrc with the following line - `. ~/git-completion.bash`
 
 ----------
 
