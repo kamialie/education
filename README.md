@@ -76,6 +76,8 @@ Commands to get man pages:
 
 **git clone \<url\> [directory]** - copy existing repository to local machine, optional directory argument, where repository will be created
 
++ `[--origin], [-o] <remote>` - give other name to refer to remote, other than the default name `origin`
+
 ## Recording changes to the repository
 
 **git status** - determine status of all files in the current repository, can be tracked (unmodified | modified | stages) or untracked
@@ -204,6 +206,8 @@ Git fetch pulls down all data from the remote project that you dont have locally
 
 **git push origin master** - example, push changes to remote master branch
 
+**git push push origin <localname>:<remote>** - above is the shortcut to this; use this one to name the remote branch differenly than the local
+
 ----------
 
 ## Tagging
@@ -302,6 +306,29 @@ Performing merge can lead to 2 cases :
 + `-D <branch>` - force deleting
 
 `--merged` and `--no-merged` are relative to current branch if no argument is passed
+
+## Remote branches
+
+**git ls-remote <remote>** or **git remote show <remote** - get full list of remote references or  remote branches with more info respectively
+
+Remote branch's name takes the form `<remote>/<branch>`, for example `origin/master`
+
+You have cloned a repository (thus your master and origin/master refer to the same commit), but later on someone has push to server and you have commited further locally. Run `git fetch <remote>` to get the latest version of origin to you local repository.
+
+**git checkout -b <branch> <remote>/<branch>** - merge remote branch into current working branch, thus local branch track the remote one
+
+**git checkout --track <remote>/<branch>** - create and check out to "tracking branch" - local branch that has direct relationship with remote branch (git know where to push, pull, etc)
+
+**git checkout <branch>** - shortcut for the above, if branch does not exist locally  (and only exists on one remote) Git creates "tracking-branch" automatically
+
+**git branch**
+
++ `[--set-upstream], [-u]` - set the upstream branch to track for local branch you are on
++ `[-vv]` - also output tracking branches (if local branch is tracking remote one), also if current branch is ahead or behind; does the comparison based on local references, thus do `git fetch --all` to get up date information
+
+**git pull** - is essentially `git fetch` followed by `git merge`
+
+**git push <remote> --delete <branch>** - delete remote branch
 
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
