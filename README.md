@@ -48,7 +48,6 @@ Configuration variables that control all aspects of Git can be stored in three d
 - `.git/config` (file in the repository) - specific to single repository; `[--local]` option is the default, should be located in corresponding repository
 
 Set identity(this information is added to every commit):
-
 + **git config --global user.name** "name"
 + **git config --global user.email** email
 
@@ -62,7 +61,7 @@ Checking settings:
 + **git config --list --show-origin** - view all settings and there they are coming from
 
 Turn on autocompletion in bash:
-+ move git-completion.bash file to home directory
++ move `git-completion.bash` file to home directory
 + source it to bashrc with the following line - `. ~/git-completion.bash`
 
 ----------
