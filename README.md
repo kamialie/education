@@ -6,9 +6,6 @@
 
 + [Get started](#git-get-started)
 	- [Setup](#setup)
-		* [Identity](#indentity)
-		* [Editor](#indentity)
-		* [Checking settings](#checking-settings)
 	- [Help](#help)
 + [Git basics](#git-basics)
 	- [Getting a git repository](#getting-a-git-repository)
@@ -50,33 +47,20 @@ Configuration variables that control all aspects of Git can be stored in three d
 - `~/.gitconfig` or `~/.config/git/config` file - values specific to user; pass `[--global]` option to **git config** to operate on this file, affects all repositories of the user
 - `.git/config` (file in the repository) - specific to single repository; `[--local]` option is the default, should be located in corresponding repository
 
-**git config --list --show-origin** - view all settings and there they are coming from
+Set identity(this information is added to every commit):
 
-### Identity
++ **git config --global user.name** "name"
++ **git config --global user.email** email
 
-**git config --global user.name** "name"
+Git uses specified editor when user needs to type in a message. If not configured, system's default is used:
++ **git config --global core.editor vim**
 
-**git config --global user.email** email
+Checking settings:
 
-This information is added to every commit.
-
-----------
-
-### Editor
-
-Git uses specified editor when user to type in a message. If not configured, system's default is used.
-
-**git config --global core.editor vim**
-
-----------
-
-### Checking settings
-
-**git config --list** - vew all settings
-
-**git config <setting>** - check specific setting
-
-**git config --show-origin <setting>** - show setting as well as where Git took it from
++ **git config --list** - view all settings
++ **git config <setting>** - check specific setting
++ **git config --show-origin <setting>** - show setting as well as where Git took it from
++ **git config --list --show-origin** - view all settings and there they are coming from
 
 ----------
 
