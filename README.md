@@ -283,7 +283,9 @@ Summary: creatig a branch in Git is just writing small metadata file, which acts
 
 ## Basic branching and merging
 
-The below examples contain following setup: one branch checkout out from master to do additional work. Some work was committed to this additional branch and now source branch is what you want to merge(additional branch) and target branch (master) is where you want to merge it
+The below examples contain following setup: one branch checkouts from master to do additional work. Some work was committed to this additional branch and now source branch is what you want to merge(additional branch) and target branch (master) is where you want to merge it
+
+To perform merge checkout out to target branch and type in `git merge <source_branch`.
 
 Performing merge can lead to 2 cases :
 
@@ -329,6 +331,26 @@ You have cloned a repository (thus your master and origin/master refer to the sa
 **git pull** - is essentially `git fetch` followed by `git merge`
 
 **git push <remote> --delete <branch>** - delete remote branch
+
+## Rebasing
+
+Setup: source branch checks out from target and does some work, while otehr work was done on target as well. Then source branch tries to perform rebase.
+
+To perform rebase checkout to source branch and type `git rebase <target_branch`.
+
+**git rebase \target_branch\>** - rebase current branch into target branch
+
++ `[--onto] <parent_a> <parent_b> <source_branch>` - in the situation when parent_b diverged from parent_a and source_branch further diverged from parent_b use the following to rebase source_branch to the parent_a
++ `[--continue]` - restart rebase after revosling conflicts
++ `[--about]` - abort the rebase operation
+
+Operation: going to common ancestor, getting the diff introduced by each commit of the branch you are on, saving the diffs to temporary files, resetting the current branch to the same commit as the target branch, and applying each change.
+
+Thus rebasing just replays the changes that took place in one branch in another branch, while classic merge takes endpoint and merges them together. After rebase is done the target branch can be simply fastforwarded by `git merge <source_branch>`
+
+**Do not rebase commits that exist outside your repository and that people may have based work on** - golden rule; that is when you rebase you introduce new commits, while abandoning other, while other commits may have been used by others when they merged their work. Try to run `git pull --rebase` or `git fetch ; git rebase <remote>/<branch>` to let git try to rebase your work over rebase other people have performed earlier (and you work was done on top of the old commits that were abandoned because of that rebase). If new rebased commit is nearly iddentical to the one that was on separate branch, git might be able to successfuly apply rebase of your branch as well.
+
+Good rule of thumb is to rebase work you havent pushed anywhere.
 
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
