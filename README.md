@@ -204,9 +204,9 @@ Git fetch pulls down all data from the remote project that you dont have locally
 
 **git fetch \<remote\>** - get the data from the remote server
 
-**git push origin master** - example, push changes to remote master branch
+**git push \<remote\> \<branch\>** - example, push changes to remote master branch
 
-**git push push origin <localname>:<remote>** - above is the shortcut to this; use this one to name the remote branch differenly than the local
+**git push push \<remote> \<local_name\>:\<remote_name>** - above is the shortcut to this; use this one to name the remote branch differenly than the local
 
 ----------
 
@@ -309,17 +309,17 @@ Performing merge can lead to 2 cases :
 
 ## Remote branches
 
-**git ls-remote <remote>** or **git remote show <remote** - get full list of remote references or  remote branches with more info respectively
+**git ls-remote \<remote\>** or **git remote show \<remote\>** - get full list of remote references or  remote branches with more info respectively
 
 Remote branch's name takes the form `<remote>/<branch>`, for example `origin/master`
 
 You have cloned a repository (thus your master and origin/master refer to the same commit), but later on someone has push to server and you have commited further locally. Run `git fetch <remote>` to get the latest version of origin to you local repository.
 
-**git checkout -b <branch> <remote>/<branch>** - merge remote branch into current working branch, thus local branch track the remote one
+**git checkout -b \<branch\> \<remote\>/\<branch\>** - merge remote branch into current working branch, thus local branch track the remote one
 
-**git checkout --track <remote>/<branch>** - create and check out to "tracking branch" - local branch that has direct relationship with remote branch (git know where to push, pull, etc)
+**git checkout --track \<remote\>/\<branch\>** - create and check out to "tracking branch" - local branch that has direct relationship with remote branch (git know where to push, pull, etc)
 
-**git checkout <branch>** - shortcut for the above, if branch does not exist locally  (and only exists on one remote) Git creates "tracking-branch" automatically
+**git checkout \<branch\>** - shortcut for the above, if branch does not exist locally  (and only exists on one remote) Git creates "tracking-branch" automatically
 
 **git branch**
 
