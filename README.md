@@ -292,6 +292,17 @@ Performing merge can lead to 2 cases :
 
 **git branch -d <name>** - delete branch
 
+## Branch management
+
+**git branch**
+
++ `-v` - list branches and their last commits as well
++ `--merged` - list branches that are already merged into the branch you are currently on (good candidates to be deleted, since the current branch contains their work)
++ `--no-merged` - list branches that contain work that have not been merged into branch you are currently on (trying to delete this branch will result in warning)
++ `-D <branch>` - force deleting
+
+`--merged` and `--no-merged` are relative to current branch if no argument is passed
+
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
 - **git stash push path/to/file** - stash individual file
