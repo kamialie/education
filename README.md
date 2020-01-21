@@ -22,6 +22,7 @@
 	- [Branch management](#branch-management)
 	- [Remote branches](#remote-branches)
 	- [Rebasing](#rebasing)
++ [Git tools](#git-tools)
 
 ----------
 
@@ -359,6 +360,19 @@ Thus rebasing just replays the changes that took place in one branch in another 
 **Do not rebase commits that exist outside your repository and that people may have based work on** - golden rule; that is when you rebase you introduce new commits, while abandoning other, while other commits may have been used by others when they merged their work. Try to run `git pull --rebase` or `git fetch ; git rebase <remote>/<branch>` to let git try to rebase your work over rebase other people have performed earlier (and you work was done on top of the old commits that were abandoned because of that rebase). If new rebased commit is nearly iddentical to the one that was on separate branch, git might be able to successfuly apply rebase of your branch as well.
 
 Good rule of thumb is to rebase work you havent pushed anywhere.
+
+----------
+
+# Git tools
+
+## Revision selection
+
+Git provides number of ways to refer to single commit, set of commits, or range of commits
+
++ Single revision
+	- 40-character full SHA-1
+	- short SHA-1 - can pass short version as long as its not ambiguous (no other commit has it); pass `--abbrev-commit` to `git log` to output shorter versions (but still unique), defaults to 7, but gets longer to keep them unique
+	- branch reference - the commit at the tip of the branch; `rev-parse` is a low level operation that name resolves too - `git rev-parse <branch_name>` will output its SHA-1
 
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
