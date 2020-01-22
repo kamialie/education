@@ -43,6 +43,7 @@
 	- [Bitbucket server notifier](#bitbucket-server-notifier)
 	- [Git](#git-plugin)
 	- [Git parameter](#git-parameter)
+	- [Nexus artifact uploader](#nexus-artifact-uploader)
 	- [Copy artifact](#copy-artifact)
 * [Other cool features](#other-cool-features)
 
@@ -670,12 +671,47 @@ parameters {
 
 ----------
 
+### Nexus artifact uploader
+
+* [doc](https://wiki.jenkins.io/display/JENKINS/Nexus+Artifact+Uploader)
+```groovy
+freeStyleJob('NexusArtifactUploaderJob') {
+    steps {
+      nexusArtifactUploader {
+        nexusVersion('nexus2')
+        protocol('http')
+        nexusUrl('localhost:8080/nexus')
+        groupId('sp.sd')
+        version('2.4')
+        repository('NexusArtifactUploader')
+        credentialsId('44620c50-1589-4617-a677-7563985e46e1')
+        artifact {
+            artifactId('nexus-artifact-uploader')
+            type('jar')
+            classifier('debug')
+            file('nexus-artifact-uploader.jar')
+        }
+        artifact {
+            artifactId('nexus-artifact-uploader')
+            type('hpi')
+            classifier('debug')
+            file('nexus-artifact-uploader.hpi')
+        }
+      }
+    }
+}
+```
+
+----------
+
 ### Copy artifact
 
 Copy artifact from another job (or same one if you like); should be created by createArtifact first; [Copy Artifact Plugin](https://wiki.jenkins.io/display/JENKINS/Copy+Artifact+Plugin)
 ```groovy
 copyArtifacts(projectName: 'sourceproject');
 ```
+
+----------
 
 ## Other cool features
 
