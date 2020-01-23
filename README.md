@@ -374,6 +374,21 @@ Git provides number of ways to refer to single commit, set of commits, or range 
 	- short SHA-1 - can pass short version as long as its not ambiguous (no other commit has it); pass `--abbrev-commit` to `git log` to output shorter versions (but still unique), defaults to 7, but gets longer to keep them unique
 	- branch reference - the commit at the tip of the branch; `rev-parse` is a low level operation that name resolves too - `git rev-parse <branch_name>` will output its SHA-1
 
+Git keeps logs of where your HEAD and branch references have been in the last few months; this information is strictly local and represents only local changes/info; use the command below:
+
+**git reflog** 
+
+**git show <reference>** - can refer to reflog data as well, examples below (substitute \<reference\>:
+
++ `HEAD@{5}` - 5th entry from `git reflog`
++ `master@{yesterday}` - using syntax to access specific dates
+
+**git log -g** - see reflog info in `git log` output
+
+Ancestry reference uses `^` (caret) symbol. If added at the end of a reference, it is resolved to the parent of that commit - `git show HEAD^` resolved to the commit before current one. Can also specify number after caret to specify which parent (useful for merge commits) - `HEAD^2` - first parent is the branch you were on when performing the merge, while second is the one that is merged.
+
+Another ancestry reference is `~` (tilde). Always goes to the first parent, thus `HEAD~2` means *first parent of the first parent*. Two syntaxes can be also combined `HEAD~3^2`
+
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
 - **git stash push path/to/file** - stash individual file
