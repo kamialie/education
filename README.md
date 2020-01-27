@@ -207,6 +207,8 @@ Print all environment variables in declarative pipeline:
 
 		sh 'printenv'
 
+[More info](https://e.printstacktrace.blog/jenkins-pipeline-environment-variables-the-definitive-guide/)
+
 ----------
 
 ### Handling credentials
