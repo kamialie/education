@@ -186,9 +186,24 @@ pipeline {
 }
 ```
 
-Environment variables can also be set dynamically. [to be continued]
+To set a global environment variable during pipeline stage use script clause:
+```groovy
+pipeline {
+	agent any
+	stages {
+		stage('Example') {
+			steps {
+				script {
+					env.VARIABLE = 'value'
+				}
+				sh 'printenv'
+			}
+		}
+	}
+}
+```
 
-Print all environment variable:
+Print all environment variables in declarative pipeline:
 
 		sh 'printenv'
 
