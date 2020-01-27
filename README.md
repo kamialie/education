@@ -16,10 +16,19 @@ fg - bring the background process back to foreground
 
 # Contents
 
+* [Basics](#basics)
 * [sed](#sed)
 * [diff](#diff)
 * [curl](#curl)
 * [tar](#tar)
+
+## Basics
+
+* **date**
+* **calendar**
+* **free** - shows free space (only works on linux)
+* **file** - determines file type and some additional info
+* **less** - view file contents
 
 ## sed
 
