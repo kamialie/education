@@ -702,7 +702,7 @@ parameters {
 					quoteValue: false,
 					saveJSONParameterToFile: false,
 					type: 'PT_CHECKBOX',
-					value: 'email@one, email@two, email@three,
+					value: 'email@one, email@two, email@three',
 					visibleItemCount: 5)
 }
 ```
