@@ -695,14 +695,14 @@ More flexible choice of choice parameter
 * [extra info for available options](https://github.com/jenkinsci/extended-choice-parameter-plugin/blob/master/src/main/java/com/cwctravel/hudson/plugins/extended_choice_parameter/ExtendedChoiceParameterDefinition.java#L90)
 ```groovy
 parameters {
-	extendedChoice( defaultValue: 'Aliev.K.Aki@sberbank.ru',
+	extendedChoice( defaultValue: 'email@default',
 					description: 'email(s) to send notification',
 					multiSelectDelimiter: ',',
 					name: 'AUTHOR',
 					quoteValue: false,
 					saveJSONParameterToFile: false,
 					type: 'PT_CHECKBOX',
-					value: 'Aliev.K.Aki@sberbank.ru, Korolev.A.Alekse@sberbank.ru, Firsov.D.Il@sberbank.ru',
+					value: 'email@one, email@two, email@three,
 					visibleItemCount: 5)
 }
 ```
