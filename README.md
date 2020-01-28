@@ -43,6 +43,7 @@
 	- [Bitbucket server notifier](#bitbucket-server-notifier)
 	- [Git](#git-plugin)
 	- [Git parameter](#git-parameter)
+	- [Extended choice parameter](#extended-choice-parameter)
 	- [Nexus artifact uploader](#nexus-artifact-uploader)
 	- [Copy artifact](#copy-artifact)
 * [Other cool features](#other-cool-features)
@@ -683,6 +684,26 @@ parameters {
                     type: 'PT_BRANCH',
                     useRepository: '.*build-verification-tests.git',
                     sortMode: 'ASCENDING'
+}
+```
+
+### Extended choice parameter
+
+More flexible choice of choice parameter
+* [doc](https://wiki.jenkins.io/display/JENKINS/Extended+Choice+Parameter+plugin)
+* [some examples](https://stackoverflow.com/questions/42392247/how-can-i-use-the-extended-choice-parameter-plugin-in-a-jenkins-pipeline-script)
+* [extra info for available options](https://github.com/jenkinsci/extended-choice-parameter-plugin/blob/master/src/main/java/com/cwctravel/hudson/plugins/extended_choice_parameter/ExtendedChoiceParameterDefinition.java#L90)
+```groovy
+parameters {
+	extendedChoice( defaultValue: 'Aliev.K.Aki@sberbank.ru',
+					description: 'email(s) to send notification',
+					multiSelectDelimiter: ',',
+					name: 'AUTHOR',
+					quoteValue: false,
+					saveJSONParameterToFile: false,
+					type: 'PT_CHECKBOX',
+					value: 'Aliev.K.Aki@sberbank.ru, Korolev.A.Alekse@sberbank.ru, Firsov.D.Il@sberbank.ru',
+					visibleItemCount: 5)
 }
 ```
 
