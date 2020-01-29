@@ -16,19 +16,36 @@ fg - bring the background process back to foreground
 
 # Contents
 
-* [Basics](#basics)
-* [sed](#sed)
-* [diff](#diff)
-* [curl](#curl)
-* [tar](#tar)
++ [Basics](#basics)
++ [ssh](#ssh)
++ [sed](#sed)
++ [diff](#diff)
++ [curl](#curl)
++ [tar](#tar)
 
 ## Basics
 
-* **date**
-* **calendar**
-* **free** - shows free space (only works on linux)
-* **file** - determines file type and some additional info
-* **less** - view file contents
++ **date**
++ **calendar**
++ **free** - shows free space (only works on linux)
++ **file** - determines file type and some additional info
++ **less** - view file contents
+
+## ssh
+
+### ssh-keygen
+
++ [simple example](https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+```shell
+ssh-keygen -t rsa -b 4096
+```
+
+### ssh-copy-id
+
++ [doc](https://www.ssh.com/ssh/copy-id)
+```shell
+ssh-copy-id -i ~/.ssh/id_rsa.pub user@host
+```
 
 ## sed
 
@@ -38,7 +55,7 @@ Stream editor
 
 **sed [flags] [file ...]**
 
-* `-i <extenstion>` - edit file in-place, saving backup with the specified extenstion; if zero-length extension is given, no backup will be saved
++ `-i <extenstion>` - edit file in-place, saving backup with the specified extenstion; if zero-length extension is given, no backup will be saved
 
 ### Examples
 
@@ -57,7 +74,7 @@ also see [cmp use](#https://stackoverflow.com/questions/12900538/fastest-way-to-
 
 ### Flags
 
-* **-brief**, **-q** - output only whether files differ
++ **-brief**, **-q** - output only whether files differ
 
 ## curl
 
@@ -67,15 +84,15 @@ When sending POST request with a **-L** flag (redirection), the follow up reques
 
 ### Flags
 
-* **--include**, **-i**  - include the HTTP-header in the output
-* **--output**, **-o** *\<file\>* - write output to *\<file\>* instead of stdout. Can specify multiple arguments, order does not matter, just the first **-o** is for the first argument(url), second for the second and so on.
-* **--fail**, **-f** - fail silently, suppress error messages that are sent on failed attempt of server to send a document
-* **--location**, **-L** - if requested page has moved to a different location (and indicated it), curl will redo the request to the new location; if used with option **-i** or **-I**, headers from all requested pages will be shown; curl will pass user+password only to the initial host; to limit number of redirect use **--max-redirs** option
-* **--verbose**, **-v** - verbose output, lines starting with '>' means header data sent by curl, '<' - header data recieved by curl, '\*' - additional info. More details my be provided by **--trace** flag
-* **--silent**, **-s** - silent or quiet, dont show progress meter or error messages
-* **--show-error**, **-S** - when used with **-s** makes curl show the error message
-* **--user**, **-u** *\<user:password\>* - specify user, password for server authentication. If only passed user, curl will prompt for password
-* **--data**, **-d** \<data\> - sends specified data in a POST request; can send data directly or read from a file - to specify a while add **@** in front, for example -d "@filename.json"; two formats are available:
++ **--include**, **-i**  - include the HTTP-header in the output
++ **--output**, **-o** *\<file\>* - write output to *\<file\>* instead of stdout. Can specify multiple arguments, order does not matter, just the first **-o** is for the first argument(url), second for the second and so on.
++ **--fail**, **-f** - fail silently, suppress error messages that are sent on failed attempt of server to send a document
++ **--location**, **-L** - if requested page has moved to a different location (and indicated it), curl will redo the request to the new location; if used with option **-i** or **-I**, headers from all requested pages will be shown; curl will pass user+password only to the initial host; to limit number of redirect use **--max-redirs** option
++ **--verbose**, **-v** - verbose output, lines starting with '>' means header data sent by curl, '<' - header data recieved by curl, '\*' - additional info. More details my be provided by **--trace** flag
++ **--silent**, **-s** - silent or quiet, dont show progress meter or error messages
++ **--show-error**, **-S** - when used with **-s** makes curl show the error message
++ **--user**, **-u** *\<user:password\>* - specify user, password for server authentication. If only passed user, curl will prompt for password
++ **--data**, **-d** \<data\> - sends specified data in a POST request; can send data directly or read from a file - to specify a while add **@** in front, for example -d "@filename.json"; two formats are available:
 	- application/x-www-form-urlencoded - param-value pairs seperated by **&** sign, "param1:value1&param2:value2"
 	- application/json - usual json, '{"key":"value"}'
 
