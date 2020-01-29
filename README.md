@@ -47,6 +47,15 @@ ssh-keygen -t rsa -b 4096
 ssh-copy-id -i ~/.ssh/id_rsa.pub user@host
 ```
 
+### scp
+
+Work as much the same as normal cp command.
+
++ [example](https://www.simplified.guide/ssh/copy-file)
+```shell
+scp myfile.txt remoteuser@remoteserver:/remote/folder/
+```
+
 ## sed
 
 Stream editor
