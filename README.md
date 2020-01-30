@@ -52,8 +52,11 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub user@host
 Work as much the same as normal cp command.
 
 + [example](https://www.simplified.guide/ssh/copy-file)
+
+All directory leading to the last inner one must exist.
+
 ```shell
-scp myfile.txt remoteuser@remoteserver:/remote/folder/
+scp myfile.txt remoteuser@remoteserver:/remote/folder/inner_folder
 ```
 
 ## sed
