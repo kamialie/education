@@ -30,6 +30,7 @@ fg - bring the background process back to foreground
 + **free** - shows free space (only works on linux)
 + **file** - determines file type and some additional info
 + **less** - view file contents
++ **pbcopy**, **pbpaste** - copy or paste to the pastboard
 
 ## ssh
 
