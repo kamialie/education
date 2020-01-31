@@ -222,7 +222,7 @@ Steps to get started
 + `(gdb) finish`, `:Finish` - execute until leaving the current function
 + `(gdb) where`, `:Break` - show the stack
 + `(gdb) frame <N>` - go to Nth stack frame
-+ `(gdb) continue`, `Continue` - continue execution
++ `(gdb) continue`, `:Continue` - continue execution
 + `CTRL-C`, `:Stop` - interrupt the program
 + `(gdb) print`, `:Evaluate` `:Ev` - evaluate expression under cursor
 
