@@ -1,83 +1,208 @@
-## General links
+# Lovely Vim
 
-- Ed suggestions:
-  + https://ru.wikipedia.org/wiki/Model-View-ViewModel
-  + https://ru.wikipedia.org/wiki/Команда\_(шаблон\_проектирования)
-  + https://ru.wikipedia.org/wiki/Реактивное\_программирование 
-  + https://ru.wikipedia.org/wiki/Design_Patterns
-  + https://ru.wikipedia.org/wiki/GRASP
-  + https://habr.com/ru/post/348286/
-  + https://ru.m.wikipedia.org/wiki/SOLID\_(объектно-ориентированное\_программирование)
+## Hot keys
 
-- education sources:
-  + https://tproger.ru/curriculum/devops/
-  + https://www.codewars.com/users/g964
-  + https://www.youtube.com/channel/UCZ-sv20iKVXtQVR4epbmz8A/featured
++ <> tags refer to user input:
+	- <number> - insert number consisting [0-9]
+	- <symbol> - alphanumber symbol
++ [argument | argument] - or, choose one of the options enclosed in square brackets
 
-- interesting articles:
-  + https://habr.com/post/270009/
-  + Markdown
-    * https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
-    * https://daringfireball.net/projects/markdown/syntax
-    * https://help.github.com/en/categories/writing-on-github
-    * https://enterprise.github.com/downloads/en/markdown-cheatsheet.pdf
-  + Computer hardware
-    * https://nsu.ru/xmlui/bitstream/handle/nsu/9054/tanenbaum_AC.pdf
-  + Computer science
-    * https://github.com/ossu/computer-science
+### File/buffer manipulaton:
 
-- fun stuff:
-  + https://medium.com/game-dev-channel/что-можно-уместить-в-4-килобайта-bcd99daf4d9
-  + http://www.braingames.ru/
-  + https://www.youtube.com/watch?v=0ZGbIKd0XrM
-  + https://stackoverflow.com/questions/40082346/how-to-check-if-a-file-exists-in-a-shell-script
-  + https://xkcd.com/571/ - commis
-  + https://register.ubisoft.com/rabbids-coding/en-US - learning game from Ubisoft
-  + https://requestbin.com/ - check url requests
++ `[:w]` - save file
++ `[:q!]` - quit without saving changes
++ `[:w] <file_name>` - save current buffer as file_name
++ `[:e]` - edit specified buffer
++ `[:bn]` - go to next buffer
++ `[:bp]` - go to previous buffer
++ `[:vs]` - open new buffer vertically
++ `[:sp]` - open new buffer horizontally
++ `[Ctrl][w] [[arrows] | [hjkl] | [w]]` - move to another buffer
++ `[Ctrl][w] [Shift] [hjkl]` - move current buffer elsewhere
++ `[:tabe] <file>` - open file in another tab (to open multiple files in tabs add -p flag)
+	* `[gt]` - go to the next tab
+	* `[gT]` - go to previous tab
+	* `<i>[gt]` - go to ith tab
++ `[:tabm] <number>` - move current tab elsewhere
++ `[:tabs]` - list all files in tabs
++ `[:tabo]` - close all tabs except current
++ `[:tabc]` - close current tab
+	* `<i>` - close ith tab
++ `[qa]` - close all buffers/tabs
++ `[:mks] <session_name>` - save a session with tabs for next login
+	* vim -S session_name - open session
+	* vim -p file1 file2 file3 - open 3 files at ones in tabs
++ `[:mks!] <session_name>` - save changes to session (if you added/deleted tabs)
++ `[:ls]` - list current buffers
++ `[:b]` - go to the next buffer
+	* `<substring>` - unique filename substring will make it jump to that buffer
 
-- cybersecurity related
-  + https://hackerone.com/reports/403417
-  + https://store.steampowered.com/app/605230/Grey_Hack/
-  + https://www.hacker101.com/resources#2
-  + Начинаете решать CTF или лабы (https://www.hackthebox.eu/), понимаете чего именно Вам не хватает (Python, Crypto, Java, ...) и тогда ищите материал. 
-Искать можно в классической/академической литературе, либо в предыдущих решениях аналогичных задач (writeups/райтапы), например, тут https://ctftime.org/writeups
-Для чтения перед сном вполне сгодится журнал Хакер ( https://t.me/xakep_ru / https://t.me/hacker_frei )
-  + https://m.habr.com/ru/company/mailru/blog/282700/
-  + CTF(21school):
-    * http://kmb.ufoctf.ru/
-    * https://proglib.io/p/capture-the-flag/
-    * https://vk.com/spbctf
-    * https://www.hackthebox.eu/
-    * https://ctftime.org/
-    * https://training.hackerdom.ru/
-    * http://forkbomb.ru/
 
-- OS:
-  + https://en.wikipedia.org/wiki/Andrew_S.\_Tanenbaum
+### Insert mode enter
 
-- AI:
-  + https://habr.com/ru/post/305578/
-  + VisionLab:
-    * http://shorturl.at/qrz39
-    * https://stepik.org/course/67/promo#toc
-    * https://habr.com/en/company/ods/blog/322626/
-    * https://www.udacity.com/course/deep-learning-pytorch--ud188
-    * https://dlcourse.ai
-    * https://course.fast.ai
-    * http://cs231n.stanford.edu
-    * https://habr.com/company/piter/blog/346358/ 
+Press while in normal mode:
 
-- Job related:
-  + https://guides.hexlet.io/how-to-create-a-resume/?utm_source=vk.com&utm_medium=social&utm_campaign=3-poleznyh-gayda-ot-hexlet-dlya-teh--kto
-  + https://guides.hexlet.io/how-to-prepare-for-interview/?utm_source=vk.com&utm_medium=social&utm_campaign=3-poleznyh-gayda-ot-hexlet-dlya-teh--kto
-  + https://guides.hexlet.io/how-to-pass-the-interview/?utm_source=vk.com&utm_medium=social&utm_campaign=3-poleznyh-gayda-ot-hexlet-dlya-teh--kto
-  + https://ru.hexlet.io/challenges/intro_to_programming_fizzbuzz
-  + https://ru.wikipedia.org/wiki/Экстремальное\_программирование
-  + https://ru.hexlet.io/pages/recommended-books
-  + https://github.com/Hexlet/ru-test-assignments
-  + https://ru.hexlet.io/projects
++ `[i]` - under cursor
++ `[I]` - at the beginning of line
++ `[a]` - after cursor
++ `[A]` - at the end of line
++ `[o]` - new line under cursor
++ `[O]` - new line above cursor
++ `[s]` - delete character and insert
++ `[S]` - delete line and insert
 
-- English
-  + Lynne Truss
-	* "the girl's like spaghetti'
-	* "Eats, Shoots and Leaves"
+### Motion
+
+Press while in normal mode:
+
++ `[w]` - go to the beginning of next word
++ `[b]` - go to the beginning of previous word
++ `[e]` - go to the end of current(next) word
++ `[gg]` - go to start of file
++ `[G]` - go to end of file
++ `[Ctrl][e]` - scroll down
++ `[Ctrl][y]` -scroll up
++ `[Ctrl][d]` - jump down half screen
++ `[Ctrl][u]` - jump up half screen
++ `[Ctrl][f]` - jump down full screen
++ `[Ctrl][b]` - jump up full screen
++ `<number> [[gg] | [G]]` - go to the specified line
++ `[-]` - go the previous line (beginning)
++ `[+]` - go to the next line (beginning)
++ `[0]` - go to beginning of line
++ `[$]` - go to end of line
++ `[^]` - go to the first non blank character on the line
++ `[%]` - go to matching bracket, quotes
++ `[f]<symbol>` - go to specified symbol in the current line; then use `[;]` or `[,]` to more the next or previous one respectively
++ `[F]<symbol>` - same as f, but backwards
++ `[t]<symbol>` - same as f, but go to one symbol before specified
++ `[T]<symbol>` - same as t, but backwards
++ `[H]` - go to the top of the screen
++ `[M]` - go to the middle of file
++ `[L]` - go to the last line
++ `[z]`
+	* `[z]` - center current line
+	* `[t]` - make current line the top most
+	* `[b]` - same as above but bottom most
++ `[Ctrl][o]` - go to the previous jump (be careful with what is considered to be a jump in vim - hjkl      are not jumps)
++ `[Ctrl][i]` - go to the next jump
++ `[K]` - find a reference to the function under cursor
+
+### Editing
+
++ `[r] <letter>` - replace letter under cursor
++ `[R]` - enter replace mode, every typed character deletes existing one
++ `[v]` - enter visual mode
++ `[Ctrl][v]` - enter visual block mode
++ `[C]` - erase from cursor till end of line and enter insert mode
++ `[cc]` - erase current line and enter insert mode
++ `[ce]` - delete current word and go to insert mode
++ `[d]` - delete operator
+	* `[w]` - until next word, excluding first character
+	* `[e]` - until next word, including first character
+	* `[i]` - inside; for example `di“` - delete everything inside quotes; works the same with `[c]`
+		- `[p]` - paragraph
+		- `[t]` - tags
+		- `["]` - quotes
+
+
+### Copy/paste/cut
+
++ `[[yy] | [Y]]` - copy current line
++ `[[dd] | [D]]` - cut current line
++ `[[y] | [d]]` - copy or cut
+	* `[[j] | [arrow down]]` - current and line below
+	* `[[k] | [arrow up]]` - current and line above
++ `[:]<start>[,]<end>[[y] | [d]]` - copy or cut line between lines start and end (included); you can also copy/cut till label - just create a label somewhere, then use `[y][`]<label>`
++ `[p]` - paste line under cursor
++ `[P]` - paste line before cursor
++ `[x]` - cut character under cursor
++ `[“]<letter>[command]` - specify the buffer for the command
+	* `[\_]` - underscore, empty buffer
++ `<number>[operation]` - do operation number of times
++ `[.]` - repeat last operation in a whole
++ `[:read] <filename>` - yank and paste everything from specified file into current buffer
++ While in insert mode:
+	* `[Ctrl][r]<register>` - insert text from specified register (register is any lowercase letter)
+	* `[Ctrl][r][a]` - insert text from dot register (dot register holds last modification you made in insert mode
++ `[J]` - append line below to the current (physically move it)
+
+
+### Search and substitution
+
++ `[*]` -  go to next occurence of the word under cursor; also highlights all occureneces \*
++ `[/]<text>` - got to the first character of first occurence of text in file starting from cursor location
+	* `[\c]` - turn on ignore case search for just one search
+	* `[n]` - go to next occurence
+	* `[N]` - go to previous occurrence
++ `[?]<text>` - same as previous, but backwards
++ `[:][s][/]<old>[/]<new>` - substitute first occurrence of  ‘old’ by ‘new’ (type `[%]` instead of `[:]` upfront for entire file)
+	* `[/]` - additional options, concatinate to command parent command (above); options below can be used separetely or together
+		- `[g]` - all in current line
+		- `[c]` - confirm before doing
+		- `:s/i/o/gc` - substitute all occurences of `i` by `o` in the current line and ask confirmation before doing each substitution
++ `[:]<number>[,]<number>` - apply next operation in between lines specified
++ `[:noh]` - turn off highlighting
+
+
+### Back to the future
+
++ `[u]` - undo last command
++ `[U]` - return current line to its original form
++ `[Ctrl][r]` - undo undos
+
+
+### Labels and folders
+
+Highlight region in vim, then `[[:][fold] | [zf]]` - fold lines
+
+`fo` - is short for `fold`
+
++ `<number>[,]<number>[fo]` - same as previous, folder in between lines specified (toggle is same)
++ `[,][+]<number>[fo]` - fold current line and lines passed relative to it (below it)
++ [mb][%][zf’b] - fold lines !dont try this, needs checking!
++ `[za]` - open/close toggle
++ `[zo]` - open folding
++ `[zc]` - close folding
++ `[zd]` - delete folding
++ `[m][any_lowercase_character]` - create local label
++ `[m][any_uppercase_letter]` - create global label
++ ``[`][label]`` - go to the label created before
+	* ``[`][`]`` - go to last jump
+
+
+### Macros:
+
++ `[q]<letter>[command sequence][q]` - record macros
+	* `[@]<letter>` - apply to the current cursor location
+	* `[@@]` - rerun last macros
++ `[[Ctrl][N] | [Ctrl][P]]` - autocomplete
++ `[Ctrl][X] [Ctrl][N]` - autocomplete only in current file
++ `[Ctrl][X] [Ctrl][F]` - autocomplete for filenames
+
+
+### Fun stuff:
+
++ `[[Operation]<count>[motion]]` - for example, [d2w] - deletes next two words
++ `[:!][shell_command]` - run shell command within vim
++ `[:make]` - trigger make within your vim!
++ `[Ctrl][R][=][expression]` - calculator in vim!!! Use it in insert mode - result will be printed in file
+
+
+## Plugins
+
+## Interesting links
+- https://medium.freecodecamp.org/learn-linux-vim-basic-features-19134461ab85
+- http://vim.wikia.com/wiki/Mapping_keys_in_Vim\_-\_Tutorial\_(Part_2)
+- http://learnvimscriptthehardway.stevelosh.com/chapters/07.html
+- https://hashrocket.com/blog/posts/8-great-vim-mappings
+- https://www.shortcutfoo.com/blog/top-50-vim-configuration-options/
+- https://dougblack.io/words/a-good-vimrc.html
+- https://stackoverflow.com/questions/736701/class-function-names-highlighting-in-vim
+- https://stackoverflow.com/questions/29192124/how-to-color-function-call-in-vim-syntax-highlighting
+- https://stackoverflow.com/questions/736701/class-function-names-highlighting-in-vim
+- https://stackoverflow.com/questions/37777417/how-to-use-vim-key-bindings-with-visual-studio-code-vim-extension - exit key mapping in vscode for vim extension:
+- http://vimdoc.sourceforge.net/htmldoc/options.html#'statusline', http://vimdoc.sourceforge.net/htmldoc/windows.html#status-line - status line
+
+
+## Installation on systems
