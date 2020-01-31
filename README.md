@@ -1,5 +1,20 @@
 # Lovely Vim
 
+# Contents
+
++ [Hot keys](#hot-keys)
+	- [File/buffer manipulaton:](#File/buffer-manipulaton:)
+	- [Insert mode enter](#insert-mode-enter)
+	- [Motion](#motion)
+	- [Editing](#editing)
+	- [Search and substitution](#search-and-substitution)
+	- [Back to the future](#back-to-the-future)
+	- [Labels and folders](#labels-and-folders)
+	- [Macros:](#macros)
+	- [Fun stuff:](#fun-stuff)
++ [Debugging](#debugging)
++ [Plugins](#plugins)
+
 ## Hot keys
 
 + <> tags refer to user input:
@@ -17,8 +32,9 @@
 + `[:bp]` - go to previous buffer
 + `[:vs]` - open new buffer vertically
 + `[:sp]` - open new buffer horizontally
-+ `[Ctrl][w] [[arrows] | [hjkl] | [w]]` - move to another buffer
++ `[Ctrl][w] [arrows | [hjkl] | w]` - move to another buffer
 + `[Ctrl][w] [Shift] [hjkl]` - move current buffer elsewhere
++ `[Ctrl][w] <number>  [+ | -]` - increase/decrease the size of the current buffer
 + `[:tabe] <file>` - open file in another tab (to open multiple files in tabs add -p flag)
 	* `[gt]` - go to the next tab
 	* `[gT]` - go to previous tab
@@ -105,7 +121,6 @@ Press while in normal mode:
 		- `[t]` - tags
 		- `["]` - quotes
 
-
 ### Copy/paste/cut
 
 + `[[yy] | [Y]]` - copy current line
@@ -188,6 +203,45 @@ Highlight region in vim, then `[[:][fold] | [zf]]` - fold lines
 + `[:make]` - trigger make within your vim!
 + `[Ctrl][R][=][expression]` - calculator in vim!!! Use it in insert mode - result will be printed in file
 
+----------
+
+## Debugging
+
+Steps to get started
+
+1. `:packadd termdebug` - load the plugin
+2. `:Termdebug` - start debugging
+3. `(gdb) file a.out` - load the program (alternatively pass a.out to the command above
+
+`(gdb) quit` - Quit debugger
+
+### Simple commads
+
++ `(gdb) next` `:Over` - execute current line and stop at the next line
++ `(gdb) step` `:Step` - execute current line and stop at the next statement, entering functions
++ `(gdb) finish` `:Finish` - execute until leaving the current function
++ `(gdb) where` `:Break` - show the stack
++ `(gdb) frame <N>` - go to Nth stack frame
++ `(gdb) continue` `Continue` - continue execution
++ `CTRL-C` `Stop` - interrupt the program
++ `(gdb) print` `:Evaluate` `:Ev` - evaluate expression under cursor
+
+### Other commands
+
++ `:Gdb` - jump to gdb window
++ `:Program` - jump to program window
++ `:Source` - jump to source code window or create one
++ `:Break` - set a breakpoint at the current line
++ `:Clear` - delete a breakpoint at the current line
+
+Create your own shortcuts that will work in any window using `TermDebugSendCommand()` function, which takes gdb command as argument:
+```vim
+map ,w :call TermDebugSendCommand('where')<CR>
+```
+
+[gdb reference](https://ftp.gnu.org/old-gnu/Manuals/gdb/html_chapter/gdb_3.html)
+
+----------
 
 ## Plugins
 
