@@ -10,8 +10,8 @@
 	- [Search and substitution](#search-and-substitution)
 	- [Back to the future](#back-to-the-future)
 	- [Labels and folders](#labels-and-folders)
-	- [Macros:](#macros)
-	- [Fun stuff:](#fun-stuff)
+	- [Macros](#macros)
+	- [Fun stuff](#fun-stuff)
 + [Debugging](#debugging)
 + [Plugins](#plugins)
 
@@ -211,20 +211,20 @@ Steps to get started
 
 1. `:packadd termdebug` - load the plugin
 2. `:Termdebug` - start debugging
-3. `(gdb) file a.out` - load the program (alternatively pass a.out to the command above
+3. `(gdb) file a.out` - load the program (alternatively pass a.out to the command above)
 
-`(gdb) quit` - Quit debugger
+`(gdb) quit` - quit debugger
 
 ### Simple commads
 
-+ `(gdb) next` `:Over` - execute current line and stop at the next line
-+ `(gdb) step` `:Step` - execute current line and stop at the next statement, entering functions
-+ `(gdb) finish` `:Finish` - execute until leaving the current function
-+ `(gdb) where` `:Break` - show the stack
++ `(gdb) next`, `:Over` - execute current line and stop at the next line
++ `(gdb) step`, `:Step` - execute current line and stop at the next statement, entering functions
++ `(gdb) finish`, `:Finish` - execute until leaving the current function
++ `(gdb) where`, `:Break` - show the stack
 + `(gdb) frame <N>` - go to Nth stack frame
-+ `(gdb) continue` `Continue` - continue execution
-+ `CTRL-C` `Stop` - interrupt the program
-+ `(gdb) print` `:Evaluate` `:Ev` - evaluate expression under cursor
++ `(gdb) continue`, `Continue` - continue execution
++ `CTRL-C`, `:Stop` - interrupt the program
++ `(gdb) print`, `:Evaluate` `:Ev` - evaluate expression under cursor
 
 ### Other commands
 
