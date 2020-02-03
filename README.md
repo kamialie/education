@@ -389,6 +389,23 @@ Ancestry reference uses `^` (caret) symbol. If added at the end of a reference, 
 
 Another ancestry reference is `~` (tilde). Always goes to the first parent, thus `HEAD~2` means *first parent of the first parent*. Two syntaxes can be also combined `HEAD~3^2`
 
+Double-dot syntax - shows range of commits that are reachiable from on commit, but aren't from another, example
+
+	A->B->E->F->master
+	   |->C->D->experiment
+
+`git log master..experiment` - will output D and C, while vice versa will return F and E
+
+`git origin/master..HEAD` - shows what commits are going to be pushed to the server (can ommit HEAD, git will substitute it)
+
+`^` or `--not` before any reference means do not show reachable commits from that reference; can specify more than two reference (unlike 2 dot)
+
+`git log refA..refB` is the same as `git log ^refA refB` and same as `git log refB --not refA`
+
+Triple-dot show commits that are reachable by eiether of two references, but not by both; `--left-rght` options helps to determined which commits are reachable by which of the two references:
+
+`git log master...experiment` returns F E D C
+
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
 - **git stash push path/to/file** - stash individual file
