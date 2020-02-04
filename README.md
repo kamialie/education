@@ -204,6 +204,8 @@ pipeline {
 }
 ```
 
+To access environment variable use `${env.VARIABLE}`, while groovy variable is accessed through `${VARIABLE}`; groovy variables can be substituted directly in in the pipeline, when they are not enclosed in double quotes - `VARIABLE`
+
 Print all environment variables in declarative pipeline:
 
 		sh 'printenv'
