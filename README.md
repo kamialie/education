@@ -23,6 +23,8 @@
 	- [Remote branches](#remote-branches)
 	- [Rebasing](#rebasing)
 + [Git tools](#git-tools)
+	- [Revision selection](revision-selection)
+	- [Interactive staging](interactive-staging)
 
 ----------
 
@@ -405,6 +407,14 @@ Double-dot syntax - shows range of commits that are reachiable from on commit, b
 Triple-dot show commits that are reachable by eiether of two references, but not by both; `--left-rght` options helps to determined which commits are reachable by which of the two references:
 
 `git log master...experiment` returns F E D C
+
+----------
+
+## Interactive staging
+
+**git add [-i | --interactive]** - interactive shell mode
+
+Patch option lets you stage separate hunks of file. Patch option `[-p | --patch]` also works with `add`, `reset`, `checkout` and `stash save` commands
 
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
