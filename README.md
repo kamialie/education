@@ -25,6 +25,7 @@
 + [Git tools](#git-tools)
 	- [Revision selection](revision-selection)
 	- [Interactive staging](interactive-staging)
+	- [Stashing and cleaning](stashing-and-cleaning)
 
 ----------
 
@@ -415,6 +416,31 @@ Triple-dot show commits that are reachable by eiether of two references, but not
 **git add [-i | --interactive]** - interactive shell mode
 
 Patch option lets you stage separate hunks of file. Patch option `[-p | --patch]` also works with `add`, `reset`, `checkout` and `stash save` commands
+
+----------
+
+## Stashing and cleaning
+
+**git stash** or **git stash push** - stash changed files (dirty state) onto separate stack
+
++ `[list]` - show the list of stashed files on the stack; following commands, if not specified the index, assume that operation is to be done on the top most item
++ `[apply] [--index] stash@{n}` - apply the file in the current state (branch and directory); does not drop the file from stash stack; `--index` flag tell git to apply it to the staging area; can pass `n` to specify with file to apply
++ `[drop] stash@{n}` - drop item from the stack
++ `[pop] stash@{n}` - apply the stash and drop from stack
++ `[--include-untracked | -u]` - include untracked files
++ `[--all | -a]` - include all files, including ignored ones
++ `[--patch]` - interactive stashing
++ `branch <new branchname>` - create a new branch from a stashed work; creates new branch -> checks out the commit you were on -> applies stashed items -> drops the stash if applied successfully
+
+**git clean** - removes untracked files irreversibly; safer option is to run `git stash --all`
+
++ `[-f]` - force, "really do this" - required flag by Git, unless configuration variable `clean.requiredForce` is not set to false; second `-f` might be needed if you try to removed submodules
++ `[-d]` - remove directories that become empty as a result of clean command
++ `[--dry-run | -n]` - show what would have been removed; that is put `-n` instead of `-f` to inspect first
++ `[-x]` - removed ignored files as well
++ `[-i]` - interactive mode
+
+----------
 
 # Stuff to check out
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
