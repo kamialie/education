@@ -755,6 +755,13 @@ copyArtifacts(projectName: 'sourceproject');
 
 ## Other cool features
 
+* mark stage or pipeline as unstable - use catchError block, inside the block should be a code that indicates an error, for example `exit 1`
+```groovy
+catchError(buildResult: 'SUCCESS', catchInterruptions: false, message: 'Message', stageResult: 'UNSTABLE') {
+	sh 'exit 1'
+}
+```
+
 * [Development tools(cli)](https://jenkins.io/blog/2017/05/18/pipeline-dev-tools/)
 
 * timeouts, retries...
