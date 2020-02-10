@@ -23,9 +23,10 @@
 	- [Remote branches](#remote-branches)
 	- [Rebasing](#rebasing)
 + [Git tools](#git-tools)
-	- [Revision selection](revision-selection)
-	- [Interactive staging](interactive-staging)
-	- [Stashing and cleaning](stashing-and-cleaning)
+	- [Revision selection](#revision-selection)
+	- [Interactive staging](#interactive-staging)
+	- [Stashing and cleaning](#stashing-and-cleaning)
+	- [Searching](#searching
 
 ----------
 
@@ -439,6 +440,24 @@ Patch option lets you stage separate hunks of file. Patch option `[-p | --patch]
 + `[--dry-run | -n]` - show what would have been removed; that is put `-n` instead of `-f` to inspect first
 + `[-x]` - removed ignored files as well
 + `[-i]` - interactive mode
+
+----------
+
+## Searching
+
+**git grep** - search withtin working directory or anywhere in the git history
+
++ `[--line-number | -n]` - prints out line numbers where matches were found as well
++ `[--count | -c]` - show summary with filenames containing the match and number of matches in each
++ `[--break]` - break each file (insert new line after each file) output
++ `[--heading]` - instead of starting each entry with the filename containing it, output filename on the separate line, then lines with the match
++ `[add more]`
+
+**git log**
+
++ `[-S] <string>` - output commits that changes the number of occurences of provided string
++ `[-G]`
++ `[-L] :<function>:<file_name>` - line log search, git will try to figure out the bounds of the provided function and output the changes made to it throughout whole history; if git cant figure out the bounds, pass the regular expression, for the provided example it would be `git log -L '/unsigned long function/',/^}/:file_name`; can also pass range of lines or single line
 
 ----------
 
