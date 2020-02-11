@@ -26,7 +26,8 @@
 	- [Revision selection](#revision-selection)
 	- [Interactive staging](#interactive-staging)
 	- [Stashing and cleaning](#stashing-and-cleaning)
-	- [Searching](#searching
+	- [Searching](#searching)
+	- [Rewriting history](#rewriting-history)
 
 ----------
 
@@ -458,6 +459,64 @@ Patch option lets you stage separate hunks of file. Patch option `[-p | --patch]
 + `[-S] <string>` - output commits that changes the number of occurences of provided string
 + `[-G]`
 + `[-L] :<function>:<file_name>` - line log search, git will try to figure out the bounds of the provided function and output the changes made to it throughout whole history; if git cant figure out the bounds, pass the regular expression, for the provided example it would be `git log -L '/unsigned long function/',/^}/:file_name`; can also pass range of lines or single line
+
+----------
+
+## Rewriting history
+
+All the following is preformed locally. Once the work is pushed to the server, it is completely different story.
+
+**git commit --ammend** - modify last commit message; opens configured editor and loads it once editor is closed; can also be used to change the contents - simply make changes, stage them and then perform the command (changes the hash of commit)
+
++ `[--no-edit]` - avoid editor session (for example adding files or changes, and there is no need to change the message)
+
+To change multiple commits use `git rebase` command with `-i`, for interactive, option; do not specify the commits already on the server, cuase the will be rewritten; the following example changes last 3 commits (could also specify `HEAD~2^`
+```bash
+git rebase -i HEAD~3
+```
+The command returns the list of commits (but in reverse order than `git log`):
+```bash
+pick f7f3f6d changed my name a bit
+pick 310154e updated README formatting and added blame
+pick a5f4a0d added cat-file
+
+# Rebase 710f0f8..a5f4a0d onto 710f0f8
+#
+# Commands:
+# p, pick <commit> = use commit
+# r, reword <commit> = use commit, but edit the commit message
+# e, edit <commit> = use commit, but stop for amending
+# s, squash <commit> = use commit, but meld into previous commit
+# f, fixup <commit> = like "squash", but discard this commit's log message
+# x, exec <command> = run command (the rest of the line) using shell
+# b, break = stop here (continue rebase later with 'git rebase --continue')
+# d, drop <commit> = remove commit
+# l, label <label> = label current HEAD with a name
+# t, reset <label> = reset HEAD to a label
+# m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
+# .       create a merge commit using the original merge commit's
+# .       message (or the oneline, if no original merge commit was
+# .       specified). Use -c <commit> to reword the commit message.
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+#
+# Note that empty commits are commented out
+```
+git will perform the specified commands from top to bottom; git it will perform the script (when you close the editor);
+
+- change commit message - change `pick` to `edit`, git will stop there, perform usual `git commit --amend`, continue with `git rebase --continue`
+- reorder commits - simply reorder / delete commit entries
+- squash commits - change `pick` to `squash` on commit that you want to squash to previous one`, in the following example last two commits are squashed into first; git then puts you into editor to merge commit messages:
+
+		pick <hash> commit message one
+		squash <hash> commit message two
+		squash <hash> commit message three
+
+
 
 ----------
 
