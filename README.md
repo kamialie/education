@@ -510,12 +510,30 @@ git will perform the specified commands from top to bottom; git it will perform 
 
 - change commit message - change `pick` to `edit`, git will stop there, perform usual `git commit --amend`, continue with `git rebase --continue`
 - reorder commits - simply reorder / delete commit entries
-- squash commits - change `pick` to `squash` on commit that you want to squash to previous one`, in the following example last two commits are squashed into first; git then puts you into editor to merge commit messages:
+- squash commits - change `pick` to `squash` on commit that you want to squash to previous one, in the following example last two commits are squashed into first; git then puts you into editor to merge commit messages:
 
 		pick <hash> commit message one
 		squash <hash> commit message two
 		squash <hash> commit message three
 
+- split commit - change `pick` to `edit`; git will perform parent commits and the one indicated as `edit` also stop right after, then you can `git reset HEAD^` and redo commit(s) finishing with `git rebase --continue` when done
+
+**git filter-branch** -  rewrite large portions of history, though python sctipt `git-filter-repo` is recommended and can be found [here](https://github.com/newren/git-filter-repo)
+	+ `[--tree-filter] '<shell_command>' HEAD` - runs specified shell command on each checkout, and recommits the result
+	+ `[--all]` - run in all branches
+	+ `[--subdirectory-filter] <directory> HEAD` - makes the specified directory a root directory for every commit; git also automatically removes all commits that did not affect the subdirecoty [NEEDS_CHECK]
+	+ `[--commit-filter]` - change the email in all commits, example below (changes hashes of all commits, not just where the change applied)
+```bash
+git filter-branch --commit-filter '
+        if [ "$GIT_AUTHOR_EMAIL" = "schacon@localhost" ];
+        then
+                GIT_AUTHOR_NAME="Scott Chacon";
+                GIT_AUTHOR_EMAIL="schacon@example.com";
+                git commit-tree "$@";
+        else
+                git commit-tree "$@";
+        fi' HEAD
+```
 
 
 ----------
