@@ -535,6 +535,28 @@ git filter-branch --commit-filter '
         fi' HEAD
 ```
 
+----------
+
+## Reset Demystified
+
+3 trees (workspaces) that git system manages and manipulates:
+
+1. HEAD - pointer to the last commit on the branch(current branch reference)
+2. Index - proposed next commit(staging area)
+3. Working directory (working tree) - while previous two trees store contents in `.git`, this one unpackes them so you can easily work with files; refer to this tree as sandbox, where you can try and do all the changes
+
+Workflow goes as follows:
+|<--------(checkout the project)--|------------------HEAD
+|---------------------------------Index---(commit)-->|
+working directory--(stage files)->|------------------|
+
+You make changes in the current working directory, then run `git add`, which moves the modifications to staging area (Index), then `git commit` creates a snapshot, which finally makes all trees to agree.
+
+**git reset**
+
++ `[--soft] <reference>` - moves the HEAD (also branch it is poiting to); `git reset --soft HEAD~` (go to parent of HEAD) moves the branch to the previous commit (undo), Index and Working directory do not change
++ `[--midex] <reference>` - the default behaviour (does the same without any flags), that is moves the HEAD and updates Index as well, all changes are also unstaged
++ `[--hard] <reference>` - moves the HEAD and updates both Index and Working directory; if commit you moved from was perfomed, it can be recovered from Git DB, but otherwise all data is overwritten
 
 ----------
 
