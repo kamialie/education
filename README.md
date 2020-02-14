@@ -26,11 +26,39 @@ fg - bring the background process back to foreground
 ## Basics
 
 + **date**
-+ **calendar**
++ **cal** - calendar
 + **free** - shows free space (only works on linux)
-+ **file** - determines file type and some additional info
-+ **less** - view file contents
++ **file** \<file\> - determines file type and some additional info
++ **less** \<file\> - view file contents
 + **pbcopy**, **pbpaste** - copy or paste to the pastboard
+	```bash
+	pbcopy < file
+	pbpaste > file
+	```
++ **cp**
+	- [-a | --archive] - copy files and directories and all their attributes; normally co take the default attributes of teh user performing the copy
+	- [-i | --interactive] - prompt for confirmation otherwise files could be overwritten silently
+	- [-r | --recursive]
+	- [-u | --update] - only copy files that do not exist or are newer than the existing ones in the destination directory
++ **mv**
+	- [-u | --update]
+	- [-i | --interactive] 
++ **ln** \<file\> \<link\>
+	- [-s] - create soft link
++ **type** \<command\> - displays the kind of command the shell wil execute (could be built-in, executable, shell function or alias)
++ **which** \<executable\> - determines the exact locatuon of the given executable (only works for executables)
++ **help** \<builtin\> - man page for builtins
++ **man** [\<section\>] \<program\> - sections:
+	1. User commands
+	2. Programming interfaces kernel system calls
+	3. Programming interfaces to the C library
+	4. Special files such as device nodes and driver
+	5. File formats
+	6. Games and amusements such as screen savers
+	7. Miscellaneous
+	8. System administration commands
++ **apropos** \<search\> - search for man pages based on argument (same as `man -k`)
+
 
 ## ssh
 
