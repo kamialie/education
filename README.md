@@ -510,7 +510,7 @@ git will perform the specified commands from top to bottom; git it will perform 
 
 - change commit message - change `pick` to `edit`, git will stop there, perform usual `git commit --amend`, continue with `git rebase --continue`
 - reorder commits - simply reorder / delete commit entries
-- squash commits - change `pick` to `squash` on commit that you want to squash to previous one, in the following example last two commits are squashed into first; git then puts you into editor to merge commit messages:
+- squash commits - change `pick` to `squash` on commit that you want to squash to previous one, in the following example last two commits are squashed into first; git then puts you into editor to merge commit messages (if want to push updated commits to remote finish with `git push --force-with-lease origin` command):
 
 		pick <hash> commit message one
 		squash <hash> commit message two
