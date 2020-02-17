@@ -4,6 +4,8 @@
 
 [Brief documentaton](https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html)
 
+[Bash FAQ](http://mywiki.wooledge.org/BashFAQ)
+
 Bash metacharacters(must be quoted or escaped if not intendent to be used): space, tab, newline, '|', '&', ';', '(', ')', '<', '>'.
 
 # Contents
