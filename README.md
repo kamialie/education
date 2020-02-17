@@ -72,6 +72,22 @@ fg - bring the background process back to foreground
 
 	alias <name>=<string>
 
+## Redirection
+
+Redirection operator `>` takes the sdtout by default. `>>` appends the content. File descriptor 2 refers to `stderr`, thus `2>` redirects the standard error.
+
+Truncate file or create a new one with the following trick:
+```bash
+$ > file.txt
+```
+
+Capture both stdout and stderr by either of the methods (first one works on older versions as well); third option is to append content using more recent version:
+```bash
+$ ls > file.txt 2>&1
+$ ls &> file.txt
+$ ls &>> file.txt
+```
+
 
 ## ssh
 
