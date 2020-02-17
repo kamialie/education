@@ -554,9 +554,13 @@ You make changes in the current working directory, then run `git add`, which mov
 
 **git reset**
 
-+ `[--soft] <reference>` - moves the HEAD (also branch it is poiting to); `git reset --soft HEAD~` (go to parent of HEAD) moves the branch to the previous commit (undo), Index and Working directory do not change
-+ `[--midex] <reference>` - the default behaviour (does the same without any flags), that is moves the HEAD and updates Index as well, all changes are also unstaged
-+ `[--hard] <reference>` - moves the HEAD and updates both Index and Working directory; if commit you moved from was perfomed, it can be recovered from Git DB, but otherwise all data is overwritten
++ `[--soft] <reference> <file>` - moves the HEAD (also branch it is poiting to) to specified commit ; `git reset --soft HEAD~` (go to parent of HEAD) moves the branch to the previous commit (undo), Index and Working directory does not change
++ `[--midex] <reference> <file>` - moves the HEAD and updates Index as well, that is unstage changes - opposite of `git add`; the default `git reset` assumes `git --mixed HEAD~` to all files - effectively unstages all files
++ `[--hard] <reference> <file>` - moves the HEAD and updates both Index and Working directory; commit you moved from can be recovered from Git DB, but otherwise all data is overwritten
+
+git reset also accepts `--patch` option to unstage on a hunk-by-hunk basis.
+
+[NEED TO DO PRACTICAL EXAMPLES]
 
 ----------
 
