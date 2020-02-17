@@ -4,6 +4,8 @@ http://www.yourownlinux.com/2015/04/sed-command-in-linux-append-and-insert-lines
 
 https://stackoverflow.com/questions/25631989/sed-insert-line-command-osx
 
+[GNU project programs docs](http://www.gnu.org/manual/manual.html)
+
 [Makefile](https://www.gnu.org/software/make/manual/)
 
 man hier - file hierarchy
@@ -58,6 +60,17 @@ fg - bring the background process back to foreground
 	7. Miscellaneous
 	8. System administration commands
 + **apropos** \<search\> - search for man pages based on argument (same as `man -k`)
++ **info** \<program\> - GNU project provided man pages; works as a tree structured nodes, which are also hyperlinked(leading asterisk); the above utilities are part of `coreutils` package - `info coreutils` will show a list of programs that are part of it; navigation:
+	- `?` - help
+	- n - display next node
+	- p - previous node
+	- u - parent node
+	- `Enter` - follow hyperlink
+	- q - quit
++ **zless** - special `less` command to view gzip-compressed text files (have .gz extension); some programs have their doc files in `/usr/share/doc` directory
++ **alias** - create custom aliases; exactly as below - no whitespaces around equal sign; `unalias` - to remove alias; alias without argument lists all existing aliases
+
+	alias <name>=<string>
 
 
 ## ssh
@@ -73,7 +86,7 @@ ssh-keygen -t rsa -b 4096
 
 + [doc](https://www.ssh.com/ssh/copy-id)
 ```shell
-ssh-copy-id -i ~/.ssh/id_rsa.pub user@host
+ssh-copy-id -i <path_to_public_key> user@host
 ```
 
 ### scp
@@ -86,6 +99,7 @@ All directory leading to the last inner one must exist.
 
 ```shell
 scp myfile.txt remoteuser@remoteserver:/remote/folder/inner_folder
+scp remoteuser@remoteserver:/remote/folder/some_file.txt path/on/host
 ```
 
 ## sed
