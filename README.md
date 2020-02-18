@@ -88,6 +88,38 @@ $ ls &> file.txt
 $ ls &>> file.txt
 ```
 
+`/dev/null` - bit bucker 'file', thus supress any messages:
+```bash
+$ ls 2> /dev/null
+```
+
+Handy way to examine any command output:
+```bash
+$ ls /usr/bin | less
+```
+
+Difference between `>` and `|`:
+
+	command > file
+	command | command
+
+Pipelines can include multiple commands, which would act like filters; examples and usefull commands below:
+```
+$ ls /bin /usr/bin | sort | uniq | less
+$ ls /bin /usr/bin | sort | uniq | wc -l
+```
+
+**uniq** - takes data from stdin or single fill and removes the duplicates
+	- `-d` - returns the list of duplicates
+**wc** - word cound, returs number of lines, words and bytes
+	- `-l` - only reports lines
+**head**, **tail** - output first, last 10 lines respectively
+	- `-n <number>` - change the default 10 line behaviour
+	- `-f` - output file content in real-time (works with `tail`)
+**tee** [\<file\> ...] - acts as an intermediate fitting - sends incoming input both to a file and further to stdout of a pipeline; example below:
+```bash
+$ ls /usr/bin | tee ls.txt | grep zip
+```
 
 ## ssh
 
@@ -135,6 +167,19 @@ var=smth
 sed **-i** '' "\<number\>s/.\*/$var/" \<target_file\> - substitute given line (number) with a variable, second argument is a regex, current example is substitute whole line; if variable contains '/' use different separator - '|'; same with **-a** means append, **-i** means insert
 
 sed **-i** '' '/pattern to match/d' \<target_file\> - delete lines matching patterns
+
+## grep
+
+**grep pattern [files ...]**
+
+File pattern searcher
+
+Default returns the lines containing the pattern
+
+### Flags
+
++ `-i` - ignore case (default is case sensetive)
++ `-v` - print only lines that do not match the pattern
 
 ## diff
 
