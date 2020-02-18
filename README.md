@@ -36,8 +36,8 @@ Bash metacharacters(must be quoted or escaped if not intendent to be used): spac
 	- [x] [Command](#command-substitution)
 	- [x] [Arithmetic](#arithmetic)
 	- [ ] [Word splitting](#word-splitting)
-	- [ ] [Filename](#filename)
-	- [ ] [Pattern matching](#pattern-matching)
+	- [x] [Filename](#filename)
+	- [x] [Pattern matching](#pattern-matching)
 	- [x] [Quote removal](#quote-removal)
 * [Redirections](#redirections)
 * [Fun stuff](#fun-stuff)
@@ -272,7 +272,13 @@ Expansion is performed on the command line after it has been split into tokens. 
 
 Quote removal is performed as the last stage.
 
-[Tilde expansion not perfomed inside double quotes.](https://unix.stackexchange.com/questions/151850/why-doesnt-the-tilde-expand-inside-double-quotes) Also read about expansions above - almost all symbols reserve their literal meaning except several ones.
+[Tilde expansion not perfomed inside double quotes](https://unix.stackexchange.com/questions/151850/why-doesnt-the-tilde-expand-inside-double-quotes). Also read about expansions above - almost all symbols reserve their literal meaning except several ones.
+
+All shell special characters are treated as ordinary ones inside double quotes, except `$`, `\`, `\``:
++ word-splitting, file (pathname) expanstion, tilde expansion and brace expansion are suppressed
++ parameter expansion, arithmetic expansion and command substitutions are still possible
+
+To supress all expansions use single quotes!
 
 ----------
 
@@ -283,15 +289,16 @@ Quote removal is performed as the last stage.
 Spaces must be escaped if intendent between braces!
 
 ```bash
-bash$ echo a{d,c,b}e
+$ echo a{d,c,b}e
 ade ace abe
 ```
 
 Comma separeted value will be inserted(not sorted)
 
+	{x..y[..incr]}
+
 ```bash
-{x..y[..incr]}
-bash$ echo a{1..4..1}e
+$ echo a{1..4..1}e
 a1e a2e a3e a4e
 ```
 
@@ -299,13 +306,21 @@ Expanded inclusive from x to y. When either x or y is preceded by 0, shell attem
 * x, y - either integers or single characters
 * incr - optional, an integer
 
+Some examples:
+```bash
+$ echo {001..15}
+001 002 003 004 005 006 007 008 009 010 011 012 013 014 015
+$ echo Front-{A,B,C}-Back
+Front-A-Back Front-B-Back Front-C-Back
+```
+
 ----------
 
 [back to contents](#contents)
 
 ### Tilde
 
-If a word begins with unquoted '~', all characters up to first unquoted slash(or all characters if no slashes) are considered a *tilde-prefix*. If none of the characters in the *tilde-prefix* are quoted, prefix is treated as a *login name*. If it is null, tilde is replaced with HOME shell variable, it unset, the home directory of the user executing the command, otherwise associated login name home directory.
+If a word begins with unquoted '~', all characters up to the first unquoted slash(or all characters if no slashes) are considered a *tilde-prefix*. If none of the characters in the *tilde-prefix* are quoted, prefix is treated as a *login name*. If it is null, tilde is replaced with HOME shell variable, if unset, the home directory of the user executing the command, otherwise associated login name home directory.
 
 If characters are in the tilde-prefix is a number (N), optionally prefixed by a '+' or a '-', tilde-prefix is replaced with corresponding element from the directory stack, as it would be displayed with [dirs](the-directory-stack) build-in
 
@@ -326,7 +341,15 @@ Examples:
 
 ### Parameter
 
-[to be continued]
+[ADD INFO FROM GNU reference]
+
+See list of available varialbes:
+```bash
+$ printenv
+$ env
+```
+
+Mistyped variable name will result to an empty string
 
 ----------
 
@@ -334,19 +357,32 @@ Examples:
 
 ### Command substitution
 ```bash
-$(command)
+$ echo $(command)
 
 or
 
-$`command`
+$ echo `command`
 ```
 
 The output of the command replaces the command itself. Command is executed in subshell, trailing new lines are deleted (embedded newlines are not deleted, but may be removed during word splitting).
 
-Old-style backquote from retains literal meaning of backslashes (except when followed by '$', '\`', or '\\'). In paranthesis form all characters make up the command, none is treated specially.
+Old-style backquote form retains literal meaning of backslashes (except when followed by '$', '\`', or '\\'). In paranthesis form all characters make up the command, none is treated specially.
 
 Command substututions may be nested (with old-style escape inner backquotes with backslashes).
 
+Some commands might need to be embedded by double quotes to preserve the way output looks, example below:
+```bash
+$ echo $(cal)
+February 2008 Su Mo Tu We Th Fr Sa 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
+$ echo "$(call)"
+	February 2008
+Su Mo Tu We Th Fr Sa 
+				1  2
+ 3  4  5  6  7  8  9
+10 11 12 13 14 15 16
+17 18 19 20 21 22 23
+24 25 26 27 28 29
+```
 ----------
 
 [back to contents](#contents)
@@ -357,6 +393,8 @@ $(( expression ))
 ```
 
 Evaluates the expression and substitutes the result. Expression is treated as if it is within double quotes, all tokens undergo parameter and variable expanstion, command substitution, and quote removal.
+
+Only supports integers, operators include - `+, -, *, /, %, **`
 
 ----------
 
@@ -380,7 +418,9 @@ Evaluates the expression and substitutes the result. Expression is treated as if
 
 ### Filename
 
-[to be continued]
+After word splitting (unless `-f` option has been set), Bash looks for `*`, `?`, and `[` characters; if one of them appears, word is regarded as a *pattern* and is replaced with an alphabetically sorted list of filenames matching the pattern (pattern matching is described below); `.` character must be mactched explicitly, since those entries are ignored by default
+
+Depending on `nullglob`, `failglob` options being set or not, word can be left unchanged, error message could be printed or word can be removed completely
 
 ----------
 
@@ -388,7 +428,14 @@ Evaluates the expression and substitutes the result. Expression is treated as if
 
 ### Pattern matching
 
-[to be continued]
+Any character, other than pattern character, matches itself; backslash escapes the following character, escaping backslash is discarded; special pattern characters must be quoted to match literally
+
++ `*` - matches any string, including null character; two adjacent `*`s used as a single pattern will match all files and zero or more directories and subdirectories, if followed by `/`, two adjacent `*` will match only directories and subdirectories; check *globstart* option
++ `?` - matches any single character
++ [...] - matches any of enclosed characters, pair of characters separated by a hyphen denote a range (check C locale to be sure what is included in range, default `[a-dx-z]` results int `[abcdxyz]`); `!` or `^` right after `[` reverses the logic; `-` can be mtaches by including first or last character, `]` can be matched only if specified first; *character classes* can be specified within `[]`:
+	- alnum, aplha, ascii, blank, cntrl, digit, graph, lower, print, punct, space, upper, word, xdigit - word class matches letter, digits and `_`
+
+[A BIT MORE INFO IS LEFT AT GNU REFERENCE]
 
 ----------
 
@@ -403,7 +450,7 @@ After all preceding expansions, all unquoted occurences of ' \\ ', ' ' ', ' " ' 
 
 ### Fun stuff
 
-* \<esc\> + . - insert last argument of previous command
+* \<esc\> + . - insert last argument of previous command (obviously doesnt work in vim mode)
 
 ----------
 
