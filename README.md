@@ -42,6 +42,7 @@ Bash metacharacters(must be quoted or escaped if not intendent to be used): spac
 * [Redirections](#redirections)
 * [Fun stuff](#fun-stuff)
 * [Bash prompt](#bash-prompt)
+* [Keyboard tricks](#keyboard-tricks)
 
 ----------
 
@@ -473,6 +474,63 @@ After all preceding expansions, all unquoted occurences of ' \\ ', ' ' ', ' " ' 
 
 ### Bash prompt
 
+
+----------
+
+[back to contents](#contents)
+
+## Keyboard tricks
+
+Since wonderful bash is GNU project, learn damn emacs keystrokes
+
+### Movement
+
++ `Ctrl-a` - move to the beginning of the line
++ `Ctrl-e` - end of line
++ `Ctrl-f` - forward one character
++ `Ctrl-b` - backward one character
++ `Alt-f` - forward one work
++ `Alt-b` - backward one word
++ `Ctrl-l` - clear the screen (same as command `clear`)
+
+### Modify text
+
++ `Ctrl-d` - delete character
++ `Ctrl-t` - traspose (exchange) characters at the cursor location with the one preceding
++ `Alt-t` - traspose the word with the one preceding
++ `Alt-l` - convert lowercase from the location to the end of word
++ `Alt-u` - conver to uppercase
+
+### Cutting and pasting text
+
++ `Ctrl-k` - kill text from location to the end of line
++ `Ctrl-u` - to the beginning of the line
++ `Alt-d` - to the end of the current word
++ `Alt-backspace` - to he beginning of the current word (if at the beginning, kills previous word)
++ `Alt-y` - yank text from the kill-ring
+
+### Completion
+
++ `Alt-?` - display all possible completions (same as double tab)
++ `Alt-*` - insert all possible completions
+
+### History
+
+Bash keeps the history of the last 500 commands in `.bash_history`, history command retrieves just that
+```bash
+$ history | less
+$ history | grep /usr/bin
+```
+
++ `!<line_number>` - expands to command under that line
++ `Ctrl-p` - move to the previos history entry
++ `Ctrl-n` - next entry
++ `Alt-<` - move to the top of history list
++ `Alt->` - end of history list
++ `Ctrl-r` - reverse incremental search
++ `Alt-p` - reverse non-incremental search (type int the search string and press enter before the search is performed)
++ `Alt-n` - forward search non-incremental
++ `Ctrl-o` - execute the item in the history and advace to the next one (handy if you are going to re-execute sequence of commands)
 
 ### Links
 
