@@ -19,6 +19,7 @@ fg - bring the background process back to foreground
 # Contents
 
 + [Basics](#basics)
+	+ [Redirection](#redirection)
 + [Text processing](#text-processing)
 	+ [sed](#sed)
 	+ [diff](#diff)
@@ -187,6 +188,75 @@ sed **-i** '' '/pattern to match/d' \<target_file\> - delete lines matching patt
 
 [back to contents](#contents)
 
+## Permissions
+
+Unix system has 3 groups of permissions: user, group, others (world). To check info about your identity use `id` command with no arguments.
+
+**Attributes to to file type**:
+
++ `-` - regular file
++ `d` - directory
++ `l` - symbolic link (has "dumb" permissions - 777)
++ `c` - character special file, refers to device that handles data as stream of bytes
++ `b` - block special file, refers to device that handles data in blocks
+
+**Permission attributes**:
+
++ `r` - file can be opened and read, directory contents can be listed if execute attribute is also set
++ `w` - file can be written or truncated (deletion and renaming are determined by directory attributes), directory allows files to be created, deleted and renamed of execute attribute is also set
++ `x` - file can be treated as a program, in scripting languages must also be set readable to be executed, directory can be entered
+
+**Special permissions**:
+
++ setuid bit - when applied to an exec file, sets the *effective user ID* from the real user (running the program) to the program's owner; usually is given to few programs ownder by superuser, so that others users can run the program with privileged rights
+	```bash
+	$ chmod u+s program
+	```
++ setgid bit - same as above but for a group; if set for the directory, newly created files in the directory will be given group ownership of the directory, rather than the file's creator; useful for shared directory
+	```bash
+	$ chmod g+s program
+	```
++ sticky bit - on Linux is ignored for files, but if set for the directory, prevents users from deleting or renaming files, unless the user is the ownder of directory or file or is a superuser
+	```bash
+	$ chmod +t program
+	```
+
+**Commands**:
++ `id` - return user identity
++ `chmod <mode> <file>` - change file modes;
+	+ octal representation:
+		+ `r` - 4
+		+ `w` - 2
+		+ `x` - 1
+	+ symbolic notation - involes target, action and permission, example `chomd u+x file` - give execution permission to the owner
+		+ target - `u` (user), `g` (group), `o` (others, world), `a` (all)
+		+ action - `+` (add permission), `-` (remove), `=` (apply only specified, remove the rest)
+		+ permissions - `r`, `w`, `x`
++ `umask <mask>` - controls the default permissions given to a file when it is created; mask takes a form of 4 digits - turned on bits remove those permissions, first octal is for special permissions - setuid, setgid, sticky bit
++ `su <user>` - start new shell as another user (no user argument assumes superuser)
+	+ `-l | -` - resulting shell session is a login shell for the specified user (user's environment, working directory); abbreviated form `-` may be used
+	+ `-c '<command>'` - execute a single command rather than starting a new interactive command; command should be enclosed in single quotes to avoid shell expansion in the current shell
++ `sudo <command>` - a lot like `su`, but has great configuration capabilities; once a user is added to a priviliged group, he enter his own password (in comparison to `su`) to perform the command; also `sudo` performs the command in the current shell (of course in current environment as well)
+	+ `-l` - see privileges granted by sudo
++ `chown [<owner>][:[<group>]] <file>` - change the file owner and/or group
+	+ arguments:
+		+ `bob` - change from current user to bob
+		+ `bob:users` - change to bob and group users
+		+ `:admins` - change just the group
+		+ `bob:` - change to bob and his login group
++ `passwd <user>` - change password; to change your own password no arguments are needed; superuser uses the argument to change particular user's passwd
++ `adduser`
++ `useradd`
++ `groupadd`
+
+[wiki article on malware](http://en.wikipedia.org/wiki/Malware)
+
+[FINISH WITH COMMANDS]
+
+---
+
+[back to contents](#contents)
+
 ## Network
 
 ### curl
@@ -232,12 +302,6 @@ Manipulate tape archives
 
 + `tar -cvf <name.tar> <path_to_directory>` - create an archive of a directory
 + `tar -x` - extract all entries
-
----
-
-[back to contents](#contents)
-
-## Permissions
 
 ---
 
