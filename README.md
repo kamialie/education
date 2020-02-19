@@ -19,11 +19,17 @@ fg - bring the background process back to foreground
 # Contents
 
 + [Basics](#basics)
-+ [ssh](#ssh)
-+ [sed](#sed)
-+ [diff](#diff)
-+ [curl](#curl)
-+ [tar](#tar)
++ [Text processing](#text-processing)
+	+ [sed](#sed)
+	+ [diff](#diff)
++ [Permissions](#permissions)
++ [Network](#network)
+	+ [curl](#curl)
++ [Archive](#archive)
+	+ [tar](#tar)
++ [Extra](#extra)
+	+ [ssh](#ssh)
+
 
 ## Basics
 
@@ -72,7 +78,11 @@ fg - bring the background process back to foreground
 
 	alias <name>=<string>
 
-## Redirection
++ **script** \<file\> - start shell session recording
+
+---
+
+### Redirection
 
 Redirection operator `>` takes the sdtout by default. `>>` appends the content. File descriptor 2 refers to `stderr`, thus `2>` redirects the standard error.
 
@@ -121,54 +131,13 @@ $ ls /bin /usr/bin | sort | uniq | wc -l
 $ ls /usr/bin | tee ls.txt | grep zip
 ```
 
-## ssh
+---
 
-### ssh-keygen
+[back to contents](#contents)
 
-+ [simple example](https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-```shell
-ssh-keygen -t rsa -b 4096
-```
+## Text processing
 
-### ssh-copy-id
-
-+ [doc](https://www.ssh.com/ssh/copy-id)
-```shell
-ssh-copy-id -i <path_to_public_key> user@host
-```
-
-### scp
-
-Work as much the same as normal cp command.
-
-+ [example](https://www.simplified.guide/ssh/copy-file)
-
-All directory leading to the last inner one must exist.
-
-```shell
-scp myfile.txt remoteuser@remoteserver:/remote/folder/inner_folder
-scp remoteuser@remoteserver:/remote/folder/some_file.txt path/on/host
-```
-
-## sed
-
-Stream editor
-
-### Flags
-
-**sed [flags] [file ...]**
-
-+ `-i <extenstion>` - edit file in-place, saving backup with the specified extenstion; if zero-length extension is given, no backup will be saved
-
-### Examples
-
-var=smth
-
-sed **-i** '' "\<number\>s/.\*/$var/" \<target_file\> - substitute given line (number) with a variable, second argument is a regex, current example is substitute whole line; if variable contains '/' use different separator - '|'; same with **-a** means append, **-i** means insert
-
-sed **-i** '' '/pattern to match/d' \<target_file\> - delete lines matching patterns
-
-## grep
+### grep
 
 **grep pattern [files ...]**
 
@@ -176,29 +145,57 @@ File pattern searcher
 
 Default returns the lines containing the pattern
 
-### Flags
+#### Flags
 
 + `-i` - ignore case (default is case sensetive)
 + `-v` - print only lines that do not match the pattern
 
-## diff
+---
+
+### diff
 
 **diff [flags]... files**
 compare files line by line
 
 also see [cmp use](#https://stackoverflow.com/questions/12900538/fastest-way-to-tell-if-two-files-are-the-same-in-unix-linux)
 
-### Flags
+#### Flags
 
 + **-brief**, **-q** - output only whether files differ
 
-## curl
+---
+
+### sed
+
+Stream editor
+
+#### Flags
+
+**sed [flags] [file ...]**
+
++ `-i <extenstion>` - edit file in-place, saving backup with the specified extenstion; if zero-length extension is given, no backup will be saved
+
+#### Examples
+
+var=smth
+
+sed **-i** '' "\<number\>s/.\*/$var/" \<target_file\> - substitute given line (number) with a variable, second argument is a regex, current example is substitute whole line; if variable contains '/' use different separator - '|'; same with **-a** means append, **-i** means insert
+
+sed **-i** '' '/pattern to match/d' \<target_file\> - delete lines matching patterns
+
+---
+
+[back to contents](#contents)
+
+## Network
+
+### curl
 
 [basic info](https://gist.github.com/subfuzion/08c5d85437d5d4f00e58)
 
 When sending POST request with a **-L** flag (redirection), the follow up request (if needed) will be GET, instead of POST.
 
-### Flags
+#### Flags
 
 + **--include**, **-i**  - include the HTTP-header in the output
 + **--output**, **-o** *\<file\>* - write output to *\<file\>* instead of stdout. Can specify multiple arguments, order does not matter, just the first **-o** is for the first argument(url), second for the second and so on.
@@ -211,6 +208,12 @@ When sending POST request with a **-L** flag (redirection), the follow up reques
 + **--data**, **-d** \<data\> - sends specified data in a POST request; can send data directly or read from a file - to specify a while add **@** in front, for example -d "@filename.json"; two formats are available:
 	- application/x-www-form-urlencoded - param-value pairs seperated by **&** sign, "param1:value1&param2:value2"
 	- application/json - usual json, '{"key":"value"}'
+
+---
+
+[back to contents](#contents)
+
+## Archive
 
 ## tar
 
@@ -227,5 +230,46 @@ Manipulate tape archives
 
 ### Examples
 
-+ `tar -cvf <name.tar> <path_to_directory>` - create an archive of a directory; add `
++ `tar -cvf <name.tar> <path_to_directory>` - create an archive of a directory
 + `tar -x` - extract all entries
+
+---
+
+[back to contents](#contents)
+
+## Permissions
+
+---
+
+[back to contents](#contents)
+
+## Extra
+
+### ssh
+
+**ssh-keygen**
+
++ [simple example](https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+```shell
+ssh-keygen -t rsa -b 4096
+```
+
+**ssh-copy-id**
+
++ [doc](https://www.ssh.com/ssh/copy-id)
+```shell
+ssh-copy-id -i <path_to_public_key> user@host
+```
+
+**scp**
+
+Work as much the same as normal cp command.
+
++ [example](https://www.simplified.guide/ssh/copy-file)
+
+All directory leading to the last inner one must exist.
+
+```shell
+scp myfile.txt remoteuser@remoteserver:/remote/folder/inner_folder
+scp remoteuser@remoteserver:/remote/folder/some_file.txt path/on/host
+```
