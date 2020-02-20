@@ -554,79 +554,87 @@ More complex conditional structures can be built using - *not*, *allOf*, *anyOf*
 
 Built-in conditions:
 * **branch** - execute the stage when the specified branch in being built. Works only on multibranch Pipeline.
-```groovy
-when {
-	branch 'master'
-}
-```
+	```groovy
+	when {
+	  branch 'master'
+	}
+	```
 * **buildingTag** - execute when the build is building a tag
-```groovy
-when {
-	buildingTag()
-}
-```
+	```groovy
+	when {
+	  buildingTag()
+	}
+	```
 * **changelog** - execute if the build's SCM changelog containes given regular expression pattern.
-```groovy
-when {
-	changelog '.*^\\[DEPENDENCY\\} .+$'
-}
-```
+	```groovy
+	when {
+	  changelog '.*^\\[DEPENDENCY\\} .+$'
+	}
+	```
 * **changeset** - [to be continued]
 * **changeRequest** - [to be continued]
 * **environment** - when specified variable is set to the given value
-```groovy
-when {
-	environment name: 'DEPLOY_TO', value: 'production'
-}
-```
+	```groovy
+	when {
+	  environment name: 'DEPLOY_TO', value: 'production'
+	}
+	```
 * **equals** - when the expected value is equal to the actual value
-```groovy
-when {
-	equals expected: 2, actual: currentBuild.number
-}
-```
+	```groovy
+	when {
+	  equals expected: 2, actual: currentBuild.number
+	}
+	```
 * **expression** - [to be continued]
 * **tag** - [to be continued]
 * **not** - execute when the nested condition is false
-```groovy
-when {
-	not {
+	```groovy
+	when {
+	  not {
 		branch 'master'
+	  }
 	}
-}
-```
+	```
 * **anyOf** - execute when any condition is true
-```groovy
-when {
-	anyOf {
+	```groovy
+	when {
+	  anyOf {
 		branch 'master';
 		branch 'staging'
+	  }
 	}
-}
-```
+	```
 * **allOf** - execute when all nested conditions are true
-```groovy
-when {
-	anyOf {
+	```groovy
+	when {
+	  anyOf {
 		branch 'master';
 		branch 'stagin'
+	  }
 	}
-}
-```
+	```
 
 * **triggeredBy** - execute when the current build has been triggered by the param given
-```groovy
-when {
-	triggeredBy ['user', 'SCMTrigger', 'TimerTrigger', 'UpstreamCause', [cause: "UserIdCause", detail: "vlinde"]]
-}
-```
+	```groovy
+	when {
+	  triggeredBy ['user', 'SCMTrigger', 'TimerTrigger', 'UpstreamCause', [cause: "UserIdCause", detail: "vlinde"]]
+	}
+	```
+	+ to get the list of causes of the current build use the following step:
+		```groovy
+		script {
+		  def list = currentBuild.getBuildCauses()
+		  echo "${list}"
+		}
+		```
 
 By default when is evaluated after entering agent for that stage, can be changed by setting **beforeAgent** to true:
 ```groovy
 when {
-	beforeAgent true
+  beforeAgent true
 }
 ```
+
 
 Check **beforeInput** specifier (same as above, but for input).
 
