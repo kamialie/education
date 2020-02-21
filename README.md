@@ -24,6 +24,7 @@ fg - bring the background process back to foreground
 	+ [sed](#sed)
 	+ [diff](#diff)
 + [Permissions](#permissions)
++ [Processes](#processes)
 + [Network](#network)
 	+ [curl](#curl)
 + [Archive](#archive)
@@ -252,6 +253,33 @@ Unix system has 3 groups of permissions: user, group, others (world). To check i
 [wiki article on malware](http://en.wikipedia.org/wiki/Malware)
 
 [FINISH WITH COMMANDS]
+
+
+---
+
+[back to contents](#contents)
+
+## Processes
+
+Kernel initialises its own activities as processes and launches program *init*, which in turn runs a series of shell scripts (*init script*) to start system services.
+
+**PID** - process ID (init has PID 1)
+
+**TTY** stand for *Teletype*, which refers to controlling terminal for the process
+
+### Commands
+
++ `ps` - output process snapshot; default returns the processes associated with the current terminal session
+	+ `x` - output all of user's processes regardless of what terminal (if any) they are controlled by; `?` in **TTY** column indicated no controlling terminal; new **STAT** column stands for *state*:
+	| State | Meaning																					|
+	|:-----:| ----------------------------------------------------------------------------------------- |
+	| R		| running or ready to run																	|
+	| S		| sleeping that is waiting for an event like keystroke or network packet					|
+	| D		| uninverruptible sleep, waiting for I/O such as disk drive									|
+	| T		| stopped (has been instructed to stop														|
+	| Z		| defunct of *zombie**, a child process that has terminated, but not yet cleaned by parent	|
+	| <		|																							|
+	| N		|																							|
 
 ---
 
