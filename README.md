@@ -272,15 +272,15 @@ Kernel initialises its own activities as processes and launches program *init*, 
 + `ps` - output process snapshot; default returns the processes associated with the current terminal session
 	+ `x` - output all of user's processes regardless of what terminal (if any) they are controlled by; `?` in **TTY** column indicated no controlling terminal; new **STAT** column stands for *state*:
 
-	| State | Meaning																					|
-	|:-----:| ----------------------------------------------------------------------------------------- |
-	| R		| running or ready to run																	|
-	| S		| sleeping that is waiting for an event like keystroke or network packet					|
-	| D		| uninverruptible sleep, waiting for I/O such as disk drive									|
-	| T		| stopped (has been instructed to stop														|
-	| Z		| defunct of *zombie*, a child process that has terminated, but not yet cleaned by parent	|
-	| <		|																							|
-	| N		|																							|
+		| State | Meaning																					|
+		|:-----:| ----------------------------------------------------------------------------------------- |
+		| R		| running or ready to run																	|
+		| S		| sleeping that is waiting for an event like keystroke or network packet					|
+		| D		| uninverruptible sleep, waiting for I/O such as disk drive									|
+		| T		| stopped (has been instructed to stop														|
+		| Z		| defunct of *zombie*, a child process that has terminated, but not yet cleaned by parent	|
+		| <		|																							|
+		| N		|																							|
 
 ---
 
