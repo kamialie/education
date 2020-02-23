@@ -11,3 +11,8 @@ floating point representaion:
     2. 8(11) bits - exponent
     3. most significant - sign bit
 * IEEE floating point standard
+
+
+### Coursera Duke C specialization notes
+
+* assert - course 2, week3, Asserts
