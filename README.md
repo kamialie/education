@@ -213,6 +213,13 @@ Highlight region in vim, then `[[:][fold] | [zf]]` - fold lines
 + `[:make]` - trigger make within your vim!
 + `[Ctrl][R][=][expression]` - calculator in vim!!! Use it in insert mode - result will be printed in file
 
+#### Spell checking
+
++ `]s` `[s` - move to misspelled word
++ `z=` - open suggestions list
++ `zg` - add word to vim's dictionary
++ `zw` - mark word as incorrect
+
 ----------
 
 ## Debugging
