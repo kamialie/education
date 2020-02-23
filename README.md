@@ -14,6 +14,7 @@
 	- [Fun stuff](#fun-stuff)
 + [Debugging](#debugging)
 + [Plugins](#plugins)
++ [Links](#links)
 
 ## Hot keys
 
@@ -27,7 +28,7 @@
 + `[:w]` - save file
 + `[:q!]` - quit without saving changes
 + `[:w] <file_name>` - save current buffer as file_name
-+ `[:e]` - edit specified buffer
++ `[:e]` - edit specified buffer (can not switch to those with `:n` and `:N`)
 + `[:bn]` - go to next buffer
 + `[:bp]` - go to previous buffer
 + `[:vs]` - open new buffer vertically
@@ -50,8 +51,17 @@
 	* vim -p file1 file2 file3 - open 3 files at ones in tabs
 + `[:mks!] <session_name>` - save changes to session (if you added/deleted tabs)
 + `[:ls]` - list current buffers
++ `[:buffers]` - same as previous
++ `[:buffer] <n>` - jump to nth buffer
 + `[:b]` - go to the next buffer
 	* `<substring>` - unique filename substring will make it jump to that buffer
++ `[ZZ]` - save current file and exit (HACK!)
+
+Open multiple file as follows:
+```bash
+vim file1 file2 file3
+```
+Than enables `:n` and `:N` commands, go to the next/previous respectivly
 
 
 ### Insert mode enter
@@ -260,3 +270,12 @@ map ,w :call TermDebugSendCommand('where')<CR>
 
 
 ## Installation on systems
+
+---
+
+## Links
+
++ [wiki page](http://en.wikibooks.org/wiki/Vi)
++ ftp://ftp.vim.org/pub/vim/doc/book/vimbook-OPL.pdf. (vim book)
++ [wiki article on vi creator](http://en.wikipedia.org/wiki/Bill_Joy)
++ [wiki article in vim author](http://en.wikipedia.org/wiki/Bram_Moolenaar)
