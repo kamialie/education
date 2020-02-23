@@ -270,7 +270,7 @@ Kernel initialises its own activities as processes and launches program *init*, 
 ### Commands
 
 + `ps` - output process snapshot; default returns the processes associated with the current terminal session
-	+ `x` - output all of user's processes regardless of what terminal (if any) they are controlled by; `?` in **TTY** column indicated no controlling terminal; new **STAT** column stands for *state*:
+	+ `x` - output all of user's processes regardless of what terminal (if any) they are controlled by; `?` in **TTY** column indicated no controlling terminal; new **STAT** column stands for *state* (process state may be followed by additional characters):
 
 		| State | Meaning																					|
 		|:-----:| ----------------------------------------------------------------------------------------- |
@@ -279,8 +279,19 @@ Kernel initialises its own activities as processes and launches program *init*, 
 		| D		| uninverruptible sleep, waiting for I/O such as disk drive									|
 		| T		| stopped (has been instructed to stop														|
 		| Z		| defunct of *zombie*, a child process that has terminated, but not yet cleaned by parent	|
-		| <		|																							|
-		| N		|																							|
+		| <		| high priority process, *niceness*, giving more time on the CPU							|
+		| N		| low priority process																		|
+
+	+ `aux` - outputs additional columns with the following info:
+
+		| Header | Meaning																				|
+		|:-----:| --------------------------------------------------------------------------------------|
+		| USER	| User ID, owner of the process															|
+		| %CPU	| CPU usage in percent																	|
+		| %MEM	| Memory usage in percent																|
+		| VSZ	| Virtual memory size																	|
+		| RSS	| Resident Set Size, amount of physical memory (RAM) the precess is using in kilobytes	|
+		| START	| Time when process has started; over 24 the date is used								|
 
 ---
 
