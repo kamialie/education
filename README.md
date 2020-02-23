@@ -293,6 +293,26 @@ Kernel initialises its own activities as processes and launches program *init*, 
 		| RSS	| Resident Set Size, amount of physical memory (RAM) the precess is using in kilobytes	|
 		| START	| Time when process has started; over 24 the date is used								|
 
++ `top` - continuously updating (default 3 seconds) display of system processes in order of process activity
+System summary contains the following info:
+
+	| Row	| Field			| Meaning										|
+	|:-----:|:-------------:|-----------------------------------------------|
+	|1		| top			| name of the program							|
+	|		| 12:00:00		| current time									|
+	|		| up 1:00		| uptime										|
+	|		| 2 users		| # of users logged in							|
+	|		| load  average	| refers to the number of processes that are waiting to run (runnable and are sharing CPU); ave for last 60 secs, 5 mins, 15 mins; under 1.0 indicates machine is not busy |
+	|2		| Tasks:		| summary of processes and their states			|
+	|3		| Cpu(s):		| CPU activity									|
+	|		| 0.7%us		| user processes (means it is outside kernel)	|
+	|		| 1.0%sy		| system (kernel) processes						|
+	|		| 0.0%ni		| *nice* (low priority) processes				|
+	|		| 98.3%id		| idle											|
+	|		| 0.0%wa		| waiting for I/O								|
+	|4		| Mem:			| physical RAM being used						|
+	|5		| Swap:			| virtual memory used							|
+
 ---
 
 [back to contents](#contents)
