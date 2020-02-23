@@ -25,6 +25,7 @@ fg - bring the background process back to foreground
 	+ [diff](#diff)
 + [Permissions](#permissions)
 + [Processes](#processes)
++ [Configuration and environment](#environment)
 + [Network](#network)
 	+ [curl](#curl)
 + [Archive](#archive)
@@ -40,13 +41,13 @@ fg - bring the background process back to foreground
 + **free** - shows free space (only works on linux)
 + **file** \<file\> - determines file type and some additional info
 + **less** \<file\> - view file contents
-+ **pbcopy**, **pbpaste** - copy or paste to the pastboard
++ **pbcopy**, **pbpaste** - copy or paste to the pasteboard
 	```bash
 	pbcopy < file
 	pbpaste > file
 	```
 + **cp**
-	- [-a | --archive] - copy files and directories and all their attributes; normally co take the default attributes of teh user performing the copy
+	- [-a | --archive] - copy files and directories and all their attributes; normally cp take the default attributes of the user performing the copy
 	- [-i | --interactive] - prompt for confirmation otherwise files could be overwritten silently
 	- [-r | --recursive]
 	- [-u | --update] - only copy files that do not exist or are newer than the existing ones in the destination directory
@@ -55,9 +56,9 @@ fg - bring the background process back to foreground
 	- [-i | --interactive] 
 + **ln** \<file\> \<link\>
 	- [-s] - create soft link
-+ **type** \<command\> - displays the kind of command the shell wil execute (could be built-in, executable, shell function or alias)
-+ **which** \<executable\> - determines the exact locatuon of the given executable (only works for executables)
-+ **help** \<builtin\> - man page for builtins
++ **type** \<command\> - displays the kind of command the shell will execute (could be built-in, executable, shell function or alias)
++ **which** \<executable\> - determines the exact location of the given executable (only works for executables)
++ **help** \<builtin\> - man page for built-ins
 + **man** [\<section\>] \<program\> - sections:
 	1. User commands
 	2. Programming interfaces kernel system calls
@@ -100,7 +101,7 @@ $ ls &> file.txt
 $ ls &>> file.txt
 ```
 
-`/dev/null` - bit bucker 'file', thus supress any messages:
+`/dev/null` - bit bucker 'file', thus suppress any messages:
 ```bash
 $ ls 2> /dev/null
 ```
@@ -115,7 +116,7 @@ Difference between `>` and `|`:
 	command > file
 	command | command
 
-Pipelines can include multiple commands, which would act like filters; examples and usefull commands below:
+Pipelines can include multiple commands, which would act like filters; examples and useful commands below:
 ```
 $ ls /bin /usr/bin | sort | uniq | less
 $ ls /bin /usr/bin | sort | uniq | wc -l
@@ -123,10 +124,10 @@ $ ls /bin /usr/bin | sort | uniq | wc -l
 
 **uniq** - takes data from stdin or single fill and removes the duplicates
 	- `-d` - returns the list of duplicates
-**wc** - word cound, returs number of lines, words and bytes
+**wc** - word count, returns number of lines, words and bytes
 	- `-l` - only reports lines
 **head**, **tail** - output first, last 10 lines respectively
-	- `-n <number>` - change the default 10 line behaviour
+	- `-n <number>` - change the default 10 line behavior
 	- `-f` - output file content in real-time (works with `tail`)
 **tee** [\<file\> ...] - acts as an intermediate fitting - sends incoming input both to a file and further to stdout of a pipeline; example below:
 ```bash
@@ -149,7 +150,7 @@ Default returns the lines containing the pattern
 
 #### Flags
 
-+ `-i` - ignore case (default is case sensetive)
++ `-i` - ignore case (default is case sensitive)
 + `-v` - print only lines that do not match the pattern
 
 ---
@@ -175,7 +176,7 @@ Stream editor
 
 **sed [flags] [file ...]**
 
-+ `-i <extenstion>` - edit file in-place, saving backup with the specified extenstion; if zero-length extension is given, no backup will be saved
++ `-i <extenstion>` - edit file in-place, saving backup with the specified extension; if zero-length extension is given, no backup will be saved
 
 #### Examples
 
@@ -209,7 +210,7 @@ Unix system has 3 groups of permissions: user, group, others (world). To check i
 
 **Special permissions**:
 
-+ setuid bit - when applied to an exec file, sets the *effective user ID* from the real user (running the program) to the program's owner; usually is given to few programs ownder by superuser, so that others users can run the program with privileged rights
++ setuid bit - when applied to an exec file, sets the *effective user ID* from the real user (running the program) to the program's owner; usually is given to few programs owner by superuser, so that others users can run the program with privileged rights
 	```bash
 	$ chmod u+s program
 	```
@@ -217,7 +218,7 @@ Unix system has 3 groups of permissions: user, group, others (world). To check i
 	```bash
 	$ chmod g+s program
 	```
-+ sticky bit - on Linux is ignored for files, but if set for the directory, prevents users from deleting or renaming files, unless the user is the ownder of directory or file or is a superuser
++ sticky bit - on Linux is ignored for files, but if set for the directory, prevents users from deleting or renaming files, unless the user is the owner of directory or file or is a superuser
 	```bash
 	$ chmod +t program
 	```
@@ -229,7 +230,7 @@ Unix system has 3 groups of permissions: user, group, others (world). To check i
 		+ `r` - 4
 		+ `w` - 2
 		+ `x` - 1
-	+ symbolic notation - involes target, action and permission, example `chomd u+x file` - give execution permission to the owner
+	+ symbolic notation - involves target, action and permission, example `chomd u+x file` - give execution permission to the owner
 		+ target - `u` (user), `g` (group), `o` (others, world), `a` (all)
 		+ action - `+` (add permission), `-` (remove), `=` (apply only specified, remove the rest)
 		+ permissions - `r`, `w`, `x`
@@ -237,7 +238,7 @@ Unix system has 3 groups of permissions: user, group, others (world). To check i
 + `su <user>` - start new shell as another user (no user argument assumes superuser)
 	+ `-l | -` - resulting shell session is a login shell for the specified user (user's environment, working directory); abbreviated form `-` may be used
 	+ `-c '<command>'` - execute a single command rather than starting a new interactive command; command should be enclosed in single quotes to avoid shell expansion in the current shell
-+ `sudo <command>` - a lot like `su`, but has great configuration capabilities; once a user is added to a priviliged group, he enter his own password (in comparison to `su`) to perform the command; also `sudo` performs the command in the current shell (of course in current environment as well)
++ `sudo <command>` - a lot like `su`, but has great configuration capabilities; once a user is added to a privileged group, he enter his own password (in comparison to `su`) to perform the command; also `sudo` performs the command in the current shell (of course in current environment as well)
 	+ `-l` - see privileges granted by sudo
 + `chown [<owner>][:[<group>]] <file>` - change the file owner and/or group
 	+ arguments:
@@ -261,7 +262,7 @@ Unix system has 3 groups of permissions: user, group, others (world). To check i
 
 ## Processes
 
-Kernel initialises its own activities as processes and launches program *init*, which in turn runs a series of shell scripts (*init script*) to start system services.
+Kernel initializes its own activities as processes and launches program *init*, which in turn runs a series of shell scripts (*init script*) to start system services.
 
 **PID** - process ID (init has PID 1)
 
@@ -341,11 +342,10 @@ other common signals:
 	+ `-l` - complete list of signals
 + `killall [-u user] [-signal] name...` - send signal to multiple processes matching a specified program or username; same as with `kill` requires superuser privileges for processes not belonging to executing user
 + `pstree` - output process list arranged in a tree-like pattern
-+ `vmstat` - snapshot of system resoruces usage of memory, swap and disk I/O
++ `vmstat` - snapshot of system resources usage of memory, swap and disk I/O
 	+ `<n>` - continuous delivery updating every n seconds
 
 Interrupt a process with `Ctrl-C` (**INT**, Interrupt). Pause a process with `Ctrl-Z` (**TSTP**, Terminal stop).
-
 
 ---
 
@@ -365,12 +365,12 @@ When sending POST request with a **-L** flag (redirection), the follow up reques
 + **--output**, **-o** *\<file\>* - write output to *\<file\>* instead of stdout. Can specify multiple arguments, order does not matter, just the first **-o** is for the first argument(url), second for the second and so on.
 + **--fail**, **-f** - fail silently, suppress error messages that are sent on failed attempt of server to send a document
 + **--location**, **-L** - if requested page has moved to a different location (and indicated it), curl will redo the request to the new location; if used with option **-i** or **-I**, headers from all requested pages will be shown; curl will pass user+password only to the initial host; to limit number of redirect use **--max-redirs** option
-+ **--verbose**, **-v** - verbose output, lines starting with '>' means header data sent by curl, '<' - header data recieved by curl, '\*' - additional info. More details my be provided by **--trace** flag
-+ **--silent**, **-s** - silent or quiet, dont show progress meter or error messages
++ **--verbose**, **-v** - verbose output, lines starting with '>' means header data sent by curl, '<' - header data received by curl, '\*' - additional info. More details my be provided by **--trace** flag
++ **--silent**, **-s** - silent or quiet, don't show progress meter or error messages
 + **--show-error**, **-S** - when used with **-s** makes curl show the error message
 + **--user**, **-u** *\<user:password\>* - specify user, password for server authentication. If only passed user, curl will prompt for password
 + **--data**, **-d** \<data\> - sends specified data in a POST request; can send data directly or read from a file - to specify a while add **@** in front, for example -d "@filename.json"; two formats are available:
-	- application/x-www-form-urlencoded - param-value pairs seperated by **&** sign, "param1:value1&param2:value2"
+	- application/x-www-form-urlencoded - param-value pairs separated by **&** sign, "param1:value1&param2:value2"
 	- application/json - usual json, '{"key":"value"}'
 
 ---
