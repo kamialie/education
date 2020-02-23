@@ -293,7 +293,7 @@ Kernel initialises its own activities as processes and launches program *init*, 
 		| RSS	| Resident Set Size, amount of physical memory (RAM) the precess is using in kilobytes	|
 		| START	| Time when process has started; over 24 the date is used								|
 
-+ `top` - continuously updating (default 3 seconds) display of system processes in order of process activity
++ `top` - continuously updating (default 3 seconds) display of system processes in order of process activity.
 System summary contains the following info:
 
 	| Row	| Field			| Meaning										|
@@ -312,6 +312,40 @@ System summary contains the following info:
 	|		| 0.0%wa		| waiting for I/O								|
 	|4		| Mem:			| physical RAM being used						|
 	|5		| Swap:			| virtual memory used							|
+
++ `jobs` - output list of jobs launched from terminal
++ `fg` - return process to foreground
+	+ `%<n>` - particular process from jobs' list
++ `bg` - send process to background
+	+ `%<n>` - particular process from jobs' list
++ `kill [-signal] PID...` - send signal to process; default signal - **TERM** (Terminate); popular signals; requires superuser privileges to send signal to processes not belonging to executing user
+
+	| Number	| Name	| Meaning																|
+	|:---------:|:-----:|-----------------------------------------------------------------------|
+	| 1			| HUP	| Hangup; used by many daemon programs to cause reinitialization - when received daemon restarts and re-reads its config file	|
+	| 2			| INT	| Interrupt; usually terminates a program								|
+	| 9			| KILL	| Kill; is sent to kernel, not a program, thus kernel immediately terminates it (also program has no chance to cleanup)	|
+	| 15		| TERM	| Terminate; if program is able to receive signals it will terminate	|
+	| 18		| CONT	| Continue; restore process after **STOP**								|
+	| 19		| STOP	| Stop; pause process without terminating; is sent to kernel			|
+
+other common signals:
+
+	| Number	| Name	| Meaning											|
+	|:---------:|:-----:|---------------------------------------------------|
+	| 3			| QUIT	| Quit												|
+	| 11		| SEGV	| Segmentation violation; illegal use of memory		|
+	| 20		| TSTP	| Terminal Stop; sent to program unlike **STOP**	|
+	| 28		| WINCH	| Window Change; sent when window changes size (for example top redraws itself when receives this signal	|
+
+	+ `-l` - complete list of signals
++ `killall [-u user] [-signal] name...` - send signal to multiple processes matching a specified program or username; same as with `kill` requires superuser privileges for processes not belonging to executing user
++ `pstree` - output process list arranged in a tree-like pattern
++ `vmstat` - snapshot of system resoruces usage of memory, swap and disk I/O
+	+ `<n>` - continuous delivery updating every n seconds
+
+Interrupt a process with `Ctrl-C` (**INT**, Interrupt). Pause a process with `Ctrl-Z` (**TSTP**, Terminal stop).
+
 
 ---
 
