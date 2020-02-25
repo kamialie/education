@@ -472,8 +472,101 @@ After all preceding expansions, all unquoted occurences of ' \\ ', ' ' ', ' " ' 
 
 [back to contents](#contents)
 
-### Bash prompt
+## Bash prompt
 
+Prompt is defined by `PS1` (prompt string one) environment variable.
+
+Unix-like systems have two complex subsustems to control terminal - `termcap` and `terminfo`.
+
+Escape codes used in shell prompts:
+
+| Sequence	| Value displayed												|
+|:----------|---------------------------------------------------------------|
+| \a		| ASCII bell													|
+| \d		| Current date in day, month, date format; f.e. "Mon May 25"	|
+| \h		| Hostname of the local machine minus trailing domain			|
+| \H		| Full hostname													|
+| \j		| number of jobs running in current shell session				|
+| \l		| name of the current terminal device							|
+| \n		| new line														|
+| \r		| carriage return												|
+| \s		| name of shell													|
+| \t		| current time 24 hour h : m : s format								|
+| \T		| time in 12 h format											|
+| \A		| time in 12 h AM/PM format										|
+| \A		| 24 h h:m format												|
+| \u		| username														|
+| \v		| version of the shell											|
+| \V		| version and release of the shell								|
+| \w		| current working directory										|
+| \W		| last part of the current working directory					|
+| \\!		| history number of the current command							|
+| \\#		| number of commands entered during this shell session			|
+| \\$		| displays $ or # instead if you have superuser privileges		|
+| \\[		| signals start of one or more non-printing characters - f.e. moving cursor or changing colors	|
+| \\]		| end of non-printing characters								|
+
+Text colors(use bold attribute (1) to get new (light) colors):
+
+| Sequence		|  Color		|
+|:-------------:|---------------|
+| \033[0;30m	| black			|
+| \033[0;31m	| red			|
+| \033[0;32m	| green			|
+| \033[0;33m	| brown			|
+| \033[0;34m	| blue			|
+| \033[0;35m	| purple		|
+| \033[0;36m	| cyan			|
+| \033[0;37m	| light grey	|
+| \033[1;30m	| dark grey		|
+| \033[1;31m	| light red		|
+| \033[1;32m	| light green	|
+| \033[1;33m	| yellow		|
+| \033[1;34m	| light blue	|
+| \033[1;35m	| light purple	|
+| \033[1;36m	| light cyan	|
+| \033[1;37m	| white			|
+
+Background colors (no not support bold):
+
+| Sequence		|  Color	|
+|:-------------:|-----------|
+| \033[0;40m	| black		|
+| \033[0;41m	| red		|
+| \033[0;42m	| green		|
+| \033[0;43m	| brown		|
+| \033[0;44m	| blue		|
+| \033[0;45m	| purple	|
+| \033[0;46m	| cyan		|
+| \033[0;47m	| light grey|
+
+Color attributes: normal (0), bold(1), underscore (4), blinking (5), inverse (7). Many emulators ignore blinking attribute
+
+Moving cursor:
+
+| Sequence		|  Action					|
+|:-------------:|---------------------------|
+| \033[*l*;*c*H	| move the cursor to line *l* and column *c*	|
+| \033[*n*A		| move up *n* lines			|
+| \033[*n*B		| move down *n* lines		|
+| \033[*n*C		| move forward *n* lines	|
+| \033[*n*D		| move backward *n* lines	|
+| \033[2J		| clear the screen and move the cursor to the upper left corner (line 0, column 0)	|
+| \033[K		| clear from the cursor position to the end of current line	|
+| \033[s		| store current location	|
+| \033[u		| recall the stored location|
+
+### Examples
+
+writing current time as the bar at the top:
+```bash
+PS1="\[\033[s\033[0;0H\033[0;41m\033[K\033[1;33m\t\033[0m\033[u\] <\u@\h \W>\$ "
+```
+
+### More info
+
++ [Bash prompt HOWTO](http://tldp.org/HOWTO/Bash-Prompt-HOWTO/)
++ [wiki ASNI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code)
 
 ----------
 
@@ -532,7 +625,7 @@ $ history | grep /usr/bin
 + `Alt-n` - forward search non-incremental
 + `Ctrl-o` - execute the item in the history and advace to the next one (handy if you are going to re-execute sequence of commands)
 
-### Links
+### More info
 
 * [bash rc not source automatically](https://apple.stackexchange.com/questions/12993/why-doesnt-bashrc-run-automatically)
 * [basic customization](https://www.ostechnix.com/hide-modify-usernamelocalhost-part-terminal/)
