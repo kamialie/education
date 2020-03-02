@@ -124,14 +124,14 @@ $ ls /bin /usr/bin | sort | uniq | less
 $ ls /bin /usr/bin | sort | uniq | wc -l
 ```
 
-**uniq** - takes data from stdin or single fill and removes the duplicates
++ **uniq** - takes data from stdin or single fill and removes the duplicates
 	- `-d` - returns the list of duplicates
-**wc** - word count, returns number of lines, words and bytes
++ **wc** - word count, returns number of lines, words and bytes
 	- `-l` - only reports lines
-**head**, **tail** - output first, last 10 lines respectively
++ **head**, **tail** - output first, last 10 lines respectively
 	- `-n <number>` - change the default 10 line behavior
 	- `-f` - output file content in real-time (works with `tail`)
-**tee** [\<file\> ...] - acts as an intermediate fitting - sends incoming input both to a file and further to stdout of a pipeline; example below:
++ **tee** [\<file\> ...] - acts as an intermediate fitting - sends incoming input both to a file and further to stdout of a pipeline; example below:
 ```bash
 $ ls /usr/bin | tee ls.txt | grep zip
 ```
