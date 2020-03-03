@@ -408,6 +408,38 @@ INVOCATION section of bash man page
 
 [back to contents](#contents)
 
+## Package management
+
+Packaging systems:
+
+1. Debian style (.deb) - Debian, Ubuntu, Xandros, Linspire
+2. Red Hat style (.rpm) - Fedora, CentOS, Red Hat Enterprise Linux, OpenSUSE, Mandriva, PCLinuxOS
+
+*Package file* - basic unit of software in a packaging system; may contain meta data and pre-, post-installation scripts to perform configuration. *Package maintainer* gets the software in source code from *upstream provider* (author), compiles it and creates the package metadata and any necessary installation scripts; also could apply modifications to soruce code in improve integration.
+
+Package tools:
+
+| Distribution			| Low-level tools	| High-level tools	|
+|-----------------------|:-----------------:|:-----------------:|
+| Debian-style			| dpkg				| apt-get, aptitude	|
+| Fedora, RHEL, CentOS	| rpm				| yum				|
+
+Search package:
+
+| Distribution			| Command(s)						|
+|-----------------------|-----------------------------------|
+| Debian-style			| apt-get update <br/> apt-cache search *search_string*	|
+| Fedora, RHEL, CentOS	| yum search *search_string*		|
+
+
+
+
+
+
+---
+
+[back to contents](#contents)
+
 ## Network
 
 ### curl
