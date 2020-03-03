@@ -431,10 +431,75 @@ Search package:
 | Debian-style			| apt-get update <br/> apt-cache search *search_string*	|
 | Fedora, RHEL, CentOS	| yum search *search_string*		|
 
+Install from repository:
 
+| Distribution			| Command(s)						|
+|-----------------------|-----------------------------------|
+| Debian-style			| apt-get update <br/> apt-get install *package_name*	|
+| Fedora, RHEL, CentOS	| yum install *package_name*		|
 
+Install from package file (no dependancy resolution is performed):
 
+| Distribution			| Command(s)						|
+|-----------------------|-----------------------------------|
+| Debian-style			| dpkg -install *package_file*		|
+| Fedora, RHEL, CentOS	| rpm -i *package_file*				|
 
+Remove a package:
+
+| Distribution			| Command(s)						|
+|-----------------------|-----------------------------------|
+| Debian-style			| apt-get remove *package_name*		|
+| Fedora, RHEL, CentOS	| yum erase *package_name*			|
+
+Update a package from a repository:
+
+| Distribution			| Command(s)						|
+|-----------------------|-----------------------------------|
+| Debian-style			| apt-get update <br/> apt-get upgrade |
+| Fedora, RHEL, CentOS	| yum update						|
+
+Update a package from a repository:
+
+| Distribution			| Command(s)						|
+|-----------------------|-----------------------------------|
+| Debian-style			| dpkg --install *package_file*		|
+| Fedora, RHEL, CentOS	| rpm -U *package_file*				|
+
+List installed package:
+
+| Distribution			| Command(s)						|
+|-----------------------|-----------------------------------|
+| Debian-style			| dpkg --list						|
+| Fedora, RHEL, CentOS	| rpm -qa							|
+
+Determine if a package is installed:
+
+| Distribution			| Command(s)						|
+|-----------------------|-----------------------------------|
+| Debian-style			| dpkg --status *package_name*		|
+| Fedora, RHEL, CentOS	| rpm -q *package_name*				|
+
+Package info:
+
+| Distribution			| Command(s)						|
+|-----------------------|-----------------------------------|
+| Debian-style			| apt-cache show *package_name*		|
+| Fedora, RHEL, CentOS	| yum info *package_name*			|
+
+Finding which package installed a file:
+
+| Distribution			| Command(s)						|
+|-----------------------|-----------------------------------|
+| Debian-style			| dpkg --search *file_name*			|
+| Fedora, RHEL, CentOS	| rpm -qf *file_name*				|
+
+### More info
+
++ [package management on Debian systems](http://www.debian.org/doc/FAQ/ch-pkgtools.en.html)
++ [RMP home page](http://www.rpm.org)
++ [YUM home page at Duke](http://linux.duke.edu/projects/yum/)
++ [metadata wiki article](http://en.wikipedia.org/wiki/Metadata)
 
 ---
 
