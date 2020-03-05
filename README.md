@@ -501,6 +501,44 @@ Finding which package installed a file:
 + [YUM home page at Duke](http://linux.duke.edu/projects/yum/)
 + [metadata wiki article](http://en.wikipedia.org/wiki/Metadata)
 
+
+---
+
+[back to contents](#contents)
+
+## Storage
+
+`/etc/fstab` - lists the devices (typically hard disk partitions) that are to be mounted at boot time
+
+`/etc/fstab` fields:
+
+| Field | Contents			| Description	|
+|-------|:-----------------:|---------------|
+| 1		| Device			| traditionally name of device file associated with physical device (such as `/dev/hda1`); modern distributions associate device with text label, which is read by OS when device is attached	|
+| 2		| Mount Point		| directory where the device is attached to the file system tree									|
+| 3		| File System Type	| Linux allows many system types to be mounted; most native - `ext3`, others - `FAT16(msdos)`, `FAT32(vfat)`, `NTFS(ntfs)`, `CD-ROM(iso9600)`	|
+| 4		| Options			| various options like read-only; or prevent any programs from being executed from them				|
+| 5		| Frequency			| single number that specifies if and when a file system is to be backed up with the `dump` command	|
+| 6		| Order				| single number that specifies in what order file systems should be checked with the `fsck` command
+
+Mount point is simply a directory on the file system tree. If that directory has contents, they wont be available until device is unmounted. If any user or process is using the device (lets say user is exploring device's file system tree), device can not me unmounted.
+
+
+### Commands
+
++ **mount** *device* *mount_point* - mount a file system; command without arguments displays currently mounted file systems with the following format - *device* on *mounting_point* type *file_system_type* (*options*)
+	+ `-t` *type* - specify file system type
++ **umount** *device* - unmount a file system
++ **fsck** - check and repair a file system
++ **fdisk** - partition table manipulator
++ **mkfs** - create a file system
++ **fdformat** - format a floppy disk
++ **dd** - write block oriented data directly to a device
++ **genisoimage (mkiofs)** - create an ISO 9660 image file
++ **wodim (cdrecord)** - write data to optical storage media
++ **md5sum** - calculate an MD5 checksum
+
+
 ---
 
 [back to contents](#contents)
