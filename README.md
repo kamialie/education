@@ -93,16 +93,9 @@ man hier - file hierarchy
 |:--------------|---------------|
 | /				| root directory|
 | /bin			| contains binaries that must be present for the system to boot and run
-| /boot			| contains Linux kernel, initial RAM disk image (for drivers at boot time) and boot loader; <br/>
-interesting files:
-+ /boot/grub/grub.conf or menu.lst - used to configure boot loader
-+ /boot/vmlinuz - Linux kernel	|
+| /boot			| contains Linux kernel, initial RAM disk image (for drivers at boot time) and boot loader; <br/> interesting files:<ul><li>/boot/grub/grub.conf or menu.lst - used to configure boot loader</li><li>/boot/vmlinuz - Linux kernel</li></ul>	|
 | /dev			| contains *device nodes*; here kernel contains list of all devices it understands
-| /etc			| contains system wide configuration files (also shell scripts which start each of the system services at boot time) - everything in this directory should be readable text <br\>
-interesting files:
-+ /etc/crontab - file taht defines automated jobs
-+ /etc/fstab - table of storage devices and their associated mount points
-+ /etc/passwd - list of user accounts
+| /etc			| contains system wide configuration files (also shell scripts which start each of the system services at boot time) - everything in this directory should be readable text<br\>interesting files:<ul><li>/etc/crontab - file taht defines automated jobs</li><li>/etc/fstab - table of storage devices and their associated mount points</li><li>/etc/passwd - list of user accounts</li></ul>	|
 | /home			| each user is given directory in **/home**
 | /lib			| contains shared library files used by the core system programs (similar to dlls in Windows)
 | /list+found	| each formatted partition or device using a Linux file system (f.e. ext3) will have this directory, which is used as partial recovory from file system corruption event
@@ -562,6 +555,16 @@ Finding which package installed a file:
 Mount point is simply a directory on the file system tree. If that directory has contents, they wont be available until device is unmounted. If any user or process is using the device (lets say user is exploring device's file system tree), device can not me unmounted.
 
 OSs use buffers to speed up the reading and writing to "slow" data devices (f.e. hard disk). That is why it is important to unmount a device, which gives OS the chance to actually write data to the device, if there is anything left in buffers.
+
+**Linux storage device names:**
+
+| Pattern	| Device										|
+|-----------|-----------------------------------------------|
+| /dev/fd\*	| floppy disk drives							|
+| /dev/hd\*	| IDE (PATA) disks on older systems; typical motherboards contain 2 IDE connectors or *channels*, each with a cable to 2 attachments points for drives: <ul><li>*master* device</li><li>*slave* device</li></ul>Device names are ordered such that **/dev/hda** refers to master device on first channge, **/dev/hdb** - slave device on first channel, **/dev/hdc** - master on second, and so on; Trailing digit indicates the partition number on the device - **/dev/hda1** refers to first partition, while **/dev/hda** refers to the entire drive	|
+| /dev/lp\*	| printers
+| /dev/sd\*	| SCSI disks; recent Linux systems kernel treats all disk-like devices (included PATA?SATa hard disjs, flash drives, and USB mass storage devices (f.e portable music players, digital cameras) as SCSI disks; the rest if teh naming is similar to the older **/dev/hd** naming scheme	|
+| /dev/sr\*	| optical drives (CD/DVD readers and burners)	|
 
 ### Commands
 
