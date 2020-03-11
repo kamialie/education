@@ -87,6 +87,44 @@ man hier - file hierarchy
 
 ---
 
+### Interesting directories
+
+|	Directory	|	Comments	|
+|:--------------|---------------|
+| /				| root directory|
+| /bin			| contains binaries that must be present for the system to boot and run
+| /boot			| contains Linux kernel, initial RAM disk image (for drivers at boot time) and boot loader; <br/>
+interesting files:
++ /boot/grub/grub.conf or menu.lst - used to configure boot loader
++ /boot/vmlinuz - Linux kernel	|
+| /dev			| contains *device nodes*; here kernel contains list of all devices it understands
+| /etc			| contains system wide configuration files (also shell scripts which start each of the system services at boot time) - everything in this directory should be readable text <br\>
+interesting files:
++ /etc/crontab - file taht defines automated jobs
++ /etc/fstab - table of storage devices and their associated mount points
++ /etc/passwd - list of user accounts
+| /home			| each user is given directory in **/home**
+| /lib			| contains shared library files used by the core system programs (similar to dlls in Windows)
+| /list+found	| each formatted partition or device using a Linux file system (f.e. ext3) will have this directory, which is used as partial recovory from file system corruption event
+| /media		| on modern Linux systems contains the mount points for removable media such as USB drives, CD-ROMs, etc that are mounted automatically at insertion
+| /mnt			| on older Linux systems contains mount points for removable devices that have been mounted manually
+| /opt			| used to install "optional" software; mainly used to hold commercial software products
+| /proc			| virtual file system maintained by Linux kernel; the "files" it contains are peepholes into kernel itself; files are readable and will give a picture of how kernel sees your computer
+| /root			| home directory for root account
+| /sbin			| contains "system" binaries; programs that perfomr vital system tasks that are generally reserved for superuser
+| /tmp			| storage for temporary, transient files created by various programs; some configs cause it to be emptied each time system is rebooted
+| /usr			| contains all programs and support files used by regular users
+| /usr/bin		| contains executable programs installed by Linux distrib
+| /usr/lib		| shared libraries for programs in **/usr/bin**
+| /usr/local	| contains programs that are not included with distrib, but are intended for system-wide use; programs compiled from source code are normally installed in **/usr/local/bin**
+| /usr/sbin		| contains more system administration programs
+| /usr/share	| contains all shared data used by programs in **/usr/bin** - deafult config files, icons, screen backgrounds, sound file, etc
+| /usr/share/doc| contains documentations files for most packages on the system
+| /var			| data that is likely to change - databases, spool file, user mail, etc
+| /var/log		| contains *log files*, records of various system activity
+
+---
+
 ### Redirection
 
 Redirection operator `>` takes the sdtout by default. `>>` appends the content. File descriptor 2 refers to `stderr`, thus `2>` redirects the standard error.
@@ -523,6 +561,7 @@ Finding which package installed a file:
 
 Mount point is simply a directory on the file system tree. If that directory has contents, they wont be available until device is unmounted. If any user or process is using the device (lets say user is exploring device's file system tree), device can not me unmounted.
 
+OSs use buffers to speed up the reading and writing to "slow" data devices (f.e. hard disk). That is why it is important to unmount a device, which gives OS the chance to actually write data to the device, if there is anything left in buffers.
 
 ### Commands
 
