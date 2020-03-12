@@ -27,7 +27,7 @@ man hier - file hierarchy
 + [Processes](#processes)
 + [Configuration and environment](#configuration-and-environment)
 + [Package management](#package-management)
-+ [Storage](#storage)
++ [Storage](#storage) [STOPPED AT PAGE 185 - CREATING NEW FILESYSTEM]
 + [Network](#network)
 	+ [curl](#curl)
 + [Archive](#archive)
@@ -565,6 +565,8 @@ OSs use buffers to speed up the reading and writing to "slow" data devices (f.e.
 | /dev/lp\*	| printers
 | /dev/sd\*	| SCSI disks; recent Linux systems kernel treats all disk-like devices (included PATA?SATa hard disjs, flash drives, and USB mass storage devices (f.e portable music players, digital cameras) as SCSI disks; the rest if teh naming is similar to the older **/dev/hd** naming scheme	|
 | /dev/sr\*	| optical drives (CD/DVD readers and burners)	|
+
+If system does not automatically mount removable devices, check the name when device is attached in **/var/log/messages** or **/var/log/syslog**. Devie name remains the same as long as device remains physically attached and computer is not rebooted.
 
 ### Commands
 
