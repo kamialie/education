@@ -617,7 +617,7 @@ Built-in conditions:
 * **triggeredBy** - execute when the current build has been triggered by the param given
 	```groovy
 	when {
-	  triggeredBy ['user', 'SCMTrigger', 'TimerTrigger', 'UpstreamCause', [cause: "UserIdCause", detail: "vlinde"]]
+	  triggeredBy ['user', 'SCMTrigger', 'TimerTrigger', 'UpstreamCause', 'GenericCause', [cause: "UserIdCause", detail: "vlinde"]]
 	}
 	```
 	+ to get the list of causes of the current build use the following step:
