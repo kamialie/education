@@ -218,6 +218,8 @@ Git fetch pulls down all data from the remote project that you dont have locally
 
 **git fetch \<remote\>** - get the data from the remote server
 
++ `<remote_branch>:<local_branch>` - fetch remote branch into local branch (without checking out to that branch)
+
 **git push \<remote\> \<branch\>** - example, push changes to remote master branch
 
 **git push push \<remote> \<local_name\>:\<remote_name>** - above is the shortcut to this; use this one to name the remote branch differenly than the local
@@ -350,9 +352,9 @@ You have cloned a repository (thus your master and origin/master refer to the sa
 
 Setup: source branch checks out from target and does some work, while otehr work was done on target as well. Then source branch tries to perform rebase.
 
-To perform rebase checkout to source branch and type `git rebase <target_branch`.
+To perform rebase - checkout to source branch and type `git rebase <target_branch>`.
 
-**git rebase \target_branch\>** - rebase current branch into target branch
+**git rebase \<target_branch\>** - rebase current branch into target branch
 
 + `[--onto] <parent_a> <parent_b> <source_branch>` - in the situation when parent_b diverged from parent_a and source_branch further diverged from parent_b use the following to rebase source_branch to the parent_a
 + `[--continue]` - restart rebase after revosling conflicts
