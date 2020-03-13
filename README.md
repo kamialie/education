@@ -34,6 +34,7 @@ man hier - file hierarchy
 	+ [tar](#tar)
 + [Extra](#extra)
 	+ [ssh](#ssh)
++ [Resources](#resources)
 
 
 ## Basics
@@ -589,6 +590,27 @@ If system does not automatically mount removable devices, check the name when de
 
 ## Network
 
+### Examination and monitoring
+
+#### Commands
+
++ **ping** - sends a special network packet (called IMCP ECHO\_REQUEST) to a speciafied host, most network devices will reply to it (may be configured to ignore IMCP traffic or this packets in particular)
+	+ `-c` *count* - limit number of sent and received ECHO\_RESPONSE packets
++ **traceroute** - lists all the "hops" network traffic takes to get from the local system to a specified host; some systems use similar **tracepath** program;
+	+ `-I` - use ICMP ECHO instead of UDP datagrams (synonym for "-P icmp")
++ **ip** - multi-purpose network configuration tool available in modern Linux kernels (relpaces deprecated **ifconfig**)
++ **netstat** - examine various network settings and statistics
+	- `-ie` (doesn't work on mac) - shows network interfaces
+	- `-r` - kernel's network routing table
+
+### Tranporting files over network
+
+ftp program (took name from File Transfer Protocol) is used to download files over the Internet. It communicates with ftp servers, whcich contain files that can be up- and downloaded. Web browser also support this protocol (**ftp://**). Original form is not safe as account names and passwords are sent in cleartext (thus almost all FTP over Internet is done by *anonymous* FTP servers - anyone can log in by "anonymous" name and meaningless password).
+
+#### Commands
+
++ 
+
 ### curl
 
 [basic info](https://gist.github.com/subfuzion/08c5d85437d5d4f00e58)
@@ -667,3 +689,15 @@ All directory leading to the last inner one must exist.
 scp myfile.txt remoteuser@remoteserver:/remote/folder/inner_folder
 scp remoteuser@remoteserver:/remote/folder/some_file.txt path/on/host
 ```
+
+---
+
+[back to contents](#contents)
+
+## Resources
+
++ [linuxcommand.org](http://linuxcommand.org/index.php)
+
+### Random
+
++ [slashdot](https://slashdot.org/)
