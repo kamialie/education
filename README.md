@@ -456,7 +456,7 @@ Package tools:
 | Debian-style			| dpkg				| apt-get, aptitude	|
 | Fedora, RHEL, CentOS	| rpm				| yum				|
 
-+ search package:
++ **Search package:**
 	* Debian-style
 		```bash
 		apt-get update
@@ -466,77 +466,90 @@ Package tools:
 		```bash
 		yum search *search_string*
 		```
-
-Search package:
-
-| Distribution			| Command(s)						|
-|-----------------------|-----------------------------------|
-| Debian-style			| apt-get update <br/> apt-cache search *search_string*	|
-| Fedora, RHEL, CentOS	| yum search *search_string*		|
-
-Install from repository:
-
-| Distribution			| Command(s)						|
-|-----------------------|-----------------------------------|
-| Debian-style			| apt-get update <br/> apt-get install *package_name*	|
-| Fedora, RHEL, CentOS	| yum install *package_name*		|
-
-Install from package file (no dependancy resolution is performed):
-
-| Distribution			| Command(s)						|
-|-----------------------|-----------------------------------|
-| Debian-style			| dpkg -install *package_file*		|
-| Fedora, RHEL, CentOS	| rpm -i *package_file*				|
-
-Remove a package:
-
-| Distribution			| Command(s)						|
-|-----------------------|-----------------------------------|
-| Debian-style			| apt-get remove *package_name*		|
-| Fedora, RHEL, CentOS	| yum erase *package_name*			|
-
-Update a package from a repository:
-
-| Distribution			| Command(s)						|
-|-----------------------|-----------------------------------|
-| Debian-style			| apt-get update <br/> apt-get upgrade |
-| Fedora, RHEL, CentOS	| yum update						|
-
-Update a package from a repository:
-
-| Distribution			| Command(s)						|
-|-----------------------|-----------------------------------|
-| Debian-style			| dpkg --install *package_file*		|
-| Fedora, RHEL, CentOS	| rpm -U *package_file*				|
-
-List installed package:
-
-| Distribution			| Command(s)						|
-|-----------------------|-----------------------------------|
-| Debian-style			| dpkg --list						|
-| Fedora, RHEL, CentOS	| rpm -qa							|
-
-Determine if a package is installed:
-
-| Distribution			| Command(s)						|
-|-----------------------|-----------------------------------|
-| Debian-style			| dpkg --status *package_name*		|
-| Fedora, RHEL, CentOS	| rpm -q *package_name*				|
-
-Package info:
-
-| Distribution			| Command(s)						|
-|-----------------------|-----------------------------------|
-| Debian-style			| apt-cache show *package_name*		|
-| Fedora, RHEL, CentOS	| yum info *package_name*			|
-
-Finding which package installed a file:
-
-| Distribution			| Command(s)						|
-|-----------------------|-----------------------------------|
-| Debian-style			| dpkg --search *file_name*			|
-| Fedora, RHEL, CentOS	| rpm -qf *file_name*				|
-
++ **Install from repository:**
+	* Debian-style
+		```bash
+		apt-get update
+		apt-get install *package_name*
+		```
+	* Fedora, RHEL, CentOS
+		```bash
+		yum install *package_name*
+		```
++ **Install from package file** (no dependancy resolution is performed)**:**
+	* Debian-style
+		```bash
+		dpkg -install *package_file*
+		```
+	* Fedora, RHEL, CentOS
+		```bash
+		rmp -i *package_name*
+		```
++ **Remove a package:**
+	* Debian-style
+		```bash
+		apt-get remove *package_name*
+		```
+	* Fedora, RHEL, CentOS
+		```bash
+		yum erase *package_name*
+		```
++ **Update a package from a repository:**
+	* Debian-style
+		```bash
+		apt-get update
+		apt-get upgrade
+		```
+	* Fedora, RHEL, CentOS
+		```bash
+		yum update
+		```
++ **Update a package from a package file:**
+	* Debian-style
+		```bash
+		dpkg --install *package_file*
+		```
+	* Fedora, RHEL, CentOS
+		```bash
+		rmp -U *package_file*
+		```
++ **List installed packages:**
+	* Debian-style
+		```bash
+		dpkg --list
+		```
+	* Fedora, RHEL, CentOS
+		```bash
+		rpm -qa
+		```
++ **Determine if a package is installed:**
+	* Debian-style
+		```bash
+		dpkg --status *package_name*
+		```
+	* Fedora, RHEL, CentOS
+		```bash
+		rmp -q *package_name*
+		```
++ **Package info:**
+	* Debian-style
+		```bash
+		apt-cache show *package_name*
+		```
+	* Fedora, RHEL, CentOS
+		```bash
+		yum info *package_name*
+		```
++ **Finding which package installed a file:**
+	* Debian-style
+		```bash
+		dpkg --search *file_name*
+		```
+	* Fedora, RHEL, CentOS
+		```bash
+		rmp -qf *file_name*
+		```
+	
 ### More info
 
 + [package management on Debian systems](http://www.debian.org/doc/FAQ/ch-pkgtools.en.html)
