@@ -456,6 +456,17 @@ Package tools:
 | Debian-style			| dpkg				| apt-get, aptitude	|
 | Fedora, RHEL, CentOS	| rpm				| yum				|
 
++ search package:
+	* Debian-style
+		```bash
+		apt-get update
+		apt-cache search *seach_string*
+		```
+	* Fedora, RHEL, CentOS
+		```bash
+		yum search *search_string*
+		```
+
 Search package:
 
 | Distribution			| Command(s)						|
