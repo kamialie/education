@@ -6,7 +6,7 @@
 * [simple java maven example](http://jenkins.io/doc/tutorials/build-a-java-app-with-maven/)
 * [multibranch example](https://jenkins.io/doc/tutorials/build-a-multibranch-pipeline-project/)
 * [checkout step](https://jenkins.io/doc/pipeline/steps/workflow-scm-step/)
-* [jenkins docker image](https://github.com/jenkinsci/docker/blob/master/README.md)
+* [jenkins docker image](https://github.com/jenkinsci/docker/blob/master/README.md), [page on jenkins on image](https://jenkins.io/blog/2018/12/10/the-official-Docker-image/)
 
 # Contents
 
@@ -262,7 +262,13 @@ withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'jenkins-ssh-key-for
 
 ### Handling parameters
 
-Parameters are defined in parameters directive.
+Parameters are defined in parameters directive. There are also available as environment variables ("${env.VARIABLE}").
+
+Parameters are set to default if job is triggered by SCM, generic trigger and so on. To pass parameters use the following url form:
+
+	http://server/job/myjob/buildWithParameters?token=TOKEN&PARAMETER=Value
+
+[info on jenkins wiki](https://wiki.jenkins.io/display/JENKINS/Parameterized+Build)
 
 ```groovy
 pipeline {
@@ -769,9 +775,11 @@ parameters {
 ### Extended choice parameter
 
 More flexible choice of choice parameter
-* [doc](https://wiki.jenkins.io/display/JENKINS/Extended+Choice+Parameter+plugin)
-* [some examples](https://stackoverflow.com/questions/42392247/how-can-i-use-the-extended-choice-parameter-plugin-in-a-jenkins-pipeline-script)
-* [extra info for available options](https://github.com/jenkinsci/extended-choice-parameter-plugin/blob/master/src/main/java/com/cwctravel/hudson/plugins/extended_choice_parameter/ExtendedChoiceParameterDefinition.java#L90)
++ [jenkins wiki page](https://wiki.jenkins.io/display/JENKINS/Extended+Choice+Parameter+plugin)
++ [jenkins plugin page](https://plugins.jenkins.io/extended-choice-parameter/)
++ [some examples](https://stackoverflow.com/questions/42392247/how-can-i-use-the-extended-choice-parameter-plugin-in-a-jenkins-pipeline-script)
++ [extra info for available options](https://github.com/jenkinsci/extended-choice-parameter-plugin/blob/master/src/main/java/com/cwctravel/hudson/plugins/extended_choice_parameter/ExtendedChoiceParameterDefinition.java#L90)
+
 ```groovy
 parameters {
   extendedChoice(	defaultValue: 'email@default',
@@ -819,7 +827,7 @@ freeStyleJob('NexusArtifactUploaderJob') {
 }
 ```
 
-----------
+---
 
 ### Copy artifact
 
@@ -830,6 +838,22 @@ copyArtifacts(projectName: 'sourceproject');
 ```
 
 ----------
+
+### Ansi color
+
+Interprets shell color codes and colors the log output
+
+[jenkins plugin page](https://plugins.jenkins.io/ansicolor/)
+
+```groovy
+steps {
+  ansiColor('xterm') {
+    //
+  }
+}
+```
+
+---
 
 ## Other cool features
 
