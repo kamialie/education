@@ -87,39 +87,39 @@ Pipeline concepts:
 Declarative Pipeline syntax has pipeline block which definess all the work done
 ```groovy
 pipeline {
-	agent any
-	stages {
-		stage('Build') {
-			steps {
-				//
-			}
-		}
-		stage('Test') {
-			steps {
-				//
-			}
-		}
-		stage('Deploy') {
-			steps {
-				//
-			}
-		}
-	}
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+        //
+      }
+    }
+    stage('Test') {
+      steps {
+        //
+      }
+    }
+    stage('Deploy') {
+      steps {
+        //
+      }
+    }
+  }
 }
 ```
 
 Scripted Pipeline has one or more node blocks, which do the work
 ```groovy
 node {
-	stage('Build') {
-		//
-	}
-	stage('Test') {
-		//
-	}
-	stage('Deploy') {
-		//
-	}
+  stage('Build') {
+    //
+  }
+  stage('Test') {
+    //
+  }
+  stage('Deploy') {
+    //
+  }
 }
 ```
 Although not required, confining all work inside a node block has advantages
@@ -170,37 +170,37 @@ Environment variables are exposed vie global varialbe *env*, which is available 
 To set an environment variable use environment directive (two examples have different scopes):
 ```groovy
 pipeline {
-	agent any
-	environment {
-		CC = 'clang'
-	}
-	stages {
-		stage('Example') {
-			environment {
-				DEBUG_FLAGS = '-g'
-			}
-			steps {
-				sh 'printenv'
-			}
-		}
-	}
+  agent any
+  environment {
+    CC = 'clang'
+  }
+  stages {
+    stage('Example') {
+      environment {
+        DEBUG_FLAGS = '-g'
+      }
+      steps {
+        sh 'printenv'
+      }
+    }
+  }
 }
 ```
 
 To set a global environment variable during pipeline stage use script clause:
 ```groovy
 pipeline {
-	agent any
-	stages {
-		stage('Example') {
-			steps {
-				script {
-					env.VARIABLE = 'value'
-				}
-				sh 'printenv'
-			}
-		}
-	}
+  agent any
+  stages {
+    stage('Example') {
+      steps {
+        script {
+          env.VARIABLE = 'value'
+        }
+        sh 'printenv'
+      }
+    }
+  }
 }
 ```
 
@@ -221,24 +221,24 @@ Declarative Pipeline syntax uses *credentials()* helper method (used with enviro
 * Secret text example:
 ```groovy
 pipeline {
-	agent {
-		//
-	}
-	environment {
-		AWS_ACCESS_KEY_ID = credentials('jenkins-aws-secret-key-id')
-		AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-	}
+  agent {
+    //
+  }
+  environment {
+    AWS_ACCESS_KEY_ID = credentials('jenkins-aws-secret-key-id')
+    AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+  }
 }
 ```
 * Username and password example:
 ```groovy
 pipeline {
-	agent {
-		//
-	}
-	environment {
-		BITBUCKET_COMMON_CREDS = credentials('jenkins-bitbucket-common-creds')
-	}
+  agent {
+    //
+  }
+  environment {
+    BITBUCKET_COMMON_CREDS = credentials('jenkins-bitbucket-common-creds')
+  }
 }
 ```
 	Example above actually sets 3 variables: BITBUCKET_COMMON_CREDS (contains username and password separated by a colon), BITBUCKET_COMMON_CREDS_USR (only username), BITBUCKET_COMMON_CREDS_PSW (only password).
@@ -266,17 +266,17 @@ Parameters are defined in parameters directive.
 
 ```groovy
 pipeline {
-    agent any
-    parameters {
-        string(name: 'Greeting', defaultValue: 'Hello', description: 'How should I greet the world?')
+  agent any
+  parameters {
+    string(name: 'Greeting', defaultValue: 'Hello', description: 'How should I greet the world?')
+  }
+  stages {
+    stage('Example') {
+      steps {
+        echo "${params.Greeting} World!"
+      }
     }
-    stages {
-        stage('Example') {
-            steps {
-                echo "${params.Greeting} World!"
-            }
-        }
-    }
+  }
 }
 ```
 
@@ -320,15 +320,15 @@ Parameters:
 * label - agent available in the Jenkins environment with the provided label
 
 		agent {
-			label 'my-defined-label'
+		  label 'my-defined-label'
 		}
 
 * node - same as label, but allows additional options like customWorkspace
 
 		agent {
-			node {
-				label 'labelNmae'
-			}
+		  node {
+		    label 'labelNmae'
+		  }
 		}
 
 * docker
@@ -369,14 +369,14 @@ Contains one or more stage directives.
 Stage directive goes in stages section and should contain a steps section, and optional stage-specific directives (e.g. agent section).
 ```groovy
 pipeline {
-	agent any
-	stages {
-		stage('Example') {
-			steps {
-				echo 'Hello'
-			}
-		}
-	}
+  agent any
+  stages {
+    stage('Example') {
+      steps {
+        echo 'Hello'
+      }
+    }
+  }
 }
 ```
 
@@ -412,29 +412,29 @@ Available options:
 * buildDiscarder - persists artifacts and console outut for the specific number of recent Pipeline runs
 
 		options {
-			buildDiscarder(
-				logRotator(
-					numToKeepStr: '1'
-				)
+		  buildDiscarder(
+		    logRotator(
+		      numToKeepStr: '1'
 			)
+		  )
 		}
 
 * checkoutToSubDirectory - perform automatic source control checkout in a subdirectory of the workspace
 
 		options {
-			checkoutToSubDirectory('foo')
+		  checkoutToSubDirectory('foo')
 		}
 
 * disableConcurrentBuild - disallow concurrent executions of the Pipeline, useful for preventing simultaneous accesses to shared resources
 
 		options {
-			disableConcurrentBuild()
+		  disableConcurrentBuild()
 		}
 
 * disableResume - do not let the pipeline ti resume if master restarts
 
 		options {
-			disableResume()
+		  disableResume()
 		}
 
 * newContainerPerStage - [to be continued]
@@ -443,34 +443,34 @@ Available options:
 * quietPeriod - set the quiet period, overriding the global default
 
 		options {
-			quietPeriod(30)
+		  quietPeriod(30)
 		}
 
 * retry - retry entire Pipeline the specified number of times
 
 		options {
-			retry(3)
+		  retry(3)
 		}
 
 * skipDefaultCheckout - [to be continued]
 * skipStagesAfterUnstable
 
 		options {
-			skipStagesAfterUnstable()
+		  skipStagesAfterUnstable()
 		}
 * timeout - set timeout, after which Jenkins aborts the Pipeline
 
 		options {
-			timeout(
-				time: 1,
-				unit: 'HOURS'
-			)
+		  timeout(
+		    time: 1,
+		    unit: 'HOURS'
+		  )
 		}
 
 * timestamps - prepend all console output with the time
 
 		options {
-			timestamps()
+		  timestamps()
 		}
 
 * parallelAlwaysFailFast - [to be continued]
@@ -490,21 +490,21 @@ Defines the automated ways in which the Pipeline should be re-triggers. Defined 
 * cron - cron-style string to define a regular interval at whick Pipeline should be re-triggered
 
 		triggers {
-			cron('H */4 * * 1-5')
+		  cron('H */4 * * 1-5')
 		}
 
 * pollSCM - cron-style string to define interval at which Jenkins should check for new source changes
 
 		triggers {
-			pollSCM('H */4 * * 1-5')
+		  pollSCM('H */4 * * 1-5')
 		}
 
 * upstream - comma separate string of jobs and a threshhold; when any job finished the minimum threshgold, the Pipeline will be re-triggered.
 
 		triggers {
-			upstream(
-				upstreamProjects: 'job1, job2,
-				threshold: hudson.model.Result.SUCCESS)
+		  upstream(
+		    upstreamProjects: 'job1, job2,
+		    threshold: hudson.model.Result.SUCCESS)
 		}
 
 [Trigger examples](https://mohamicorp.atlassian.net/wiki/spaces/DOC/pages/136806413/Triggering+Jenkins+for+Commits+to+a+Specific+Branch)
@@ -665,9 +665,78 @@ To force parallel stages to be aborted when one of them fails add **failFast tru
 
 ### Bitbucket server notifier
 
-* https://jenkins.io/doc/pipeline/steps/stashNotifier/
-* https://github.com/jenkinsci/stashnotifier-plugin/issues/160
-* https://bitbucket.org/blog/how-to-configure-stash-notifier-in-pipelines-to-view-build-status
+Sends **INGPROGESS**, **SUCCESS**, **FAILURE** build markers to commits in bitbucket. The following will work if placed in script block, as it uses some variables that are declared in scripted pipeline:
+
+```groovy
+stage('Notify') {
+  steps {
+    script {
+      notifyBitbucket()
+    }
+  }
+}
+```
+
+Old style step does not need to be in script block:
+
+```groovy
+stage('Notify') {
+  steps {
+    step([$class: 'StashNotifier'])
+  }
+}
+```
+
+Most configurable way it to use the whole step; define a function outside the declarative pipeline and call it as usual (obtain commit hash from checkout step to supply to the notification step):
+
+```groovy
+pipeline {
+  ...
+  stages {
+    stage('Checkout') {
+      steps {
+        script {
+          scm = checkout(...)
+          env.COMMIT = scm.GIT_COMMIT
+        }
+      }
+    }
+    stage('Notify') {
+      steps {
+        notify('INPROGRESS')
+      }
+    }
+  }
+  post {
+    sucess {
+      notify('SUCCESS')
+    }
+    failure {
+      notify('FAILURE')
+    }
+  }
+}
+
+def notify(String state) {
+  notifyBitbucket(
+    commitSha1: "${env.COMMIT}",
+    credentialsId: '', // enter bitbucket credential with login, password
+    disableInprogressNotification: false,
+    considerUnstableAsSuccess: true,
+    ignoreUnverifiedSSLPeer: true,
+    buildStatus: state, // INPROGRESS, SUCCESS or FAILURE
+    buildName: 'Test', // sets custom name, turns off the effect of the following two options
+    includeBuildNumberInKey: true, // includes jenkins build number in the name
+    prependParentProjectKey: true, // includes full jenkins project name in the name
+    projectKey: '', // unknown yet
+    stashServerBaseUrl: 'url' // type url)
+}
+```
+	
++ [plugin github page](https://github.com/jenkinsci/stashnotifier-plugin)
+	+ [issue](https://github.com/jenkinsci/stashnotifier-plugin/issues/245)
++ [plugin jenkins page](https://jenkins.io/doc/pipeline/steps/stashNotifier/)
++ [third-party guide on setup](https://bitbucket.org/blog/how-to-configure-stash-notifier-in-pipelines-to-view-build-status)
 
 ----------
 
@@ -688,12 +757,12 @@ Lets you choose the git branch, tags or revision in the project (if you want to 
 * [issue example](https://issues.jenkins-ci.org/browse/JENKINS-54062?page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel&showAll=true)
 ```groovy
 parameters {
-    gitParameter    branchFilter: 'origin/(.*)',
-                    defaultValue: 'default',
-                    name: 'BRANCH',
-                    type: 'PT_BRANCH',
-                    useRepository: '.*build-verification-tests.git',
-                    sortMode: 'ASCENDING'
+  gitParameter	branchFilter: 'origin/(.*)',
+				defaultValue: 'default',
+				name: 'BRANCH',
+				type: 'PT_BRANCH',
+				useRepository: '.*build-verification-tests.git',
+				sortMode: 'ASCENDING'
 }
 ```
 
@@ -705,7 +774,7 @@ More flexible choice of choice parameter
 * [extra info for available options](https://github.com/jenkinsci/extended-choice-parameter-plugin/blob/master/src/main/java/com/cwctravel/hudson/plugins/extended_choice_parameter/ExtendedChoiceParameterDefinition.java#L90)
 ```groovy
 parameters {
-	extendedChoice( defaultValue: 'email@default',
+  extendedChoice(	defaultValue: 'email@default',
 					description: 'email(s) to send notification',
 					multiSelectDelimiter: ',',
 					name: 'AUTHOR',
@@ -724,29 +793,29 @@ parameters {
 * [doc](https://wiki.jenkins.io/display/JENKINS/Nexus+Artifact+Uploader)
 ```groovy
 freeStyleJob('NexusArtifactUploaderJob') {
-    steps {
-      nexusArtifactUploader {
-        nexusVersion('nexus2')
-        protocol('http')
-        nexusUrl('localhost:8080/nexus')
-        groupId('sp.sd')
-        version('2.4')
-        repository('NexusArtifactUploader')
-        credentialsId('44620c50-1589-4617-a677-7563985e46e1')
-        artifact {
-            artifactId('nexus-artifact-uploader')
-            type('jar')
-            classifier('debug')
-            file('nexus-artifact-uploader.jar')
-        }
-        artifact {
-            artifactId('nexus-artifact-uploader')
-            type('hpi')
-            classifier('debug')
-            file('nexus-artifact-uploader.hpi')
-        }
-      }
+  steps {
+  nexusArtifactUploader {
+	  nexusVersion('nexus2')
+	  protocol('http')
+	  nexusUrl('localhost:8080/nexus')
+	  groupId('sp.sd')
+	  version('2.4')
+	  repository('NexusArtifactUploader')
+	  credentialsId('44620c50-1589-4617-a677-7563985e46e1')
+	  artifact {
+		  artifactId('nexus-artifact-uploader')
+		  type('jar')
+		  classifier('debug')
+		  file('nexus-artifact-uploader.jar')
+	  }
+	  artifact {
+		  artifactId('nexus-artifact-uploader')
+		  type('hpi')
+		  classifier('debug')
+		  file('nexus-artifact-uploader.hpi')
+	  }
     }
+  }
 }
 ```
 
@@ -755,6 +824,7 @@ freeStyleJob('NexusArtifactUploaderJob') {
 ### Copy artifact
 
 Copy artifact from another job (or same one if you like); should be created by createArtifact first; [Copy Artifact Plugin](https://wiki.jenkins.io/display/JENKINS/Copy+Artifact+Plugin)
+
 ```groovy
 copyArtifacts(projectName: 'sourceproject');
 ```
@@ -766,7 +836,7 @@ copyArtifacts(projectName: 'sourceproject');
 * mark stage or pipeline as unstable - use catchError block, inside the block should be a code that indicates an error, for example `exit 1`
 ```groovy
 catchError(buildResult: 'SUCCESS', catchInterruptions: false, message: 'Message', stageResult: 'UNSTABLE') {
-	sh 'exit 1'
+  sh 'exit 1'
 }
 ```
 
@@ -775,37 +845,37 @@ catchError(buildResult: 'SUCCESS', catchInterruptions: false, message: 'Message'
 * timeouts, retries...
 ```groovy
 pipeline {
-    agent any
-    stages {
-        stage('Deploy') {
-            steps {
-                retry(3) {
-                    sh './flakey-deploy.sh'
-                }
-
-                timeout(time: 3, unit: 'MINUTES') {
-                    sh './health-check.sh'
-                }
-            }
+  agent any
+  stages {
+    stage('Deploy') {
+      steps {
+        retry(3) {
+          sh './flakey-deploy.sh'
         }
+
+        timeout(time: 3, unit: 'MINUTES') {
+          sh './health-check.sh'
+        }
+      }
     }
+  }
 }
 ```
 Wrappers steps such as *timeout* and *retry* may contain other steps include ing *timeout* or *retry*
 ```groovy
 pipeline {
-    agent any
-    stages {
-        stage('Deploy') {
-            steps {
-                timeout(time: 3, unit: 'MINUTES') {
-                    retry(5) {
-                        sh './flakey-deploy.sh'
-                    }
-                }
-            }
+  agent any
+  stages {
+    stage('Deploy') {
+      steps {
+        timeout(time: 3, unit: 'MINUTES') {
+          retry(5) {
+            sh './flakey-deploy.sh'
+          }
         }
+      }
     }
+  }
 }
 ```
 
@@ -813,32 +883,32 @@ pipeline {
 ```groovy
 Jenkinsfile (Declarative Pipeline)
 pipeline {
-    agent any
-    stages {
-        stage('Test') {
-            steps {
-                sh 'echo "Fail!"; exit 1'
-            }
-        }
+  agent any
+  stages {
+    stage('Test') {
+      steps {
+        sh 'echo "Fail!"; exit 1'
+      }
     }
-    post {
-        always {
-            echo 'This will always run'
-        }
-        success {
-            echo 'This will run only if successful'
-        }
-        failure {
-            echo 'This will run only if failed'
-        }
-        unstable {
-            echo 'This will run only if the run was marked as unstable'
-        }
-        changed {
-            echo 'This will run only if the state of the Pipeline has changed'
-            echo 'For example, if the Pipeline was previously failing but is now successful'
-        }
+  }
+  post {
+    always {
+      echo 'This will always run'
     }
+    success {
+      echo 'This will run only if successful'
+    }
+    failure {
+      echo 'This will run only if failed'
+    }
+    unstable {
+      echo 'This will run only if the run was marked as unstable'
+    }
+    changed {
+      echo 'This will run only if the state of the Pipeline has changed'
+      echo 'For example, if the Pipeline was previously failing but is now successful'
+    }
+  }
 }
 ```
 * archive artifact
@@ -852,7 +922,7 @@ Preserves the prefix, if supplied not the subject itsself, but including path to
 Fingerprint options saves the metadata about the artifact. See more info in docs above.
 ```groovy
 post {
-	archiveArtifacts artifacts: "artifact_path"	
+  archiveArtifacts artifacts: "artifact_path"	
 }
 ```
 * create zip file - [docs](https://jenkins.io/doc/pipeline/steps/pipeline-utility-steps/#zip-create-zip-file)
