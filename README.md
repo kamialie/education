@@ -607,7 +607,6 @@ If system does not automatically mount removable devices, check the name when de
 + **wodim (cdrecord)** - write data to optical storage media
 + **md5sum** - calculate an MD5 checksum
 
-
 ---
 
 [back to contents](#contents)
@@ -631,29 +630,121 @@ If system does not automatically mount removable devices, check the name when de
 
 ftp program (took name from File Transfer Protocol) is used to download files over the Internet. It communicates with ftp servers, whcich contain files that can be up- and downloaded. Web browser also support this protocol (**ftp://**). Original form is not safe as account names and passwords are sent in cleartext (thus almost all FTP over Internet is done by *anonymous* FTP servers - anyone can log in by "anonymous" name and meaningless password).
 
-#### Commands
+There are many other client version among which the **lftp** is more popular. It acts just like traditional plus supports other protocols (http), can run background tasks, has tab completion and other features.
 
-+ 
+#### ftp
 
-### curl
+```shell
+ftp file_server
+```
+
+Invoke the ftp program and connect it to the *file_server*; login name would usually be *anonymous* and while some servers will accept empty password, others might be expecting email, thus try using *user@example.com*
+
++ **cd** *path/to* - normal **cd** operation; most files for public downloading are usually located under the *pub* directory
++ **ls**
++ **lcd** *path/to* - change working directory on the local machine
++ **get** *file_name* - transfer specified file
++ **bye** - log off
++ **help** - display available commands
+
+#### wget
+
+Another popular command-line program for downloading. Can download signle or multiple files, both from web and ftp servers, can also download sites. Among other features are background, recursive, partially completed downloading.
+
+#### curl
 
 [basic info](https://gist.github.com/subfuzion/08c5d85437d5d4f00e58)
 
-When sending POST request with a **-L** flag (redirection), the follow up request (if needed) will be GET, instead of POST.
+When sending POST request with a `-L` flag (redirection), the follow up request (if needed) will be GET, instead of POST.
 
-#### Flags
-
-+ **--include**, **-i**  - include the HTTP-header in the output
-+ **--output**, **-o** *\<file\>* - write output to *\<file\>* instead of stdout. Can specify multiple arguments, order does not matter, just the first **-o** is for the first argument(url), second for the second and so on.
-+ **--fail**, **-f** - fail silently, suppress error messages that are sent on failed attempt of server to send a document
-+ **--location**, **-L** - if requested page has moved to a different location (and indicated it), curl will redo the request to the new location; if used with option **-i** or **-I**, headers from all requested pages will be shown; curl will pass user+password only to the initial host; to limit number of redirect use **--max-redirs** option
-+ **--verbose**, **-v** - verbose output, lines starting with '>' means header data sent by curl, '<' - header data received by curl, '\*' - additional info. More details my be provided by **--trace** flag
-+ **--silent**, **-s** - silent or quiet, don't show progress meter or error messages
-+ **--show-error**, **-S** - when used with **-s** makes curl show the error message
-+ **--user**, **-u** *\<user:password\>* - specify user, password for server authentication. If only passed user, curl will prompt for password
-+ **--data**, **-d** \<data\> - sends specified data in a POST request; can send data directly or read from a file - to specify a while add **@** in front, for example -d "@filename.json"; two formats are available:
++ `include, -i`  - include the HTTP-header in the output
++ `output, -o <file>` - write output to *\<file\>* instead of stdout. Can specify multiple arguments, order does not matter, just the first **-o** is for the first argument(url), second for the second and so on.
++ `fail, -f` - fail silently, suppress error messages that are sent on failed attempt of server to send a document
++ `location, -L` - if requested page has moved to a different location (and indicated it), curl will redo the request to the new location; if used with option `-i` or `-I`, headers from all requested pages will be shown; curl will pass user+password only to the initial host; to limit number of redirect use **--max-redirs** option
++ `verbose, -v` - verbose output, lines starting with '>' means header data sent by curl, '<' - header data received by curl, '\*' - additional info. More details my be provided by `--trace` flag
++ `silent, -s` - silent or quiet, don't show progress meter or error messages
++ `show-error, -S` - when used with **-s** makes curl show the error message
++ `user, -u <user:password>` - specify user, password for server authentication. If only passed user, curl will prompt for password
++ `data, -d <data>` - sends specified data in a POST request; can send data directly or read from a file - to specify a while add **@** in front, for example -d "@filename.json"; two formats are available:
 	- application/x-www-form-urlencoded - param-value pairs separated by **&** sign, "param1:value1&param2:value2"
 	- application/json - usual json, '{"key":"value"}'
+
+#### ssh
+
+```shell
+ssh [user@]remote_system [command]
+```
+Connect to remote host; optinally log in as specified *user*; optionally run a single *command* in remote shell
+
++ `-p` *port* - specify custom port
+
+Secure protocol to communicate with remote machine. Authenticates remote server (confirms it is who it says it is, thus, preventing man-in-the-middle attack) and encrypts all communications. Authentication can fail because of 2 reasons: man-in-the-middle attack, ssh-server or remote OS was reinstalled. Error message will point to the offedning key, removing it (usually from *known_hosts* file) will let ssh client to accept the connection and add new key.
+
+Consists of 2 parts:
+
++ ssh server on the remote machine, listening for incoming connections on default port 22
++ ssh client on local machine
+
+Many Linux distros are shipped with popular **OpenSSH** from OpenBSD project, some include both client and server part (like Red Hat), while others (like Ubuntu) only supply the client part. For latter **openssh-server** package needs to be installed for server part.
+
+SSH provides sort of encrypted tunneling for commands to safely be transmitted to remote system, but this also allows other networks traffic to be sent through creating sort of VPN. Best use is to transmit GUI from remote system to local one. `-X` or `-Y` login on remote transmits launched program's GUI to the local machine:
+
+Most popular programs that lets run ssh (or telnet) session on Windows is [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/)
+
+```shell
+ssh -X remote_system
+xload
+```
+
+Run command on remote and get output to the local file (command to run on remote system needs to be enclosed in single quotes to prevent shell expansion in local shell):
+```shell
+ssh remote_system 'ls *' > local_file
+```
+
+#### ssh-keygen
+
+```shell
+ssh-keygen -t rsa -b 4096
+```
+
++ [example](https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+
+#### ssh-copy-id
+
+```shell
+ssh-copy-id -i <path_to_public_key> user@host
+```
+
++ [doc](https://www.ssh.com/ssh/copy-id)
+
+#### scp
+
+```shell
+scp myfile.txt remote_user@remote_server:/remote/folder/inner_folder
+scp remote_user@remote_server:/remote/folder/some_file.txt path/on/host
+```
+
+Works as much the same as normal cp command. All directories leading to the last inner one must exist.
+
++ [example](https://www.simplified.guide/ssh/copy-file)
+
+#### sftp
+
+```shell
+sftp remote_system
+```
+
+Works pretty much like original **ftp**, but uses ssh ecnrypted tunnel. Does not require ftp server to be running on remote system, only ssh server. Many graphical file managers support sftp protocol (like GNOME or KDE), thus simply putting `sftp://` into locaton bar lets you operate on file on remote system.
+
+---
+
+### Extra resources
+
++ [Linux network administration quide](http://tldp.org/LDP/nag2/index.html)
++ Wikipedia
+	- [internet protocol address](http://en.wikipedia.org/wiki/Internet_protocol_address)
+	- [host name](http://en.wikipedia.org/wiki/Host_name)
+	- [uniform resource identifier](http://en.wikipedia.org/wiki/Uniform_Resource_Identifier)
 
 ---
 
@@ -685,34 +776,6 @@ Manipulate tape archives
 
 ## Extra
 
-### ssh
-
-**ssh-keygen**
-
-+ [simple example](https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-```shell
-ssh-keygen -t rsa -b 4096
-```
-
-**ssh-copy-id**
-
-+ [doc](https://www.ssh.com/ssh/copy-id)
-```shell
-ssh-copy-id -i <path_to_public_key> user@host
-```
-
-**scp**
-
-Work as much the same as normal cp command.
-
-+ [example](https://www.simplified.guide/ssh/copy-file)
-
-All directory leading to the last inner one must exist.
-
-```shell
-scp myfile.txt remoteuser@remoteserver:/remote/folder/inner_folder
-scp remoteuser@remoteserver:/remote/folder/some_file.txt path/on/host
-```
 
 ---
 
