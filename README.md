@@ -30,6 +30,7 @@ man hier - file hierarchy
 + [Storage](#storage) [STOPPED AT PAGE 185 - CREATING NEW FILESYSTEM]
 + [Network](#network)
 	+ [curl](#curl)
++ [Searching for files](#searching-for-files)
 + [Archive](#archive)
 	+ [tar](#tar)
 + [Extra](#extra)
@@ -50,15 +51,15 @@ man hier - file hierarchy
 	pbpaste > file
 	```
 + **cp**
-	- [-a | --archive] - copy files and directories and all their attributes; normally cp take the default attributes of the user performing the copy
-	- [-i | --interactive] - prompt for confirmation otherwise files could be overwritten silently
-	- [-r | --recursive]
-	- [-u | --update] - only copy files that do not exist or are newer than the existing ones in the destination directory
+	- `-a | --archive` - copy files and directories and all their attributes; normally cp take the default attributes of the user performing the copy
+	- `-i | --interactive` - prompt for confirmation otherwise files could be overwritten silently
+	- `-r | --recursive`
+	- `-u | --update` - only copy files that do not exist or are newer than the existing ones in the destination directory
 + **mv**
-	- [-u | --update]
-	- [-i | --interactive] 
+	- `-u | --update`
+	- `-i | --interactive` 
 + **ln** \<file\> \<link\>
-	- [-s] - create soft link
+	- `-s` - create soft link
 + **type** \<command\> - displays the kind of command the shell will execute (could be built-in, executable, shell function or alias)
 + **which** \<executable\> - determines the exact location of the given executable (only works for executables)
 + **help** \<builtin\> - man page for built-ins
@@ -74,11 +75,11 @@ man hier - file hierarchy
 + **apropos** \<search\> - search for man pages based on argument (same as `man -k`)
 + **info** \<program\> - GNU project provided man pages; works as a tree structured nodes, which are also hyperlinked(leading asterisk); the above utilities are part of `coreutils` package - `info coreutils` will show a list of programs that are part of it; navigation:
 	- `?` - help
-	- n - display next node
-	- p - previous node
-	- u - parent node
+	- `n` - display next node
+	- `p` - previous node
+	- `u` - parent node
 	- `Enter` - follow hyperlink
-	- q - quit
+	- `q` - quit
 + **zless** - special `less` command to view gzip-compressed text files (have .gz extension); some programs have their doc files in `/usr/share/doc` directory
 + **alias** - create custom aliases; exactly as below - no whitespaces around equal sign; `unalias` - to remove alias; alias without argument lists all existing aliases
 
@@ -204,21 +205,19 @@ also see [cmp use](#https://stackoverflow.com/questions/12900538/fastest-way-to-
 
 ### sed
 
-Stream editor
-
-#### Flags
-
 **sed [flags] [file ...]**
 
 + `-i <extenstion>` - edit file in-place, saving backup with the specified extension; if zero-length extension is given, no backup will be saved
+
+Stream editor
 
 #### Examples
 
 var=smth
 
-sed **-i** '' "\<number\>s/.\*/$var/" \<target_file\> - substitute given line (number) with a variable, second argument is a regex, current example is substitute whole line; if variable contains '/' use different separator - '|'; same with **-a** means append, **-i** means insert
+`sed -i '' "<number>s/.*/$var/" <target_file>` - substitute given line (number) with a variable, second argument is a regex, current example is substitute whole line; if variable contains '/' use different separator - '|'; same with **-a** means append, **-i** means insert
 
-sed **-i** '' '/pattern to match/d' \<target_file\> - delete lines matching patterns
+`sed -i '' '/pattern to match/d' <target_file>` - delete lines matching patterns
 
 ---
 
@@ -745,6 +744,157 @@ Works pretty much like original **ftp**, but uses ssh ecnrypted tunnel. Does not
 	- [internet protocol address](http://en.wikipedia.org/wiki/Internet_protocol_address)
 	- [host name](http://en.wikipedia.org/wiki/Host_name)
 	- [uniform resource identifier](http://en.wikipedia.org/wiki/Uniform_Resource_Identifier)
+
+---
+
+[back to contents](#contents)
+
+## Searching for files
+
+#### locate
+
+**locate** *substring*
+
+Performs rapid database search of pathnames, and the returns every name that matches the given substring. In order to work the database should already exist. Can be updating weekly or daily. **updagedb** command can be used to manually update this database, which is possible run as a cron job as well.
+
+Two common versions on Linux distribs are **slocate** and **mlocate**, which are usually accessed by symbolic link **locate**.
+
+---
+
+### find
+
+In the simplest form takes one or more arguments (directories) to search. With the use of *options*, *tests* and *actions* the default output can be specified and narrowed down.
+
+#### Tests
+
+`-type T` limits search to specified type; example below will limit search to directories:
+
+```shell
+find ~ -type d
+```
+
+More available options:
+
++ `b` - block special device file
++ `c` - cahracter special device file
++ `d` - directory
++ `f` - file
++ `l` - symbolic link
+
+`-name PATTERN` - limits the output matching given wildcard pattern
+
+`-size [SIGN]{NUMBER}{UNITS}` - limits outputs based on size condition; plus sign indicates *greater that*, while minus - *smaller than*, and no sign - *to match exactly*; units may be one of the following:
+
++ `b` - 512-byte block, default
++ `c` - bytes
++ `w` - 2-byte words
++ `k` - kilobytes (1024 bytes)
++ `M` - megabytes
++ `G` - gigabytes
+
+Example below outputs image files with size greater than 1 megabyte:
+
+```shell
+find ~ -type f -name "*.JPG" -size +1M
+```
+
+More available options(not a complete list):
+
+| Test				| Description	|
+|-------------------|---------------|
+| -cmin *n*			| match files and directories whose content or attributes were last modified exactly *n* minutes ago (to specify more than use *+n*, less than - *-n*	|
+| -cnewer *file*	| match files or directories whose contents or attributes were last modified recently than those of *file*	|
+| -ctime *n*		| match files or directories whose contents or attributes were last modifed *n*\*24 hours ago	|
+| -empty			| match empty files and directories
+| -group *name*		| match file or directories belonging to *group* (may be expressed either as a group name or as a numeric group ID	|
+| -iname *pattern*	| case-insensitive **-name** test	|
+| -inum *n*			| match files with inode number *n* (helpful for finding all the hard links to a particular inode	|
+| -mmin *n*			| files or directories whose contents were last modified *n* minutes ago	|
+| -mtime *n*		| files or directories whose contents were last modified *n*\*24 hours ago	|
+| -name *pattern*	| files and directories with the specified wildcard *pattern*	|
+| -newer *file*		| files or directories whose contents were modified more recently than the specified *file* (useful for writing shell scripts to perform file backups)	|
+| -nouser			| files or directories that do not belong to a valid user; belonging to deleted accounts or detect activity by attackers	|
+| -nogroup			| files or directories that do not belong to a valid group
+| -perm *mode*		| files or directories that have permissions set to the specified *mode* (either octal or symbolic notation)
+| -samefile *name*	| similar to *-inum*; match files that shre the same inode number as file *name*	|
+| -size *n*			| files if size *n*	|
+| -type *c*			| of type *c*	|
+| -user *name*		| files or directories beloning to user *name* (may be expressed by a username or by a numeric user ID	|
+
+Operators provide a way to combine **tests** into more complex logical relationship. Available operators:
+
+| Operator	| Description	|
+|-----------|---------------|
+| -and, -a	| matches if tests on both sides are true; no operator present implies **and**	|
+| -or, -a	| if one of tests are true		|
+| -not, !	| if following test is false	|
+| ( )		| groups tests and operators together to form larger expressions; by defaults **find** evaluates from left to right; since parenthesis have special meaning to shell, they must be quoted - usually escaped with backslash	|
+
+Example below outputs files and directories with bad permissions:
+
+```shell
+$> find ~ \( -type f -not -perm 0600 \) -or \( -type d -not -perm 0700 \)
+```
+
+---
+
+#### Actions
+
+Predifined and user-defined actions provide a way to act on the itmes on the list.
+
+| Action	| Description	|
+|-----------|---------------|
+| -delete	| delete the currently matching file	|
+| -ls		| perform the equivalent of `ls -dils` on the matching file	|
+| -print	| output the full relative pathname of the matching file; default	|
+| -quit		| quit once a match has been made	|
+
+Actions parameter acts just like any test, participating in logical expression evaluation, thus should be put at the end not to affect the precedence - in the two examples below the first one would print only if two first tests are true, while the later would print all files:
+
+```shell
+$> find ~ type -f -and -name '*.back' and -print
+$> find ~ -print and type -f -and -name '*.back'
+```
+
+| User-defined actions	| Description	|
+|-----------------------|---------------|
+| -exec *command* {} ;	| invoke arbitrary commands; braces represent the current pathname, semicolon is a required delimiter to indicate the end of the command	|
+| -ok *command* {} ;	| same as previous, but prompts user before each execution	|
+
+When **-exec** action is used, it launches a new instance of the specified command for each argument. To combine all results into one change semicolon to plus sign.
+
+External command **xargs** may also be used to achieve the same effect. It accepts input from standard input and converts it into an argument list for a specified comand. Number of arguments that can be placed in command line isn't unlimited. When a command line exceed the maximum, xargs executes the specified command with the maximim number of arguments possible and then repeats the process untill standard input is exhausted. To see the maximum size of the cl - `xargs --show-limits`
+
+Examples:
+
++ sames as using `-delete` action(since braces and semicolon have special meanings for shell, must be either quoted or escaped):
+
+	```shell
+	$> find ~ -type f -name '*.bak' -exec rm '{}' ';'
+	```
++ promts for confirmation for each execution:
+
+	```shell
+	$> find ~ -type f -name 'foo*' -ok ls pl '{} ':'
+	```
+
++ launches ls once for all pathnames:
+
+	```shell
+	$> find ~ -type f -name 'foo*' -exec ls -l '{}' +
+	```
++ same as previous, but using external **xargs** command
+
+	```shell
+	$> find ~ -type f -name 'foo*' -print | xargs ls -l
+	```
+
+Whitespaces embedded in filenames will cause problems for **xargs** and **find** comands, as they serve as delimiters for arguments. Thus **find** has option to set *null* character as delimiter in the output, `print0` action, and `--null` or `-0` for **xargs** will accept this null terminated output.
+
+---
+
+#### Options
+
 
 ---
 
