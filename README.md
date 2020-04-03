@@ -751,7 +751,7 @@ Works pretty much like original **ftp**, but uses ssh ecnrypted tunnel. Does not
 
 ## Searching for files
 
-#### locate
+### locate
 
 **locate** *substring*
 
@@ -895,6 +895,21 @@ Whitespaces embedded in filenames will cause problems for **xargs** and **find**
 
 #### Options
 
+Options control the scope of a **find** search. Most commonly used:
+
+| Option				| Description	|
+|-----------------------|---------------|
+| -depth				| direct find to process a directory's contents befor ethe directory itself; automatically applied when **-delete** action is specified	|
+| -maxdepth *levels*	| set the maximum number of levels that **find** will descend into a directory tree	|
+| -mindepth *levels*	| same as pervious, but set minimum	|
+| -mount				| do not traverse directories that are mounted on other file systems	|
+| -noleaf				| do not optimize search base on assumption that search is performed on a Unix-like file system (needed on DOS/Windows file systems and CD-ROMs)	|
+
+---
+
+### Extra resources
+
++ **locate**, **updatedb**, **find** and **xargs** programs are part of GNU Project's *findutils* package, [on-line documentation](http://www.gnu.org/software/findutils/)
 
 ---
 
