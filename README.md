@@ -81,6 +81,26 @@ https://runnable.com/docker/basic-docker-networking
 [multi-host networking](#https://docs.docker.com/network/overlay-standalone.swarm/)
 [docker swarm reference architecture](#https://success.docker.com/article/networking)
 
+[History note] Docker Inc. acquired SocketPlane from Docker 1.12, which completely rearchitectured their networking model.
+
+Three pillars:
+
+1. Container network model (CNM) - design
+2. Libnetwork - docker's implementation (logic, API, UX...)
+3. drivers - actual implementations of networks; each network type has its own driver; docker has a notion of *local* (native, build-in) and *remote* (3rd party) drivers; *local* include bridge, overlay, MACVLAN, IPVLAN, host, none.
+
+[reference on CNM](https://github.com/moby/libnetwork/blob/master/docs/design.md)
+
+Competing CNI (Container Network Interface) is used by Kubernetes (CoreOS Inc.)
+
+Major parts of CNM:
+
++ Sandbox (aka namespace in Linux world) - isolated area of OS, contains full network stack (IP confgigs, DNS, routing table, etc)
++ Endpoint (aka network interface, eth0)
++ Network - from docker's perspective, multiple endpoint talking to each other
+
+`docker info` - is a basic command that gathers all info about current docker state; here, in plugins section, you can find available networks drivers
+
 Docker's networking subsystem is pluggable, using drivers.
 
 Good example of creating couple user-defined networks for an application: couple containers running the application, one running the database. All containers are connected to the backend network, while application containers are also connected to front-end, where load-balancer will also be connected (its single port, which is exposed to the host will map requests to one of the application containers)
@@ -129,7 +149,8 @@ docker run -dti --network test-net alpine
 
 [to be continued]
 
-### docker network
+### docker network command
+
 * **create**
     + [--attachable] - enable manual container attachment
     + [--driver], [-d] [*bridge*, *overlay*] - driver to manage the network, default are bridge or overlay, can specify third party pluggins
@@ -144,8 +165,8 @@ docker run -dti --network test-net alpine
 * **connect** - connect container to a software-defined network
 * **disconnect** - disconnect container to a software-defined network
 * **inspect** *\<network_name\>* - display detailed info about one or more networks
-    + [--format], [-f] - format output
-    + [--verbose], [-v] - verbose output
+    + `--format`, `-f` - format output
+    + `--verbose`, `-v` - verbose output
 
 ## Storage in docker
 
