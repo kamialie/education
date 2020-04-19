@@ -42,7 +42,7 @@ man hier - file hierarchy
 + [Linux virtualization tools](#linux-virtualization-tools)
 + [Resources](#resources)
 
-## Open source
+# Open source
 
 Free Software Foundation (Stallman)
 [Open Source Initiative](https://opensource.org/licenses) (OSI)
@@ -65,9 +65,9 @@ Creative Common Licenses allows creators to choose the right they want to reserv
 
 ---
 
-## Installation
+# Installation
 
-### Storage
+## Storage
 
 Best practices for partitioning storage is to mount system files (root) to even if small, but fast drive, while `/home` and `/var` to larger hard drive (slower than previos).
 
@@ -75,7 +75,7 @@ Best practices for partitioning storage is to mount system files (root) to even 
 
 ---
 
-### Boot process
+## Boot process
 
 Motherboards have hard-coded minimal OS embedded in them, choices are either BIOS (Basic Input Output System) and more modern UEFI (Unified Extensible Firmware Interface). It checks all connected devices, looks for MBR (Master Boot Record) in a storage device and mounts it. If it had Linux installed, bootloader script, GRUB (Grand Unified Bootloader), executes and loads Linux kernel into memory. Holding down right shift key during boot will open GRUB menu (`ESC` key to move to previous menu). Press `E` key, when entry is highlited to configure how it is going to execute.
 
@@ -107,11 +107,11 @@ systemctl isolate <target>
 
 [back to contents](#contents)
 
-## Configuration and environment
+# Configuration and environment
 
 Shell program reads configuration scripts, *startup files*, which define the default environment shared by all users. The following considers bash. Startup files then followed by more in home directory that define personal environment. Exact sequence depends on the type of shell session - login shell session (when prompted username and password), non-login shell session (terminal session in the GUI)
 
-### Commands
+## Commands
 
 + `env` - output entire list of shell variables
 + `printenv` - display environment variables
@@ -130,7 +130,7 @@ Shell program reads configuration scripts, *startup files*, which define the def
 	+ `list-timezones` - list available timezones
 	+ `set-timezone Canada/Toronto` - the argument is taken from the output of command above, must match exactly
 
-### Interesting variables
+## Interesting variables
 
 | Variable		| Meaning																							|
 |:---------:	|---------------------------------------------------------------------------------------------------|
@@ -150,7 +150,7 @@ Shell program reads configuration scripts, *startup files*, which define the def
 | HISTSIZE		| increase the size of command history from the default of 500										|
 | HISTCONTROL	| causes shell's history recording to ignore a command if the same was just recorded				|
 
-### Startup files
+## Startup files
 
 General rule - add directories to **PATH** or define additional environment variables in **.bash\_profile** (or equvalent, for example Ubuntu uses **.profile**, everything else to **.bashrc**.
 Popular extensions (appended to the end) for backup file - `.back`, `.sav`, `.old`, `.orig`
@@ -164,7 +164,9 @@ Popular extensions (appended to the end) for backup file - `.back`, `.sav`, `.ol
 | /etc/bash.bashrc	| global config script that applies to all users											|
 | ~/.bashrc			| user's personal startup file, can be used to extend or override global settings (almost always read); non-login shells read by default and most of startup files read it as well	|
 
-### dmesg
+---
+
+## dmesg
 
 Displays system message buffer, in other words messages relating to kernel ring buffer.
 
@@ -173,11 +175,15 @@ For example, find out info about wifi adapter (`wl` is how linux names devices, 
 dmesg | grep wl
 ```
 
-### lshw
+---
+
+## lshw
 
 Displays comprehensive review of a hardware environment, ideally using `sudo`
 
-### Linux Desktop options
+---
+
+## Linux Desktop options
 
 + Cinnamon/Mate - more traditional design, like Windows XP
 + Gnome (default on Ubuntu) - more like Mac with Dock
@@ -186,13 +192,15 @@ Displays comprehensive review of a hardware environment, ideally using `sudo`
 
 Simply *apt install* the package of desired desktop and choose on the next login
 
+---
+
 ### More info
 
 INVOCATION section of bash man page
 
 ---
 
-## Basics
+# Basics
 
 Linux distro consists of 3 layers: Linux kernel, Linux desktop and specific suit of tools like package manager. Linux desktop is a software designed to manage graphic interface features like windows, menus, applications. Common examples are GNOME, KDE and Cinnamon.
 
@@ -256,7 +264,7 @@ Linux distro families:
 
 ---
 
-### Interesting directories
+## Interesting directories
 
 |	Directory	|	Comments	|
 |:--------------|---------------|
@@ -291,7 +299,7 @@ More info on [Filesystem Hierarchy Standard](https://en.wikipedia.org/wiki/Files
 
 ---
 
-### Redirection
+## Redirection
 
 Redirection operator `>` takes the sdtout by default. `>>` appends the content. File descriptor 2 refers to `stderr`, thus `2>` redirects the standard error.
 
@@ -344,9 +352,9 @@ $ ls /usr/bin | tee ls.txt | grep zip
 
 [back to contents](#contents)
 
-## Text processing
+# Text processing
 
-### grep
+## grep
 
 **grep pattern [files ...]**
 
@@ -354,27 +362,27 @@ File pattern searcher
 
 Default returns the lines containing the pattern
 
-#### Flags
+### Flags
 
 + `-i` - ignore case (default is case sensitive)
 + `-v` - print only lines that do not match the pattern
 
 ---
 
-### diff
+## diff
 
 **diff [flags]... files**
 compare files line by line
 
 also see [cmp use](#https://stackoverflow.com/questions/12900538/fastest-way-to-tell-if-two-files-are-the-same-in-unix-linux)
 
-#### Flags
+### Flags
 
 + **-brief**, **-q** - output only whether files differ
 
 ---
 
-### sed
+## sed
 
 **sed [flags] [file ...]**
 
@@ -382,7 +390,7 @@ also see [cmp use](#https://stackoverflow.com/questions/12900538/fastest-way-to-
 
 Stream editor
 
-#### Examples
+### Examples
 
 var=smth
 
@@ -394,7 +402,7 @@ var=smth
 
 [back to contents](#contents)
 
-## Permissions
+# Permissions
 
 Unix system has 3 groups of permissions: user, group, others (world). To check info about your identity use `id` command with no arguments.
 
@@ -464,7 +472,7 @@ Unix system has 3 groups of permissions: user, group, others (world). To check i
 
 [back to contents](#contents)
 
-## Processes
+# Processes
 
 Kernel initializes its own activities as processes and launches program *init*, which in turn runs a series of shell scripts (*init script*) to start system services.
 
@@ -472,7 +480,7 @@ Kernel initializes its own activities as processes and launches program *init*, 
 
 **TTY** stand for *Teletype*, which refers to controlling terminal for the process
 
-### Commands
+## Commands
 
 + `ps` - output process snapshot; default returns the processes associated with the current terminal session
 	+ `x` - output all of user's processes regardless of what terminal (if any) they are controlled by; `?` in **TTY** column indicated no controlling terminal; new **STAT** column stands for *state* (process state may be followed by additional characters):
@@ -555,7 +563,7 @@ Interrupt a process with `Ctrl-C` (**INT**, Interrupt). Pause a process with `Ct
 
 [back to contents](#contents)
 
-## Package management
+# Package management
 
 Packaging systems:
 
@@ -679,7 +687,7 @@ Package tools:
 		rmp -qf *file_name*
 		```
 	
-### More info
+## More info
 
 + [package management on Debian systems](http://www.debian.org/doc/FAQ/ch-pkgtools.en.html)
 + [RMP home page](http://www.rpm.org)
@@ -691,7 +699,7 @@ Package tools:
 
 [back to contents](#contents)
 
-## Storage
+# Storage
 
 `/etc/fstab` - lists the devices (typically hard disk partitions) that are to be mounted at boot time
 
@@ -722,7 +730,7 @@ OSs use buffers to speed up the reading and writing to "slow" data devices (f.e.
 
 If system does not automatically mount removable devices, check the name when device is attached in **/var/log/messages** or **/var/log/syslog**. Devie name remains the same as long as device remains physically attached and computer is not rebooted.
 
-### Commands
+## Commands
 
 + `df` - disk utility
 	+ `-h` - human readable format
@@ -739,7 +747,7 @@ If system does not automatically mount removable devices, check the name when de
 + **wodim (cdrecord)** - write data to optical storage media
 + **md5sum** - calculate an MD5 checksum
 
-### Useful commands
+## Useful commands
 
 Outputs mounted disks on the system; if device does not appear it might have not yet been mounted:
 ```shell
@@ -755,11 +763,11 @@ $> lsblk | grep sd
 
 [back to contents](#contents)
 
-## Network
+# Network
 
-### Examination and monitoring
+## Examination and monitoring
 
-#### Commands
+### Commands
 
 + **ping** - sends a special network packet (called IMCP ECHO\_REQUEST) to a speciafied host, most network devices will reply to it (may be configured to ignore IMCP traffic or this packets in particular)
 	+ `-c` *count* - limit number of sent and received ECHO\_RESPONSE packets
@@ -770,13 +778,15 @@ $> lsblk | grep sd
 	- `-ie` (doesn't work on mac) - shows network interfaces
 	- `-r` - kernel's network routing table
 
-### Tranporting files over network
+## Tranporting files over network
 
 ftp program (took name from File Transfer Protocol) is used to download files over the Internet. It communicates with ftp servers, whcich contain files that can be up- and downloaded. Web browser also support this protocol (**ftp://**). Original form is not safe as account names and passwords are sent in cleartext (thus almost all FTP over Internet is done by *anonymous* FTP servers - anyone can log in by "anonymous" name and meaningless password).
 
 There are many other client version among which the **lftp** is more popular. It acts just like traditional plus supports other protocols (http), can run background tasks, has tab completion and other features.
 
-#### ftp
+---
+
+### ftp
 
 ```shell
 ftp file_server
@@ -791,11 +801,15 @@ Invoke the ftp program and connect it to the *file_server*; login name would usu
 + **bye** - log off
 + **help** - display available commands
 
-#### wget
+---
+
+### wget
 
 Another popular command-line program for downloading. Can download signle or multiple files, both from web and ftp servers, can also download sites. Among other features are background, recursive, partially completed downloading.
 
-#### curl
+---
+
+### curl
 
 [basic info](https://gist.github.com/subfuzion/08c5d85437d5d4f00e58)
 
@@ -813,7 +827,9 @@ When sending POST request with a `-L` flag (redirection), the follow up request 
 	- application/x-www-form-urlencoded - param-value pairs separated by **&** sign, "param1:value1&param2:value2"
 	- application/json - usual json, '{"key":"value"}'
 
-#### ssh
+---
+
+### ssh
 
 ```shell
 ssh [user@]remote_system [command]
@@ -845,7 +861,9 @@ Run command on remote and get output to the local file (command to run on remote
 ssh remote_system 'ls *' > local_file
 ```
 
-#### ssh-keygen
+---
+
+### ssh-keygen
 
 ```shell
 ssh-keygen -t rsa -b 4096
@@ -853,7 +871,9 @@ ssh-keygen -t rsa -b 4096
 
 + [example](https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 
-#### ssh-copy-id
+---
+
+### ssh-copy-id
 
 ```shell
 ssh-copy-id -i <path_to_public_key> user@host
@@ -861,7 +881,9 @@ ssh-copy-id -i <path_to_public_key> user@host
 
 + [doc](https://www.ssh.com/ssh/copy-id)
 
-#### scp
+---
+
+### scp
 
 ```shell
 scp myfile.txt remote_user@remote_server:/remote/folder/inner_folder
@@ -872,7 +894,7 @@ Works as much the same as normal cp command. All directories leading to the last
 
 + [example](https://www.simplified.guide/ssh/copy-file)
 
-#### sftp
+### sftp
 
 ```shell
 sftp remote_system
@@ -894,9 +916,9 @@ Works pretty much like original **ftp**, but uses ssh ecnrypted tunnel. Does not
 
 [back to contents](#contents)
 
-## Searching for files
+# Searching for files
 
-### locate
+## locate
 
 **locate** *substring*
 
@@ -906,11 +928,11 @@ Two common versions on Linux distribs are **slocate** and **mlocate**, which are
 
 ---
 
-### find
+## find
 
 In the simplest form takes one or more arguments (directories) to search. With the use of *options*, *tests* and *actions* the default output can be specified and narrowed down.
 
-#### Tests
+### Tests
 
 `-type T` limits search to specified type; example below will limit search to directories:
 
@@ -983,7 +1005,7 @@ $> find ~ \( -type f -not -perm 0600 \) -or \( -type d -not -perm 0700 \)
 
 ---
 
-#### Actions
+### Actions
 
 Predifined and user-defined actions provide a way to act on the itmes on the list.
 
@@ -1038,7 +1060,7 @@ Whitespaces embedded in filenames will cause problems for **xargs** and **find**
 
 ---
 
-#### Options
+### Options
 
 Options control the scope of a **find** search. Most commonly used:
 
@@ -1052,7 +1074,7 @@ Options control the scope of a **find** search. Most commonly used:
 
 ---
 
-### Extra resources
+## Extra resources
 
 + **locate**, **updatedb**, **find** and **xargs** programs are part of GNU Project's *findutils* package, [on-line documentation](http://www.gnu.org/software/findutils/)
 
@@ -1060,7 +1082,7 @@ Options control the scope of a **find** search. Most commonly used:
 
 [back to contents](#contents)
 
-## Archive
+# Archive
 
 ## tar
 
@@ -1084,13 +1106,13 @@ Manipulate tape archives
 
 [back to contents](#contents)
 
-## Extra
+# Extra
 
 ---
 
 [back to contents](#contents)
 
-## Linux virtualization tools
+# Linux virtualization tools
 
 [linux containers website](https://linuxcontainers.org/)
 
@@ -1103,11 +1125,11 @@ $> sudo apt install lxd
 
 [back to contents](#contents)
 
-## Resources
+# Resources
 
 + [linuxcommand.org](http://linuxcommand.org/index.php)
 + [snap](https://snapcraft.io/docs/getting-started), one-click server-app installation on linux
 
-### Random
+## Random
 
 + [slashdot](https://slashdot.org/)
