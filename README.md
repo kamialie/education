@@ -4,6 +4,8 @@ http://www.yourownlinux.com/2015/04/sed-command-in-linux-append-and-insert-lines
 
 https://stackoverflow.com/questions/25631989/sed-insert-line-command-osx
 
+[Linux foundation](https://www.linuxfoundation.org/)
+
 [GNU project programs docs](http://www.gnu.org/manual/manual.html)
 
 [Makefile](https://www.gnu.org/software/make/manual/)
@@ -18,6 +20,9 @@ man hier - file hierarchy
 
 # Contents
 
++ [Open Source](#open-source)
++ [Installation](#installation)
++ [Configuration and environment](#configuration-and-environment)
 + [Basics](#basics)
 	+ [Redirection](#redirection)
 + [Text processing](#text-processing)
@@ -25,7 +30,6 @@ man hier - file hierarchy
 	+ [diff](#diff)
 + [Permissions](#permissions)
 + [Processes](#processes)
-+ [Configuration and environment](#configuration-and-environment)
 + [Package management](#package-management)
 + [Storage](#storage) [STOPPED AT PAGE 185 - CREATING NEW FILESYSTEM]
 + [Network](#network)
@@ -35,10 +39,173 @@ man hier - file hierarchy
 	+ [tar](#tar)
 + [Extra](#extra)
 	+ [ssh](#ssh)
++ [Linux virtualization tools](#linux-virtualization-tools)
 + [Resources](#resources)
 
+## Open source
+
+Free Software Foundation (Stallman)
+[Open Source Initiative](https://opensource.org/licenses) (OSI)
+
+Licencing models:
+
++ GPL (GNU General Public Licence) - allows any use, modification and redistribution as long as original licence terms aren't changed
++ Creative commnons - allows more restrictive conditions
++ MIT
++ Apache
++ BSD
+
+Creative Common Licenses allows creators to choose the right they want to reserve for themselves (following can be combined an any way):
+
++ attribution - distribution and modification as long as creator attribution is included
++ share-alike - requires initial licence conditions to be included in all future distros and copies
++ non-commercial - only non-commercial use
++ no derivative works - allows further redistribution, but only of unmodified copies
++ public domain - allows all possible use
+
+---
+
+## Installation
+
+### Storage
+
+Best practices for partitioning storage is to mount system files (root) to even if small, but fast drive, while `/home` and `/var` to larger hard drive (slower than previos).
+
+[LVM](https://wiki.ubuntu.com/Lvm) (Logical Virtual Management) - combines physical storage devices into one logical group, can later divide it separate volumes.
+
+---
+
+### Boot process
+
+Motherboards have hard-coded minimal OS embedded in them, choices are either BIOS (Basic Input Output System) and more modern UEFI (Unified Extensible Firmware Interface). It checks all connected devices, looks for MBR (Master Boot Record) in a storage device and mounts it. If it had Linux installed, bootloader script, GRUB (Grand Unified Bootloader), executes and loads Linux kernel into memory. Holding down right shift key during boot will open GRUB menu (`ESC` key to move to previous menu). Press `E` key, when entry is highlited to configure how it is going to execute.
+
+`Ctrl-Alt-T` - brings up terminal on many Linux systems.
+
+`vmlinuz...` file in `/boot` directory is a compressed version of working Linux kernel. Other files ending with `generic` perform various supports tasks for kernel, their timestamp matches one of the `vmlinuz` files.
+
+grub bootloader uses files from `/boot/grub`. grub configurations can be edited at `/etc/default/grub`, then run `sudo update-grub`.
+
+Linux run levels (codes to tell Linux how it should run):
+
++ (0) system hall - shuts machine off)
++ (1) single-user (rescue) mode - work on security matters without network connection and other users logging in
++ (3) multi-user mode without GUI - resource efficient server providing only terminal connections
++ (5) multi-user mode with GUI - standard desktop machine
++ (6) reboot
+
+Command below should currently running level:
+```shell
+systemctl get-default
+```
+
+Temporary change level, where `<target>` is the desired level (for example `rescue.target`); change `isolate` to `enable` to make it default:
+```shell
+systemctl isolate <target>
+```
+
+---
+
+[back to contents](#contents)
+
+## Configuration and environment
+
+Shell program reads configuration scripts, *startup files*, which define the default environment shared by all users. The following considers bash. Startup files then followed by more in home directory that define personal environment. Exact sequence depends on the type of shell session - login shell session (when prompted username and password), non-login shell session (terminal session in the GUI)
+
+### Commands
+
++ `env` - output entire list of shell variables
++ `printenv` - display environment variables
+	+ `variable` - display particular variable contents
++ `set` - display both shell and environment variables and defined shell functions (sorted)
++ `alias` - display defined aliases
++ `chsh -s /path/to/shell` - set default shell for the current user
++ `export VAR` - make variable available to child processes
++ `locale` - outputs setting that effect geaographic location (are stored in `/usr/share/i18n/locales/` directory); systemd distros rather use `localctl`, see below
++ `localectl` - command-line tool to work with locales
+	+ `status` - outputs current setting
+	+ `list-locales` - outputs complete list of available locales
+	+ `set-local LANG=en_CA.utf8` - change local
++ `history` - outputs recent shell commands
++ `timedatectl` - display current time-zone setting
+	+ `list-timezones` - list available timezones
+	+ `set-timezone Canada/Toronto` - the argument is taken from the output of command above, must match exactly
+
+### Interesting variables
+
+| Variable		| Meaning																							|
+|:---------:	|---------------------------------------------------------------------------------------------------|
+| DISPLAY		| name of display, if running in graphical environment (usually `:0`, meaning first generated by X server)		|
+| EDITOR		| program to be used for text editing																|
+| SHELL			| name of shell (if not set when shell starts, bash assigns full pathname of the current user's login shell)	|
+| HOME			| pathname of home direcotry																		|
+| LANG			| defined the character set and collation of your language											|
+| OLD\_PWD		| previous working directory																		|
+| PAGER			| program to be used for paging output (often `/usr/bin/less`)										|
+| PATH			| colon-separeted list of directories that are searched when name of executable program is entered	|
+| PS1			| Prompt String 1; defines contents of shell prompt													|
+| PWD			| current working directory																			|
+| TERM			| name of terminal type, sets the protocol to be used with terminal emulator						|
+| TZ			| timezone; often unix-like systems maintain computer's internal clock in *Coordinated Universal Time* (UTC) and apply offset set by this variable	|
+| USER			| username																							|
+| HISTSIZE		| increase the size of command history from the default of 500										|
+| HISTCONTROL	| causes shell's history recording to ignore a command if the same was just recorded				|
+
+### Startup files
+
+General rule - add directories to **PATH** or define additional environment variables in **.bash\_profile** (or equvalent, for example Ubuntu uses **.profile**, everything else to **.bashrc**.
+Popular extensions (appended to the end) for backup file - `.back`, `.sav`, `.old`, `.orig`
+
+| File				| Contents																					|
+|:-----------------:|-------------------------------------------------------------------------------------------|
+| /etc/profile		| global config script that applies to all users											|
+| ~/.bash\_profile	| user's personal startup file, can be used to override settings in global config script	|
+| ~/.bash\_login		| if previous not found, bash attempts to read this script									|
+| ~/.profile		| if previous two not found, bash attempts to read this script (default in Debian-based distributions)	|
+| /etc/bash.bashrc	| global config script that applies to all users											|
+| ~/.bashrc			| user's personal startup file, can be used to extend or override global settings (almost always read); non-login shells read by default and most of startup files read it as well	|
+
+### dmesg
+
+Displays system message buffer, in other words messages relating to kernel ring buffer.
+
+For example, find out info about wifi adapter (`wl` is how linux names devices, that are meant to connect to a wireless LANs):
+```shell
+dmesg | grep wl
+```
+
+### lshw
+
+Displays comprehensive review of a hardware environment, ideally using `sudo`
+
+### Linux Desktop options
+
++ Cinnamon/Mate - more traditional design, like Windows XP
++ Gnome (default on Ubuntu) - more like Mac with Dock
++ Xfce
++ KDE
+
+Simply *apt install* the package of desired desktop and choose on the next login
+
+### More info
+
+INVOCATION section of bash man page
+
+---
 
 ## Basics
+
+Linux distro consists of 3 layers: Linux kernel, Linux desktop and specific suit of tools like package manager. Linux desktop is a software designed to manage graphic interface features like windows, menus, applications. Common examples are GNOME, KDE and Cinnamon.
+
+Linux distro families:
+
++ Debian:
+	- Ubuntu, Mint, Kali
++ RedHat:
+	- CentOs, Fedora
++ SUSE:
+	- OpenSUSE
++ Arch Linux:
+	- LinHES, Manjaro
 
 + **date**
 + **cal** - calendar
@@ -94,29 +261,33 @@ man hier - file hierarchy
 |	Directory	|	Comments	|
 |:--------------|---------------|
 | /				| root directory|
-| /bin			| contains binaries that must be present for the system to boot and run
+| /bin			| contains binaries that must be present for the system to boot and run; are expected to be available for all session modes (lets say single user mode)
 | /boot			| contains Linux kernel, initial RAM disk image (for drivers at boot time) and boot loader; <br/> interesting files:<ul><li>/boot/grub/grub.conf or menu.lst - used to configure boot loader</li><li>/boot/vmlinuz - Linux kernel</li></ul>	|
-| /dev			| contains *device nodes*; here kernel contains list of all devices it understands
-| /etc			| contains system wide configuration files (also shell scripts which start each of the system services at boot time) - everything in this directory should be readable text<br\>interesting files:<ul><li>/etc/crontab - file taht defines automated jobs</li><li>/etc/fstab - table of storage devices and their associated mount points</li><li>/etc/passwd - list of user accounts</li></ul>	|
+| /dev			| contains *device nodes*; here kernel contains list of all devices it understands, both physical and virtual
+| /etc			| contains system wide configuration files (also shell scripts which start each of the system services at boot time) - everything in this directory should be readable text<br\>interesting files:<ul><li>/etc/crontab - file that defines automated jobs</li><li>/etc/fstab - table of storage devices and their associated mount points</li><li>/etc/passwd - list of user accounts</li></ul>	|
 | /home			| each user is given directory in **/home**
 | /lib			| contains shared library files used by the core system programs (similar to dlls in Windows)
 | /list+found	| each formatted partition or device using a Linux file system (f.e. ext3) will have this directory, which is used as partial recovory from file system corruption event
 | /media		| on modern Linux systems contains the mount points for removable media such as USB drives, CD-ROMs, etc that are mounted automatically at insertion
 | /mnt			| on older Linux systems contains mount points for removable devices that have been mounted manually
 | /opt			| used to install "optional" software; mainly used to hold commercial software products
-| /proc			| virtual file system maintained by Linux kernel; the "files" it contains are peepholes into kernel itself; files are readable and will give a picture of how kernel sees your computer
+| /proc			| virtual file system maintained by Linux kernel; the "files" it contains are peepholes into kernel itself; files are readable and will give a picture of how kernel sees your computer; files representing running systems processes
 | /root			| home directory for root account
-| /sbin			| contains "system" binaries; programs that perfomr vital system tasks that are generally reserved for superuser
+| /sbin			| contains "system" binaries; programs that perform vital system tasks that are generally reserved for superuser; available from full multi-level session
 | /tmp			| storage for temporary, transient files created by various programs; some configs cause it to be emptied each time system is rebooted
-| /usr			| contains all programs and support files used by regular users
+| /usr			| contains all programs and support files used by regular users; non-essential command binaries and data files this binaries use
 | /usr/bin		| contains executable programs installed by Linux distrib
 | /usr/lib		| shared libraries for programs in **/usr/bin**
 | /usr/local	| contains programs that are not included with distrib, but are intended for system-wide use; programs compiled from source code are normally installed in **/usr/local/bin**
 | /usr/sbin		| contains more system administration programs
 | /usr/share	| contains all shared data used by programs in **/usr/bin** - deafult config files, icons, screen backgrounds, sound file, etc
 | /usr/share/doc| contains documentations files for most packages on the system
-| /var			| data that is likely to change - databases, spool file, user mail, etc
+| /var			| data that is likely to change - databases, spool file, user mail, application cache, etc
 | /var/log		| contains *log files*, records of various system activity
+| /sys			| files contanining system resources and kernel features
+| /sys/block		| contains info about attached storage devices; more likely to see `sda` directory which further contains more info inside about that storage device
+
+More info on [Filesystem Hierarchy Standard](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard). It is a way files and directories are organized in Linux distros.
 
 ---
 
@@ -384,168 +555,127 @@ Interrupt a process with `Ctrl-C` (**INT**, Interrupt). Pause a process with `Ct
 
 [back to contents](#contents)
 
-## Configuration and environment
-
-Shell program reads configuration scripts, *startup files*, which define the default environment shared by all users. The following considers bash. Startup files then followed by more in home directory that define personal environment. Exact sequence depends on the type of shell session - login shell session (when prompted username and password), non-login shell session (terminal session in the GUI)
-
-### Commands
-
-+ `printenv` - display environment variables
-	+ `variable` - display particular variable contents
-+ `set` - display both shell and environment variables and defined shell functions (sorted)
-+ `alias` - display defined aliases
-+ `chsh -s /path/to/shell` - set default shell for the current user
-+ `export VAR` - make variable available to child processes
-
-### Interesting variables
-
-| Variable		| Meaning																							|
-|:---------:	|---------------------------------------------------------------------------------------------------|
-| DISPLAY		| name of display, if running in graphical environment (usually `:0`, meaning first generated by X server)		|
-| EDITOR		| program to be used for text editing																|
-| SHELL			| name of shell (if not set when shell starts, bash assigns full pathname of the current user's login shell)	|
-| HOME			| pathname of home direcotry																		|
-| LANG			| defined the character set and collation of your language											|
-| OLD_PWD		| previous working directory																		|
-| PAGER			| program to be used for paging output (often `/usr/bin/less`)										|
-| PATH			| colon-separeted list of directories that are searched when name of executable program is entered	|
-| PS1			| Prompt String 1; defines contents of shell prompt													|
-| PWD			| current working directory																			|
-| TERM			| name of terminal type, sets the protocol to be used with terminal emulator						|
-| TZ			| timezone; often unix-like systems maintain computer's internal clock in *Coordinated Universal Time* (UTC) and apply offset set by this variable	|
-| USER			| username																							|
-| HISTSIZE		| increase the size of command history from the default of 500										|
-| HISTCONTROL	| causes shell's history recording to ignore a command if the same was just recorded				|
-
-### Startup files
-
-General rule - add directories to **PATH** or define additional environment variables in **.bash\_profile** (or equvalent, for example Ubuntu uses **.profile**, everything else to **.bashrc**.
-Popular extensions (appended to the end) for backup file - `.back`, `.sav`, `.old`, `.orig`
-
-| File				| Contents																					|
-|:-----------------:|-------------------------------------------------------------------------------------------|
-| /etc/profile		| global config script that applies to all users											|
-| ~/.bash_profile	| user's personal startup file, can be used to override settings in global config script	|
-| ~/.bash_login		| if previous not found, bash attempts to read this script									|
-| ~/.profile		| if previous two not found, bash attempts to read this script (default in Debian-based distributions)	|
-| /etc/bash.bashrc	| global config script that applies to all users											|
-| ~/.bashrc			| user's personal startup file, can be used to extend or override global settings (almost always read); non-login shells read by default and most of startup files read it as well	|
-
-### More info
-
-INVOCATION section of bash man page
-
----
-
-[back to contents](#contents)
-
 ## Package management
 
 Packaging systems:
 
-1. Debian style (.deb) - Debian, Ubuntu, Xandros, Linspire
+1. Debian style (.deb) - Debian, Ubuntu, Xandros, Linspire, Kali
 2. Red Hat style (.rpm) - Fedora, CentOS, Red Hat Enterprise Linux, OpenSUSE, Mandriva, PCLinuxOS
 
 *Package file* - basic unit of software in a packaging system; may contain meta data and pre-, post-installation scripts to perform configuration. *Package maintainer* gets the software in source code from *upstream provider* (author), compiles it and creates the package metadata and any necessary installation scripts; also could apply modifications to soruce code in improve integration.
 
+`/etc/apt/sources.list` (at least on ubuntu) contains the repository urls that package manager is using to get and update packages (`/etc/apt/sources.list.d/` contains third-party repositories); repo types:
+
++ main - supported by Canonical (exclusively open-source software)
++ restricted - proprietary (built with close source software)
++ universe - community supported
++ multiverse - restricted usage (use within the open source is controversial, mostly due to patent or legality issues)
+
 Package tools:
 
-| Distribution			| Low-level tools	| High-level tools	|
-|-----------------------|:-----------------:|:-----------------:|
-| Debian-style			| dpkg				| apt-get, aptitude	|
-| Fedora, RHEL, CentOS	| rpm				| yum				|
+| Distribution		| Low-level tools	| High-level tools	|
+|-----------------------|:---------------------:|:---------------------:|
+| Debian-style		| dpkg			| apt-get, aptitude	|
+| Fedora, RHEL, CentOS	| rpm			| yum (or newer dnf)	|
 
 + **Search package:**
 	* Debian-style
-		```bash
+		```shell
 		apt-get update
 		apt-cache search *seach_string*
 		```
+		```shell
+		apt update
+		apt seach *search_string*
+		```
 	* Fedora, RHEL, CentOS
-		```bash
+		```shell
 		yum search *search_string*
 		```
 + **Install from repository:**
 	* Debian-style
-		```bash
+		```shell
 		apt-get update
 		apt-get install *package_name*
 		```
 	* Fedora, RHEL, CentOS
-		```bash
+		```shell
 		yum install *package_name*
 		```
 + **Install from package file** (no dependancy resolution is performed)**:**
 	* Debian-style
-		```bash
+		```shell
 		dpkg -install *package_file*
 		```
 	* Fedora, RHEL, CentOS
-		```bash
+		```shell
 		rmp -i *package_name*
 		```
 + **Remove a package:**
 	* Debian-style
-		```bash
+		```shell
 		apt-get remove *package_name*
 		```
 	* Fedora, RHEL, CentOS
-		```bash
+		```shell
 		yum erase *package_name*
 		```
 + **Update a package from a repository:**
 	* Debian-style
-		```bash
+		```shell
 		apt-get update
 		apt-get upgrade
 		```
 	* Fedora, RHEL, CentOS
-		```bash
+		```shell
 		yum update
 		```
 + **Update a package from a package file:**
 	* Debian-style
-		```bash
+		```shell
 		dpkg --install *package_file*
 		```
 	* Fedora, RHEL, CentOS
-		```bash
+		```shell
 		rmp -U *package_file*
 		```
 + **List installed packages:**
 	* Debian-style
-		```bash
+		```shell
 		dpkg --list
 		```
 	* Fedora, RHEL, CentOS
-		```bash
+		```shell
 		rpm -qa
 		```
 + **Determine if a package is installed:**
 	* Debian-style
-		```bash
+		```shell
 		dpkg --status *package_name*
 		```
 	* Fedora, RHEL, CentOS
-		```bash
+		```shell
 		rmp -q *package_name*
 		```
 + **Package info:**
 	* Debian-style
-		```bash
+		```shell
 		apt-cache show *package_name*
 		```
+		```shell
+		apt show *package_name*
+		```
 	* Fedora, RHEL, CentOS
-		```bash
+		```shell
 		yum info *package_name*
 		```
 + **Finding which package installed a file:**
 	* Debian-style
-		```bash
+		```shell
 		dpkg --search *file_name*
 		```
 	* Fedora, RHEL, CentOS
-		```bash
+		```shell
 		rmp -qf *file_name*
 		```
 	
@@ -585,15 +715,18 @@ OSs use buffers to speed up the reading and writing to "slow" data devices (f.e.
 | Pattern	| Device										|
 |-----------|-----------------------------------------------|
 | /dev/fd\*	| floppy disk drives							|
-| /dev/hd\*	| IDE (PATA) disks on older systems; typical motherboards contain 2 IDE connectors or *channels*, each with a cable to 2 attachments points for drives: <ul><li>*master* device</li><li>*slave* device</li></ul>Device names are ordered such that **/dev/hda** refers to master device on first channge, **/dev/hdb** - slave device on first channel, **/dev/hdc** - master on second, and so on; Trailing digit indicates the partition number on the device - **/dev/hda1** refers to first partition, while **/dev/hda** refers to the entire drive	|
+| /dev/hd\*	| IDE (PATA) disks on older systems; typical motherboards contain 2 IDE connectors or *channels*, each with a cable to 2 attachments points for drives: <ul><li>*master* device</li><li>*slave* device</li></ul>Device names are ordered such that **/dev/hda** refers to master device on first channel, **/dev/hdb** - slave device on first channel, **/dev/hdc** - master on second, and so on; Trailing digit indicates the partition number on the device - **/dev/hda1** refers to first partition, while **/dev/hda** refers to the entire drive	|
 | /dev/lp\*	| printers
-| /dev/sd\*	| SCSI disks; recent Linux systems kernel treats all disk-like devices (included PATA?SATa hard disjs, flash drives, and USB mass storage devices (f.e portable music players, digital cameras) as SCSI disks; the rest if teh naming is similar to the older **/dev/hd** naming scheme	|
+| /dev/sd\*	| SCSI disks; recent Linux systems kernel treats all disk-like devices (included PATA?SATa hard disks, flash drives, and USB mass storage devices (f.e portable music players, digital cameras) as SCSI disks; the rest if the naming is similar to the older **/dev/hd** naming scheme	|
 | /dev/sr\*	| optical drives (CD/DVD readers and burners)	|
 
 If system does not automatically mount removable devices, check the name when device is attached in **/var/log/messages** or **/var/log/syslog**. Devie name remains the same as long as device remains physically attached and computer is not rebooted.
 
 ### Commands
 
++ `df` - disk utility
+	+ `-h` - human readable format
+	+ `-t ext4` - specify filesystem type
 + **mount** *device* *mount_point* - mount a file system; command without arguments displays currently mounted file systems with the following format - *device* on *mounting_point* type *file_system_type* (*options*)
 	+ `-t` *type* - specify file system type
 + **umount** *device* - unmount a file system
@@ -605,6 +738,18 @@ If system does not automatically mount removable devices, check the name when de
 + **genisoimage (mkiofs)** - create an ISO 9660 image file
 + **wodim (cdrecord)** - write data to optical storage media
 + **md5sum** - calculate an MD5 checksum
+
+### Useful commands
+
+Outputs mounted disks on the system; if device does not appear it might have not yet been mounted:
+```shell
+$> df -ht ext4
+```
+
+Outputs all block devices physically attached to the system:
+```shell
+$> lsblk | grep sd
+```
 
 ---
 
@@ -941,6 +1086,18 @@ Manipulate tape archives
 
 ## Extra
 
+---
+
+[back to contents](#contents)
+
+## Linux virtualization tools
+
+[linux containers website](https://linuxcontainers.org/)
+
+get `lxd` environmet (or older `lxc` platform):
+```shell
+$> sudo apt install lxd
+```
 
 ---
 
@@ -949,6 +1106,7 @@ Manipulate tape archives
 ## Resources
 
 + [linuxcommand.org](http://linuxcommand.org/index.php)
++ [snap](https://snapcraft.io/docs/getting-started), one-click server-app installation on linux
 
 ### Random
 
