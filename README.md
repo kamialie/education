@@ -15,6 +15,7 @@
 
 ## Contents
 	+ [Automation](#automation)
+	+ [Regex](#regex)
 
 ## Automation
 
@@ -132,4 +133,60 @@ import datetime
 
 timestamp = os.path.getmtime('newfile.txt')
 date = datetime.datetime.fromtimestamp(timestamp)
+```
+
+---
+
+# Regex
+
+[Regex HOWTO](https://docs.python.org/3/howto/regex.html)
+
+[Play regex](https://regexcrossword.com/)
+
+To work with regular expressions import [re](https://docs.python.org/3/library/re.html) module.
+
+To specify the search pattern pass raw string to re module methods using `r` prefix - `r"pattern"` (this tells Python to send the string as it is).
+
+`re.IGNORECASE` option.
+
+## Methods
+
+| Method							| Description	|
+|-----------------------------------|---------------|
+| search(pattern, target\_string	| returns re.Match object (with only first match) with info of the index where the match was found and the corresponding string; if nothing was found, returns `None`	|
+| findall(pattern, target\_string	| same as previous, but returns all matches	in the form all list	|
+| split(pattern, target\_string		| works as string *split* method, while taking regex as first parameter indicating possible delimiters; enclose the regex in parethesis to include the delimiters in resulting list	|
+| sub(pattern, sub\_string, target\_string	| replaces all occurence of pattern with a second argument, *sub\_string*; *sub\_string* may also be a regex, f.e. using the capturing groups found earlier	|
+
+## Specifiers
+
+Escape special characters with `\` backslash.
+
+[check, analyze regex](https://regex101.com/)
+
+
+[greedy vs non-greedy mode](https://docs.python.org/3/howto/regex.html#greedy-versus-non-greedy)
+
+| Specifier									| Description	|
+|-------------------------------------------|---------------|
+| . - dot									| matches any character	|
+| [Pp], [a-z], [a-z0-9] - character classes	| matches any characters specified inside brackets, can specify range or multiple ranges; adding `^` in the beginning negates the the result	|
+| expression|expression - pipe				| matches either of the expression	|
+| * - star									| repeated match - preceding character 0 or more times	|
+| + - plus									| repeated match - preceding character 1 or more times	|
+| ? - question mark							| repeated match - preceding character 0 or one times (that is optional)	|
+| {number}, {num1, num2}					| repeated match - preceding character *number* of times, or within range	|
+| (expression)								| capture groups - enclosed expression will be captures (returned by methods); can be later references by backslash followed by number notation - `\1`	|
+| \b										| specify boundaries, f.e. `r'\b[a-z]{5}\b'` - for exactly 5 letter word	|
+| \w										| matches any character, number or underscore	|
+| \d										| matches digits	|
+| \s										| matches whitespace characters	|
+
+## Groups
+
+Patterns enclosed in parenthesis will be captured as groups. `groups` on result of `search` method will returned these groups.
+
+```python
+result = re.search(r'pattern', string)
+groups = result.groups()
 ```
