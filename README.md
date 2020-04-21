@@ -107,9 +107,11 @@ Good example of creating couple user-defined networks for an application: couple
 
 ### bridge
 
-Docker bridge driver automatically installed on host machine(can provide isolation from containers on other networks). Bridge networks only apply to containers running on the same Docker daemon host. Default bridge networks is created upon Docker startup, newly created containers automatically connect to it unless otherwise specified (user-defined networks are superior to the default one)
+Docker bridge driver is automatically installed on host machine(can provide isolation from containers on other networks). Bridge networks only apply to containers running on the same Docker daemon host. Default bridge networks is created upon Docker startup, newly created containers automatically connect to it unless otherwise specified (user-defined networks are superior to the default one)
 
-Default bridge network is called *bridge*(docker0 on host), used to connect containers on a single host. *Host* and *none* arent fully-fledged and only used to start a container connected directly to the Docker daemon host's networking stack, or to start a container with no network devices (thus completely isolate container).
+Default bridge network is called *bridge*(docker0 on host), used to connect containers on a single host. *Host* and *none* arent fully-fledged and only used to start a container connected directly to the Docker daemon host's networking stack or to start a container with no network devices (thus completely isolate container).
+
+Bridge network is creatied via `802.1d bridge` device; it is also called sirtual switch or vswitch. Actually uses Linux's kernel, which makes very fast and durable.
 
 Differences between default and user-defined:
 * containers on user-defined network automatically expose all ports to each other, and no ports to outside world; on default network user needs to manually open ports for two containers to communicate, thus close unnecessary ports for outside world by other means
@@ -117,7 +119,9 @@ Differences between default and user-defined:
 * can easaly configure new network; default requires restart or Docker
 * sharing environment variables can be done using docker-compose or docker swarm service(using secrets and configs)
 
-Container can connect to more than one bridge network
+Container connect to the bridge network (switch) via eth0 adapter, which is shown in `brctl show` command as interfaces. Container can connect to more than one bridge network.
+
+For extra inspection use `bridge-utils` package (on Ubuntu) to get even more info on bridge network; command `brctl show` will output all bridge networks on host.
 
 ### host
 
