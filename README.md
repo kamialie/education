@@ -57,6 +57,35 @@ import os
 
 [documentation on os.path](https://docs.python.org/3/library/os.path.html)
 
+---
+
+### Environment
+
+`environ` dictionary of `os` module provides environment variables of shell (second argument is the default value if key is not present):
+
+```python
+import os
+var = os.environ.get('HOME', '')
+```
+
+To get command-line arguments use `sys` module; the resulting list contains program name, as well as passed arguments:
+```python
+import sys
+print(sys.argv)
+```
+
+`?` enironment variable hold a status code of the last shell command executed
+
+to get a copy of current shell environment use `copy()` method, which returns a dictionary of variables;
+it can further be modified to be passed to a child process (use `pathsep.join()` method, which takes list of variables to construct new PATH):
+```python
+import os
+my_env = os.environ.copy()
+my_env = os.pathsep(['/usr/local/bin/', my_env['PATH']])
+```
+
+---
+
 ### CSV
 
 [docs](https://docs.python.org/3/library/csv.html)
@@ -189,4 +218,47 @@ Patterns enclosed in parenthesis will be captured as groups. `groups` on result 
 ```python
 result = re.search(r'pattern', string)
 groups = result.groups()
+```
+
+# Subprocesses
+
+[docs](https://docs.python.org/3/library/subprocess.html)
+
+`subprocess` module provide functionality to run shell commands within python.
+
+`run` method takes in a list that consists of command and its arguments.
+It store the return code that can be accessed later.
+To capture the output of the command pass `capture_ouput=True` argument to the run method.
+It will be accessible through `stdout` property of returned variable and be represented by array of bytes,
+which needs to be decoded.
+
+`run` method also might take arguments:
++ `env` - dictionary with environment variables
++ `cwd` - working directory for the command
++ `timeout` - in seconds
++ `shell` - boolean, if true, python will first execute default system shell, then run command inside of it (enables shell features like shell expansions)
+
+## Examples
+
+run date command:
+```python
+import subprocess
+result = subprocess.run(['date'])
+result.returncode
+```
+
+capture output:
+```python
+import subprocess
+result = subprocess.run(['host'], capture_output=True)
+print(result.sdout.decode())
+```
+
+execute child process with modified environment:
+```python
+import os
+import subprocess
+result = subprocess.run(['myapp'], env=my_env)
+my_env = os.environ.copy()
+my_env = os.pathsep(['/usr/local/bin/', my_env['PATH']])
 ```
