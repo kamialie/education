@@ -14,8 +14,16 @@
 [Python built-in functions](https://docs.python.org/3/library/functions.html)
 
 ## Contents
-	+ [Automation](#automation)
-	+ [Regex](#regex)
++ [Automation](#automation)
+	+ [Environment](#environment)
+	+ [CSV](#csv)
+	+ [Examples](#examples)
++ [Regex](#regex)
+	+ [Methods](#methods)
+	+ [Specifiers](#specifiers)
+	+ [Groups](#groups)
++ [Subprocesses](#subprocesses)
++ [Testing](#testing)
 
 ## Automation
 
@@ -261,4 +269,53 @@ import subprocess
 result = subprocess.run(['myapp'], env=my_env)
 my_env = os.environ.copy()
 my_env = os.pathsep(['/usr/local/bin/', my_env['PATH']])
+```
+
+# Testing
+
+[docs, basic example](https://docs.python.org/3/library/unittest.html#basic-example)
+
+[docs, running in cl](https://docs.python.org/3/library/unittest.html#command-line-interface)
+
+[docs, patterns](https://docs.python.org/3/library/unittest.html#organizing-test-code)
+
+[docs, assertRaises](https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertRaises)
+
+[monitoring distributed systems](https://landing.google.com/sre/sre-book/chapters/monitoring-distributed-systems/)
+
+[testing reliability](https://landing.google.com/sre/sre-book/chapters/testing-reliability/)
+
+[performance testing](https://testing.googleblog.com/2007/10/performance-testing.html)
+
+[raising exceptions](https://docs.python.org/3/tutorial/errors.html#raising-exceptions)
+
+Python prodives `unittest` module with classes and methods to provide necessary functionality.
+For example, `TestCase` class. To use it create you own class and inherit from `TestCase`.
+Any method that is prefixed with `test_` will be recognized with testing framework.
+
+[assert](https://docs.python.org/2/reference/simple_stmts.html#the-assert-statement) keywork raises an error with a message, when condition evaluates to false:
+```python
+assert type(parameter) == str, 'descriptive message"
+```
+
+[use of assert in Python](https://stackoverflow.com/questions/5142418/what-is-the-use-of-assert-in-python)
+
+`assertRaises` method can test if the unit is raising the right error with given parameters:
+```python
+def test_assert_error(self):
+	self.asserRaises(ValueError, method_name, parameter1, parameter2)
+
+## Examples
+
+```python
+import <your function>
+import unittest
+
+class TestingSomething(unittest.TestCase):
+	def test_basic(self):
+		testcase = 'some stuff'
+		expected = 'other stuff
+		self.assertEqual(<yourfunction>(testcase), expected)
+
+unittest.main()
 ```
