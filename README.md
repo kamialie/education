@@ -36,7 +36,7 @@ du = shutil.disk_usage('/')
 print(du.free / du.total * 100)
 ```
 
-get cpu usage(takes seconds, float, as paramter, to calculate average during that period of time):
+get CPU usage(takes seconds, float, as parameter, to calculate average during that period of time):
 ```python
 import psutil
 psutil.cpu_percent(1)
@@ -60,7 +60,7 @@ import os
 | create directory				| `os.mkdir('directory')`						|
 | change directory				| `os.chdir('directory')`						|
 | remove directory (successful only if directory is empty	| `os.rmdir('directory')`	|
-| list contents of directory, retunrs a list	| `os.listdir('directory')`		|
+| list contents of directory, returns a list	| `os.listdir('directory')`		|
 | check file is a directory		| `os.isdir('name')`							|
 
 [documentation on os.path](https://docs.python.org/3/library/os.path.html)
@@ -82,7 +82,7 @@ import sys
 print(sys.argv)
 ```
 
-`?` enironment variable hold a status code of the last shell command executed
+`?` environment variable holds a status code of the last shell command executed
 
 to get a copy of current shell environment use `copy()` method, which returns a dictionary of variables;
 it can further be modified to be passed to a child process (use `pathsep.join()` method, which takes list of variables to construct new PATH):
@@ -192,8 +192,8 @@ To specify the search pattern pass raw string to re module methods using `r` pre
 |-----------------------------------|---------------|
 | search(pattern, target\_string	| returns re.Match object (with only first match) with info of the index where the match was found and the corresponding string; if nothing was found, returns `None`	|
 | findall(pattern, target\_string	| same as previous, but returns all matches	in the form all list	|
-| split(pattern, target\_string		| works as string *split* method, while taking regex as first parameter indicating possible delimiters; enclose the regex in parethesis to include the delimiters in resulting list	|
-| sub(pattern, sub\_string, target\_string	| replaces all occurence of pattern with a second argument, *sub\_string*; *sub\_string* may also be a regex, f.e. using the capturing groups found earlier	|
+| split(pattern, target\_string		| works as string *split* method, while taking regex as first parameter indicating possible delimiters; enclose the regex in parenthesis to include the delimiters in resulting list	|
+| sub(pattern, sub\_string, target\_string	| replaces all occurrences of pattern with a second argument, *sub\_string*; *sub\_string* may also be a regex, f.e. using the capturing groups found earlier	|
 
 ## Specifiers
 
@@ -207,7 +207,7 @@ Escape special characters with `\` backslash.
 | Specifier									| Description	|
 |-------------------------------------------|---------------|
 | . - dot									| matches any character	|
-| [Pp], [a-z], [a-z0-9] - character classes	| matches any characters specified inside brackets, can specify range or multiple ranges; adding `^` in the beginning negates the the result	|
+| [Pp], [a-z], [a-z0-9] - character classes	| matches any characters specified inside brackets, can specify range or multiple ranges; adding `^` in the beginning negates the result	|
 | expression|expression - pipe				| matches either of the expression	|
 | * - star									| repeated match - preceding character 0 or more times	|
 | + - plus									| repeated match - preceding character 1 or more times	|
@@ -289,11 +289,11 @@ my_env = os.pathsep(['/usr/local/bin/', my_env['PATH']])
 
 [raising exceptions](https://docs.python.org/3/tutorial/errors.html#raising-exceptions)
 
-Python prodives `unittest` module with classes and methods to provide necessary functionality.
+Python provides `unittest` module with classes and methods to provide necessary functionality.
 For example, `TestCase` class. To use it create you own class and inherit from `TestCase`.
 Any method that is prefixed with `test_` will be recognized with testing framework.
 
-[assert](https://docs.python.org/2/reference/simple_stmts.html#the-assert-statement) keywork raises an error with a message, when condition evaluates to false:
+[assert](https://docs.python.org/2/reference/simple_stmts.html#the-assert-statement) keyword raises an error with a message, when condition evaluates to false:
 ```python
 assert type(parameter) == str, 'descriptive message"
 ```
@@ -304,6 +304,7 @@ assert type(parameter) == str, 'descriptive message"
 ```python
 def test_assert_error(self):
 	self.asserRaises(ValueError, method_name, parameter1, parameter2)
+```
 
 ## Examples
 
