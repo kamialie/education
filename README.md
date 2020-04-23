@@ -137,9 +137,9 @@ The overlay network creates a distributed network among multiple Docker daemon h
 
 When swarm is initialized or join Docker hosts to an existing swarm, two networks are created on the host:
 1. overlay network called *ingres*, which handles control and data traffic related to swarm services; swarm service connects to it by default if not user-defined is specified
-2. bridge network called *docker_gwbridge*, which connects the individual Docker daemon to the other daemons participating in the swarm; it is a virtual bridge that connects the overlay networks(including ingress) to an individual Docker daemon's physical network, so that traffic can from flow to and from swarm managers and workers; exists in the kernel of a Docker host.
+2. bridge network called *docker_gwbridge*, which connects the individual Docker daemon to the other daemons participating in the swarm; it is a virtual bridge that connects the overlay networks(including ingress) to an individual Docker daemon's physical network, so that traffic can flow to and from swarm managers and workers; exists in the kernel of a Docker host.
 
-When creating a overlay network for services on manager, docker automatically adds them on worker node when creating a service and removes them when removing a service.
+When creating a overlay network for services on manager, docker automatically adds them on worker node when creating a service and removes them when removing a service (that is it initially gets created on manager and is scoped to swarm, but actually appears on workers upon need).
 
 User-defined overlay network also provides DNS translation in contrast to default ingress network.
 
@@ -149,9 +149,27 @@ docker network create -d overlay --attachable test-net
 docker run -dti --network test-net alpine
 ```
 
+#### behind the scenes
+
+Each node (host) has its own sandbox with a bridge network. For overlay network, each of these sandboxes get a VXLAN tunnel endpoints that are plumed into bridge. Then, the communication is done through this tunnel (effectively the overlay network; also is a single layer2 broadcast domain; layer2 adjencency), so router doesn't participate in making decisions, rather VXLAN encapsulation takes care of all that.
+
+Underlay network (through router) must be connected.
+
+Ports that should be open: 4789(UDP), 7946(TCP/UPD), 2377(TCP).
+
 ### macvlan
 
-[to be continued]
+Linux specific driver. Uses Linux subinterfaces and naming conventions that come with that. For example, with a parent eth0 interface, after creating new macvlan connecting to vlan 100, it creates a eth0.100 subinterface. **Require Promiscuous mode**.
+
+Suitable for the case, when you want to connect containers to the existing VLAN with vms and apps, since bridge and overlay are more contaner-focused. Contanerizing parts of business application includes starting and connecting docker hosts to the existing network. Containers inside these hosts connect to the app's network through their host, but overall picture enables us to avoid hosts and see containers directly connected to the app's network.
+
+When creating macvlan network it needs the subnet information, default gateway and a name, thus knowing where to connect containers on the outside network, that is which vlan. It also needs to know a range of addresses that are not already in use on vlan to avoid duplication (as it is words right now).
+
+For strict isolation Linux kernel filters and drops all packets between container and the host it is running on.
+
+### ipvlan
+
+Almost same as `macvlan`, but more cloud friendly (doesn't require special mode) and does not assign each participant its own MAC address (actually assignes parents MAC address). All other rules apply here as well.
 
 ### docker network command
 
