@@ -35,6 +35,11 @@ man hier - file hierarchy
 + [Network](#network)
 	+ [curl](#curl)
 + [Searching for files](#searching-for-files)
+	+ [locate](#locate)
+	+ [find](#find)
+		+ [tests](#Tests)
+		+ [actions](#Actions)
+		+ [options](#Options)
 + [Archive](#archive)
 	+ [tar](#tar)
 + [Extra](#extra)
@@ -215,6 +220,10 @@ Linux distro families:
 + Arch Linux:
 	- LinHES, Manjaro
 
+Most programs keep their documentation files in `/etc/share/doc` directory.
+
+## Commands
+
 + **date**
 + **cal** - calendar
 + **free** - shows free space (only works on linux)
@@ -225,6 +234,7 @@ Linux distro families:
 	pbcopy < file
 	pbpaste > file
 	```
++ **basename** - returns the base part of the filename or directory path
 + **cp**
 	- `-a | --archive` - copy files and directories and all their attributes; normally cp take the default attributes of the user performing the copy
 	- `-i | --interactive` - prompt for confirmation otherwise files could be overwritten silently
@@ -238,7 +248,7 @@ Linux distro families:
 + **type** \<command\> - displays the kind of command the shell will execute (could be built-in, executable, shell function or alias)
 + **which** \<executable\> - determines the exact location of the given executable (only works for executables)
 + **help** \<builtin\> - man page for built-ins
-+ **man** [\<section\>] \<program\> - sections:
++ **man** [\<section\>] \<program\> - sections (if not alraedy present, install `man-db` package; same name for `apt` and `yum`):
 	1. User commands
 	2. Programming interfaces kernel system calls
 	3. Programming interfaces to the C library
@@ -248,7 +258,7 @@ Linux distro families:
 	7. Miscellaneous
 	8. System administration commands
 + **apropos** \<search\> - search for man pages based on argument (same as `man -k`)
-+ **info** \<program\> - GNU project provided man pages; works as a tree structured nodes, which are also hyperlinked(leading asterisk); the above utilities are part of `coreutils` package - `info coreutils` will show a list of programs that are part of it; navigation:
++ **info** \<program\> - (if not already present, install `info` package) GNU project provided man pages; works as a tree structured nodes, which are also hyperlinked(leading asterisk); the above utilities are part of `coreutils` package - `info coreutils` will show a list of programs that are part of it; navigation:
 	- `?` - help
 	- `n` - display next node
 	- `p` - previous node
