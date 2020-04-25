@@ -43,6 +43,7 @@ Bash metacharacters(must be quoted or escaped if not intendent to be used): spac
 * [Fun stuff](#fun-stuff)
 * [Bash prompt](#bash-prompt)
 * [Keyboard tricks](#keyboard-tricks)
+* [Resources](#resources)
 
 ----------
 
@@ -144,6 +145,16 @@ while test-commands; do consequent-commands; done
 ```
 Same as above.
 
+Counting example(`-le` stands for `less than or equal to`):
+
+```shell
+n=1
+while [ $n -le 5 ]; do
+	echo "Iteration $n"
+	((n+=1))
+done
+```
+
 ### for
 ```bash
 for name [ [in [words ...] ] ; ] do commands; done
@@ -151,7 +162,24 @@ for name [ [in [words ...] ] ; ] do commands; done
 for (( expr1 ; expr2 ; expr 3 )) ; do commands ; done
 ```
 
-Expands *words* and execute *commands* once for each member in the resultant list.
+Expands *words* and execute *commands* once for each member in the resulting list.
+
+Names separated by space create a list that for loop can iterate over:
+
+```shell
+for count in one two three; do echo "$count"; done
+```
+
+#### Examples
+
+rename files:
+
+```shell
+for file in *.HTM; do
+	name = $(basename "$file" .HTM)
+	mv "$file" "$name.html"
+done
+```
 
 ----------
 
@@ -160,7 +188,7 @@ Expands *words* and execute *commands* once for each member in the resultant lis
 ### Conditional constructs
 
 #### if
-```bash
+```shell
 if test-command; then
     consequent-commands;
 [elif more-test-commands; then
@@ -168,7 +196,17 @@ if test-command; then
 [else alternate-consequents;]
 fi
 ```
+
 If clause evaluated when test-commands returns 0 (success status), otherwise elif, else clauses execute in turn.
+
+`Test` evaluates the condition recieved and exits with zero if its true and with one if its false. Square bracket is an alias to `test` command, but it then also should be closed with a closing square bracket (spaces after opening and before closing brackets are important!).
+
+Checking if string is empty can be done in two ways:
+
+```shell
+if test -n "$PATH"; then echo 'PATH is not empty'; fi
+if [ -n "$PATH"; then echo "PATH is not empty"; fi
+```
 
 #### case
 ```bash
@@ -630,3 +668,12 @@ $ history | grep /usr/bin
 * [bash rc not source automatically](https://apple.stackexchange.com/questions/12993/why-doesnt-bashrc-run-automatically)
 * [basic customization](https://www.ostechnix.com/hide-modify-usernamelocalhost-part-terminal/)
 * [more on customization](https://www.cyberciti.biz/tips/howto-linux-unix-bash-shell-setup-prompt.html)
+
+# Later organized
+
+Command line arguments are accessed with `$` sign and a number, f.e. first cl-argument is `$1`.
+
+# Resources
+
++ [bash scripting tutorial](https://ryanstutorials.net/bash-scripting-tutorial/) - also other tutorials
++ [tutorial for beginners](https://linuxconfig.org/bash-scripting-tutorial-for-beginners)
