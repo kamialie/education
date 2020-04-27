@@ -95,6 +95,10 @@ Commands to get man pages:
 
 ## Recording changes to the repository
 
+[commit style advice](https://commit.style/)
+
+[tips for usefull commits](https://thoughtbot.com/blog/5-useful-tips-for-a-better-commit-message)
+
 **git status** - determine status of all files in the current repository, can be tracked (unmodified | modified | stages) or untracked
 
 - `[--short], [-s]` - short version; 1 column is staged area, 2 column - working tree; corresponding signs are:
