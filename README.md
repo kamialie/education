@@ -171,6 +171,8 @@ Commands to get man pages:
 + `[--relative-date]` - display date in relative format
 + `[--oneline]` - shorthand for --pretty=oneline --abbrev-commit together
 
+**git show** *identifier* - show **git log -p** output on specified commit through identifier
+
 ----------
 
 ## Limiting log output
@@ -197,11 +199,15 @@ Commands to get man pages:
 	- git add forgotten_file
 	- git commit --amend
 
-**git reset \<reference\> \<path/to/file/or/directory\>** - reset the specified file, thus its becomes unstaged
+**git reset \<reference\> \<path/to/file/or/directory\>** - reset the specified file after staging it with `git add`, thus it becomes unstaged
 
-+ git reset HEAD some_file - example
+```shell
+$> git reset HEAD some_file
+```
 
 **git checkout -- \<path/to/file/or/directory\>** - unmodify a file, revert it to last commit
+
+**git revert \<reference\>** - creates a revert commit to the reference specified (both staged and committed). [docs](https://git-scm.com/docs/git-revert)
 
 ----------
 
