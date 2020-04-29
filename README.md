@@ -323,7 +323,9 @@ Performing merge can lead to 2 cases :
 **git mergetool** - open graphical tool to resolve conflicts, append tool name to use other than default
 **git mergetool --tool-help** - get help (for example tool is not configured)
 
-**git branch -d <name>** - delete branch
+**git branch -d <name>** - delete branch locally, with `-D` flag to force delete (in case of unmerged changes)
+
+**git push --delete origin <branch>** - delete remote branch
 
 ## Branch management
 
@@ -581,3 +583,5 @@ git reset also accepts `--patch` option to unstage on a hunk-by-hunk basis.
 - **bisect** command which is used to find where "the feature" was broken fisrt - can pass the script to check it
 - **git stash push path/to/file** - stash individual file
 - **git stash -p** - ask before every stash
+- [ resolving merge conflicts](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/resolving-a-merge-conflict-using-the-command-line)
+- [rewriting history](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History)
