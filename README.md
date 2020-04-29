@@ -271,6 +271,7 @@ Most programs keep their documentation files in `/etc/share/doc` directory.
 	alias <name>=<string>
 
 + **script** \<file\> - start shell session recording
++ **bat** \<file\> - show contents of the file in nice format. [git page](https://github.com/sharkdp/bat)
 
 ---
 
