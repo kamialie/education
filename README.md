@@ -24,6 +24,7 @@
 	+ [Groups](#groups)
 + [Subprocesses](#subprocesses)
 + [Testing](#testing)
++ [Troubleshooting](#troubleshooting)
 
 ## Automation
 
@@ -319,4 +320,22 @@ class TestingSomething(unittest.TestCase):
 		self.assertEqual(<yourfunction>(testcase), expected)
 
 unittest.main()
+```
+
+# Troubleshooting
+
+## Commands
+
+### strace
+
+Outputs all systems call that the program made and their return status
+```shell
+$> strace ./my_program
+```
+
+### ltrace
+
+Same as previous but outputs library calls
+```shell
+$> ltrace ./my_program
 ```
