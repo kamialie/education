@@ -11,6 +11,8 @@
     + https://stackoverflow.com/questions/27835619/urllib-and-ssl-certificate-verify-failed-error - interesting answer about certification handling
     + https://realpython.com/vim-and-python-a-match-made-in-heaven/ - setting evironment with vim
 
+- python cl debugger - pdb3
+
 [Python built-in functions](https://docs.python.org/3/library/functions.html)
 
 ## Contents
