@@ -326,6 +326,25 @@ unittest.main()
 
 # Troubleshooting
 
+[Effective troubleshooting](https://landing.google.com/sre/sre-book/chapters/effective-troubleshooting/)
+
+## Memory usage analisys
+
+[article](https://www.pluralsight.com/blog/tutorials/how-to-profile-memory-usage-in-python)
+
+memory profiler analyses the use of memory line by line, python example with the profiler decorator:
+```python
+from memory_profiler import profiler
+
+@profile
+def main():
+	pass
+```
+
+Then simply run the program to output the memory usage.
+
+`Guppy` module is used to profile an entire application in Python.
+
 ## Commands
 
 ### strace
