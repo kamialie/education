@@ -385,11 +385,26 @@ Default returns the lines containing the pattern
 **diff [flags]... files**
 compare files line by line
 
+[docs](http://man7.org/linux/man-pages/man1/diff.1.html)
+
+Default behavior indicates lines where changes were made (by order, first indicates first file that was passed); letter in between indicate different type of changes: `a` - added, `c` - changed.
+
 also see [cmp use](#https://stackoverflow.com/questions/12900538/fastest-way-to-tell-if-two-files-are-the-same-in-unix-linux)
+
+## patch
+
+```shell
+patch original.file < change.diff
+```
+
+[docs](http://man7.org/linux/man-pages/man1/patch.1.html)
+
+Patch commands applies changes to the original file using output of `diff -u original.file changed.file > change.diff` command.
 
 ### Flags
 
 + **-brief**, **-q** - output only whether files differ
++ **--unified**[=NUM], **U** NUM, **-u** - output lines of unified context; `+` indicates lines added, `-` lines deleted
 
 ---
 
@@ -1095,23 +1110,126 @@ Options control the scope of a **find** search. Most commonly used:
 
 # Archive
 
+Archiving is the process of gathering many files and bundling them into a single large file.
+
 ## tar
 
-Manipulate tape archives
+```shell
+tar mode[options] pathname...
+```
 
-### Flags
+Unix-world classic program is `tar`. Extensions `.tar` and `.tgz` indicate archive and compressed archive respectively.
 
-**tar**
-+ `-c, --create [options] [files | directories]` - create a new archive containing specified items
-+ `-x, --extract` - extract to disk from the archive; if a file with the same name appears more than once, later once overwrite earlier copies
-+ `-f, --file <file>` - read the archive or write the archive to the specified file; the filename can be '-' for standard input or output
-+ `-v, --verbose` - produce verbose output
-+ `-z, --gunzip, --gzip` - compress the resulting archive with gzip
+`tar` uses a bit different way of expressing options, where mode must go first followed by options without leading dash(es).
+
+
+Unless extraced by root (superuser) the contents of archive take owndership of the performing user when extracted rather than the original owner.
+
+Default for pathnames is relative, rather than absolute (`tar` does it by removing leading slash). This way extracting the archive will always be relative to the directory where operation is performed.
+
+Specifying files on extraction does not normally support wildcards and requires full relative path, however, GNU version supports `--wildcards` option.
+
+Possible scenario of `find` use is to make incremental backups based on timestamp (of backup archive as relative point).
+
+### Modes
+
+| Mode	| Description	|
+|-------|---------------|
+| c		| create an archive from a list of files and/or directories	|
+| x		| extract archive	|
+| r		| append specified pathname to the end of archive	|
+| t		| list the contents of archive	|
+| z		| gzip compression	|
+| j		| bzip2 compression	|
+
+
+### Options
+
+| Option	| Description	|
+|-----------|---------------|
+| f			| specify the name of the archive; `-` can be interpreted as `stdin` or `stdout` accordingly	|
+| v			| verbose output	|
 
 ### Examples
 
-+ `tar -cvf <name.tar> <path_to_directory>` - create an archive of a directory
-+ `tar -x` - extract all entries
+Create an archive from directory with specified name:
+```shell
+$> tar cf name.tar directory
+```
+
+List the contents of the archive:
+```shell
+$> tar tf name.tar
+```
+
+Extract the contents of the archive:
+```shell
+$> tar xf name.tar
+```
+
+Extract single file from archive (multiple pathnames can be specified):
+```shell
+$> tar xf name.tar pathname
+```
+
+Extracting files with wildcard (GNU version):
+```shell
+$> tar xf name.tar --wildcards 'home/dir/some-*/file-A'
+```
+
+`tar` in conjunction with `find`:
+```shell
+$> find some_dir -name 'file-A' exec tar rf name.tar '{}' '+'
+```
+
+`tar` from stdin (simplified version on second line considering gzip and bzip2 direct support in GNU tar and `--files-from` option substituted by `-T`::
+```shell
+$> find some_dir -name 'file-A' | tar cf - --files-from=- | gzip > name.tgz
+$> find some_dir -name 'file-A' | tar czf name.tgz -T  -
+```
+
+transfer files over network from remote machine:
+```shell
+$> ssh remote-sys 'tar cf - Documents | tar xf -
+```
+
+---
+
+There are 2 types of compression:
+
+1. *Lossless* - compression preserves all the data contained in the original, restored file from compression is exactly the same as original
+2. *Lossy* - removes data as the compression is performed to allow more compression, restored *lossy* file does not match the original version, rather it is a close approximation; f.r. JPEG, MP3
+
+## gzip, gunzip
+
+**gzip** compresses one or more files, **gunzip** uncompresses them. The original file is replaced while preserving permissions and timestamp.
+
+To view the contents of the compressed file `gunzip`, `zcat` or `zless` can be used, following examples accomplish the same thing:
+```shell
+$> gunzip -c file.txt.gz | less
+$> zcat file.txt.gz | less
+$> zless file.txt.gz
+```
+
+### Options
+
+| Option	| Long Option					| Description	|
+|-----------|-------------------------------|---------------|
+| -c		| --stdout, --to-stdout			| write output ot stdout and keep the original file	|
+| -d		| --decompress, --uncompress	| decompress, makes **gzip** to act like **gunzip**	|
+| -f		| --force						| force compression even if the compressed version already exists	|
+| -h		| --help						| usage info	|
+| -l		| --list						| list compression stats	|
+| -r		| --recursive					| if one or more arguments are directories, recursively compress files within	|
+| -t		| --test						| test the integrity of compressed file	|
+| -v		| --verbose						| dispay verbose info	|
+| -*number* | -								| set amount of compression, from 1 (fastest, least compresion) t 9 (slowest, most compression), default is 6; also 1 is --fastest, 9 is --best	|
+
+## bzip2
+
+Same as gzip, but achieves higher compression at the cost of speed using different algorithm. Extenstion - `.bz2`. Comes with `bunzip2` and `bzcat` programs. All options mentioned in `gzip` are supported as well, except `-r`. Also includes `bzip2recover` which attempts to recover damaged **.bz2** files.
+
+## zip
 
 ---
 
