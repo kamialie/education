@@ -35,6 +35,13 @@
   + https://register.ubisoft.com/rabbids-coding/en-US - learning game from Ubisoft
   + https://requestbin.com/ - check url requests
 
+- Google:
+	+ [google linux vm](https://cloud.google.com/compute/docs/quickstart-linux)
+	+ [create instance template](https://cloud.google.com/compute/docs/instances/create-vm-from-instance-template)
+	+ [google cloud sdk](https://cloud.google.com/sdk/docs)
+	+ [create load balancer on google cloud](https://geekflare.com/gcp-load-balancer/)
+	+ [terraform with gcp](https://cloud.google.com/community/tutorials/getting-started-on-gcp-with-terraform)
+
 - cybersecurity related
   + https://hackerone.com/reports/403417
   + https://store.steampowered.com/app/605230/Grey_Hack/
