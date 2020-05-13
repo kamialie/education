@@ -27,6 +27,8 @@
 + [Subprocesses](#subprocesses)
 + [Testing](#testing)
 + [Troubleshooting](#troubleshooting)
++ [Email](#email)
++ [PDF](#pdf)
 
 ## Automation
 
@@ -359,4 +361,113 @@ $> strace ./my_program
 Same as previous but outputs library calls
 ```shell
 $> ltrace ./my_program
+```
+
+---
+
+# Email
+
+To create email python has [email built-in module](https://docs.python.org/3/library/email.html).
+
+[SMTP](https://tools.ietf.org/html/rfc2821.html) = Simple Mail Transfer Protocol
+
+[MIME](https://tools.ietf.org/html/rfc2045) = Multipurpose Internet Mail Extensions; used to encode all sort of files as strings.
+
+To send an attachment one should know the type and subtype of the object. Python's `mimetypes` module can be used to make a guess (type and subtype will be divided by slash):
+```python
+import mimetypes
+type, _ = mimetypes.guess_type(path_to_file)
+print(type)
+```
+
+`smtplib` module is used to connect to smtp server to send emails. Simple connection is as follows (second version uses SSL protocol):
+```python
+import smtplib
+mail_server = smtplib.SMTP('localhost')
+mail_server = smtplib.SMTP_SSL('smtp.example.com')
+```
+
+To see messages sent back and forth by `smtplib` set debug mode:
+```python
+mail_server.set_debuglevel(1)
+```
+
+Authenticate to server:
+```python
+mail_server.login(sender, password)
+```
+
+Finally send message, return dictionary with recipients that did not get the email, thus empty dictionary means all messages delivered successfuly:
+```python
+mail_server.send_message(message)
+mail_server.quit()
+```
+
+## Examples
+
+add recipient, sender, subject and email body:
+```python
+from email.message import EmailMessage
+message = EmailMessage()
+message['From'] = 'me@example.com'
+message['To'] = 'you@example.com'
+message['Subject'] = 'this is the subject of the email'
+body = """This is
+multiline
+body"""
+message.set_content(body)
+print(message)
+```
+
+attach image to email:
+```python
+with open(attachment_path, 'rb') as ap:
+	message.add_attachment(ap.read(),
+		maintype=mime_type,
+		subtype=mime_subtype,
+		filename=path_to_file)
+```
+
+# PDF
+
+[reportlab](https://bitbucket.org/rptlab/reportlab/src/default/) is one of many modules that can be used to generate pdf files.
+
+User guide included in current directory.
+
+Complete example:
+```python
+# one of many classes that act like a base for generating pdf
+from reportlab.platypus import SimpleDocTemplate
+# what reportlab calls Flawables, chunks that can be organized
+from reportlab.platypus import Paragraph, Spacer, Table, Image
+# each element is a class and needs to have its own style
+from reportlab.lib.styles import getSampleStyleSheet
+# colors that going to be used in style
+from reportlab.lib import colors
+# charts
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.charts.piecharts import Pie
+
+# file is going to be created at specified path
+report = SimpleDocTemplate("/tmp/report.pdf")
+# initialize style
+styles = getSampleStyleSheet()
+# set a titile
+report_title = Paragraph("A Complete Inventory of My Fruit", styles["h1"])
+fruit = [['apples', 2], ['oranges', 3], ['kiwi', 1]]
+# set style for table: add grid, color it, etc
+table_style = [('GRID', (0,0), (-1,-1), 1, colors.black)]
+# create table with style above, aligh it on the left
+report_table = Table(data=fruit, style=table_style, hAlign="LEFT")
+# initialize pie chart
+report_pie = Pie(width=3*inch, height=3*inch)
+report_pie.data = []
+report_pie.labels = []
+for fruit_name in sorted(fruit):
+	report_pie.data.append(fruit[fruit_name])
+	report_pie.labels.append(fruit_name)
+# since Pie object isnt flawable, it has to be placed inside flawable Drawing
+report_chart = Drawing()
+report_chart.add(report_pie)
+report.build([report_title, report_table])
 ```
