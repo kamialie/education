@@ -620,6 +620,8 @@ Copies new files or directories from \<src\> and adds them to the filesystem at 
 
 **COPY** is generally preferred over **ADD** as it is more transparent and provides basic functionality. **ADD** best usage is for local tar extraction. In case of multiple Dockerfile steps, **COPY** them individually - results in fewer cache invalidations, as each **COPY** is on seperate layer.
 
+Weird behavior of copying over inner directories (inner direcotory has items with the same name, as items on the root of base directory) - result is weird overlapping.
+
 ----------
 
 #### ENV
