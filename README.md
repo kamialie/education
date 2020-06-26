@@ -16,6 +16,7 @@
 [Python built-in functions](https://docs.python.org/3/library/functions.html)
 
 ## Contents
++ [Data structures](#data-structures)
 + [Automation](#automation)
 	+ [Environment](#environment)
 	+ [CSV](#csv)
@@ -29,6 +30,19 @@
 + [Troubleshooting](#troubleshooting)
 + [Email](#email)
 + [PDF](#pdf)
+
+## Data structures
+
+## Deque
+
+```python
+from collections import deque
+```
+
+Implemeted as double-linked list, which is ideal for implementing stack.
+Therefore methods to be used are `append(element)`, `appendleft(element)`,
+`pop()` and `popleft()`. `pop()` on empty deque will cause an exception, thus,
+check with `len()` first.
 
 ## Automation
 
