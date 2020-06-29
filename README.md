@@ -1233,6 +1233,54 @@ Same as gzip, but achieves higher compression at the cost of speed using differe
 
 ## zip
 
+```shell
+> zip [options] zipfile file...
+```
+
+Both a compression and archiver tool. Unlike `tar`, if existing archive is
+specified, it is updated opposed to being replaced (new file are added, matching
+ones are updated).
+
+Since `unzip` cannot accept standard input, `zip` and `unzip` cannot be used
+together to transfer file over network.
+
+Main use included file transfer between Windows systems, while `tar` and `gzip`
+are more preferred in Linux.
+
+### Examples
+
+Basic run (`-r` option is for recursive behaviour, extension is added
+automatically, here added for clarity):
+```shell
+> zip -r playground.zip playground
+```
+
+Extract contents with `unzip`:
+```shell
+> unzip playground.zip
+```
+
+Output contents of an archive and selectively extract file:
+```shell
+> unzip -l playground.zip
+> unzip playground.zip playground/dir1/some_file
+```
+
+Provide list of files via standard input:
+```shell
+> find playground -name "file-A" | zip -@ file-A.zip
+```
+
+Pass contents via standard input:
+```shell
+> ls -l /etc/ | zip ls-etc.zip -
+```
+
+Show contents of an archive in standard output:
+```shell
+> unzip -p ls-etc.zip | less
+```
+
 ---
 
 [back to contents](#contents)
