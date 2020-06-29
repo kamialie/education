@@ -272,6 +272,7 @@ Most programs keep their documentation files in `/etc/share/doc` directory.
 
 + **script** \<file\> - start shell session recording
 + **bat** \<file\> - show contents of the file in nice format. [git page](https://github.com/sharkdp/bat)
++ **reboot** - restart the system (`shutdown /r` on windows, `shutdown -r now` on Darwin)
 
 ---
 
@@ -582,6 +583,7 @@ other common signals:
 + `pstree` - output process list arranged in a tree-like pattern
 + `vmstat` - snapshot of system resources usage of memory, swap and disk I/O
 	+ `<n>` - continuous delivery updating every n seconds
++ `nice` - set priority value for a process when it launches
 
 Interrupt a process with `Ctrl-C` (**INT**, Interrupt). Pause a process with `Ctrl-Z` (**TSTP**, Terminal stop).
 
