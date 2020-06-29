@@ -2,6 +2,14 @@
 
 ## Contents
 
++ [General](#general)
+	+ [namaspace](#namespace)
++ [Objects](#objects)
++ [Manifest file](#manifest-file)
++ [Volumes](#volumes)
++ [Services](#services)
++ [Additional notes](#additional-notes)
+
 ## General
 
 Containers are isolated user spaces per running application code. The user
@@ -35,15 +43,6 @@ Google Kubernetes Engine features:
 + integrates with Google's VPC
 + provides insights to resources and clusters via GCP Console
 
-Everything in Kubernetes is represented by an object with state and attributes
-that user can change. Each object has two elements: object spec (desired state)
-and object state (current state). Pod is the smallest deployable object (not
-container). Pod embodies the environment where container lives, which can hold
-one or more containers. If there are several containers in a pod, they share all
-resources like networking and storage. Kubernetes assigns unique IP address to a
-pod, which containers inside share (containers in a pod can also communicate
-through localhost).
-
 Kubernetes control plane components:
 + kube-APIserver - accepts commands to view or change the state of cluster (user
 interracts with it via `kubectl` command); also authenticates commands and
@@ -59,3 +58,143 @@ providers
 + kuberlet (runs on nodes) - kubernetes agent that kube-APIserver talks to
 + kube-proxy (runs on nodes) - provides network connectivity among pods in a
 cluster
+
+Kubernetes doesn't create nodes nor it handles failed nodes. Open-source Kuber
+ADM can automate some of the initial cluster setup, GKE takes the responsibility
+of managing and provisioning nodes, creating them and recreating when needed. In
+GKE master node is abstracted away for customer and is not included in billing.
+
+### Namespace
+
+Namespaces can abstract single physical layer into multiple clusters. They
+provide scope for naming resources like pods, controllers and deployments. User
+can create namespaces, while Kubernetes has 3 default ones:
++ default - for objects with no namespace defined
++ Kube-system - for objects created by Kubernetes itsef (ConfigMap, Secrets,
+Controllers, Deployments); by default these items are excluded, when using
+kubectl command (can be viewed explicitly)
++ Kube-public - for objects publicly readable for all users
+
+Can be applied for resource in command line or manifest file, while first option
+is preferred for manifest file to be more flexible.
+
+## Objects
+
+Everything in Kubernetes is represented by an object with state and attributes
+that user can change. Each object has two elements: object spec (desired state)
+and object state (current state). All Kubernetes objects are identified by a
+unique name(set by user) and a unique identifier(set by Kubernetes).
+
+### Pod
+
+Pod is the smallest deployable object (not
+container). Pod embodies the environment where container lives, which can hold
+one or more containers. If there are several containers in a pod, they share all
+resources like networking and storage. Kubernetes assigns unique IP address to a
+pod, which containers inside share among each other (containers in a pod can
+also communicate through localhost).
+
+---
+
+### Controller
+
+Manages state of pods. Good choice for long-living software components.
+
+Examples:
++ ReplicaSets
++ Deployments
++ Replication Controllers
++ StatefulSets
++ DaemonSets
++ Jobs
+
+---
+
+#### ReplicaSet
+
+ReplicaSet controller ensures that a population of Pods, all identical to one
+another, are running at the same time.
+
+---
+
+#### Deployment
+
+Deployment object really creates a ReplicaSet object to manage the pods, while
+user acrually interacts with Deployments object. This allows the latter to
+perform a rolling upgrade by creating a second ReplicaSet object and increase
+the number of upgraded Pods in the second ReplicaSet while it decreases the
+number in the first ReplicaSet.
+
+---
+
+#### Replication
+
+Replication Controllers perform a similar role to the combination of ReplicaSets
+and Deployments, but their use is no longer recommended. Deployments provide a
+helpful "front end" to ReplicaSets.
+
+---
+
+#### StatefulSet
+
+Better choice for applications that maintain local state. Unlike Deployment,
+Pods in StatefulSet have persistent identities with stable network identity and
+persistent disk storage.
+
+---
+
+#### DaemonSet
+
+Good choice to run certain Pods on all the nodes within the cluster or on a
+selection of nodes. DaemonSet ensures that a specific Pod is always running on
+all or some subset of the nodes. If new nodes are added, DaemonSet will
+automatically set up Pods in those nodes with the required specification. The
+word "daemon" is a computer science term meaning a non-interactive process that
+provides useful services to other processes. A Kubernetes cluster might use a
+DaemonSet to ensure that a logging agent like fluentd is running on all nodes in
+the cluster.
+
+---
+
+#### Job
+
+The Job controller creates one or more Pods required to run a task. When the
+task is completed, Job will then terminate all those Pods. A related controller
+is CronJob, which runs Pods on a time-based schedule.
+
+## Manifest file
+
+File describing objects that you Kubernetes to create and maintain. Can be json
+or yamn format.
+
+Required fields:
++ `apiVersion` - Kubernetes API version
++ `kind` - type of object
++ `metadata` - identifies the object with `name` and optionally `labels`
+(key-value pair that can be tagged during or after creating)
++ `spec`
+
+## Volumes
+
+## Services
+
+Services provide durable endpoints to Pods. It is a static IP address that
+represents a service or a function (you can group several Pods into one that
+provide same service). Thus, dynamically created Pods can have persistent
+endpoint for other services to communicate with. By default, the master assigns
+a virtual IP address also known as a cluster IP to the service from internal IP
+tables. With GKE, this is assigned from the clusters VPC network.
+
+To get service quickly by asking Kubernetes to expose a deployment.
+
+3 primary types of services:
++ ClusterIP: Exposes the service on an IP address that is only accessible from
+within this cluster. This is the default type.
++ NodePort: Exposes the service on the IP address of each node in the cluster,
+at a specific port number.
++ LoadBalancer: Exposes the service externally, using a load balancing service
+provided by a cloud provider.
+
+## Additional notes
+
++ https://cloud.google.com/kubernetes-engine/
