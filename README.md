@@ -8,6 +8,7 @@
 + [Manifest file](#manifest-file)
 + [Volumes](#volumes)
 + [Services](#services)
++ [kubectl](#kubectl)
 + [Additional notes](#additional-notes)
 
 ## General
@@ -55,7 +56,7 @@ software to assign node to a pod by simply writing it in pod object.
 kube-APIserver and applies changes if they are needed
 + kube-cloud-manager - manages controllers that interact with underlying cloud
 providers
-+ kuberlet (runs on nodes) - kubernetes agent that kube-APIserver talks to
++ kubelet (runs on nodes) - kubernetes agent that kube-APIserver talks to
 + kube-proxy (runs on nodes) - provides network connectivity among pods in a
 cluster
 
@@ -195,6 +196,66 @@ at a specific port number.
 + LoadBalancer: Exposes the service externally, using a load balancing service
 provided by a cloud provider.
 
+## kubectl
+
+First `kubectl` should be configured to be able to access the cluster. Congig
+file resides at $HOME/.kube/config, which contains cluster names and credentials
+to access them. `kubectl config view` to view config file.  The kubeconfig file
+can contain information for many clusters. The currently active context (the
+cluster that kubectl commands manipulate) is indicated by the current-context
+property.
+
+`kubectl config use-context [CONTEXT] - switch context` - switch context
+
+`gcloud container clusters get-credentials [CLUSTER NAME] --zone [ZONE]` - write
+into config file in `.kube` directory in home by default.
+
+```shell
+source <(kubectl completion bash)
+```
+
+```shell
+> kubectl [command] [TYPE] [NAME] [flags]
+```
++ command - action to perform (get, describe, logs...)
++ TYPE - type of object to perfrom an action on (pods, deployments, nodes)
++ NAME - name of object
++ flags - additional behavior (`-o=yaml` - output in yaml format, `-o=wide` -
+get additional columns of information)
+
+### Examples
+
+```shell
+> kubectl top nodes # info on nodes status
+> kubectl cp ~/test.html $my_nginx_pod:/usr/share/nginx/html/test.html # copy files
+> kubectl apply -f ./new-nginx-pod.yaml # apply manifest file and start a container
+```
+
+### Introspection
+
+Commands to view info about kubernetes objects.
+
++ `kubectl get pods` - view all pods in a cluster and info on them; possible
+states:
+	+ `Pending` - image is retrived, but container hasn't started yet
+	+ `Running` - successfully attached to a node and all containers are running
+	+ `Succeded` - containers terminated successfully and won't be restarting
+	+ `Failed` - containers terminated with a failure
+	+ `Unknown` - most likely comminucatin error between master and kubelet
+	+ `CrashLoopBackOff` - one of containers unexpectdly exited after it was
+	restarted at least once (most likely pod isn't configured correctly)
++ `kubectl describe pod [POD_NAME]` - get more detailed info on specific pod
+including containers' states
++ `kubectl exec [POD_NAME] -- [COMMAND]` - execute commands and application on a
+pod; use `-c` flag to specify container
+	+ `kubectl exec -ti [POD_NAME] -- /bin/bash` - get interactive shell
++ `kubectl logs [POD_NAME]` - view logs of a pod; use `-c` flag to specify
+container; contains both stdout and stderr
+
+
 ## Additional notes
 
 + https://cloud.google.com/kubernetes-engine/
++ `gcloud container clusters create $my_cluster --num-nodes 3 --zone $my_zone
+--enable-ip-alias` - create cluster in GKE, more info at
+[https://cloud.google.com/sdk/gcloud/reference/container/clusters/create]
