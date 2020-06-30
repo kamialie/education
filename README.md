@@ -33,7 +33,7 @@
 
 ## Data structures
 
-## Deque
+### Deque
 
 ```python
 from collections import deque
@@ -43,6 +43,13 @@ Implemeted as double-linked list, which is ideal for implementing stack.
 Therefore methods to be used are `append(element)`, `appendleft(element)`,
 `pop()` and `popleft()`. `pop()` on empty deque will cause an exception, thus,
 check with `len()` first.
+
+---
+
+### Queue
+
+Use deque from python's collections with corresponding operations to use it as a
+queue (popleft and append)
 
 ## Automation
 
