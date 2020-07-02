@@ -5,6 +5,8 @@
 + [General](#general)
 	+ [namaspace](#namespace)
 + [Objects](#objects)
+	+ [Controller](#controller)
+		+ [Deployment](#deployment)
 + [Manifest file](#manifest-file)
 + [Volumes](#volumes)
 + [Services](#services)
@@ -120,11 +122,148 @@ another, are running at the same time.
 
 #### Deployment
 
-Deployment object really creates a ReplicaSet object to manage the pods, while
-user acrually interacts with Deployments object. This allows the latter to
-perform a rolling upgrade by creating a second ReplicaSet object and increase
-the number of upgraded Pods in the second ReplicaSet while it decreases the
-number in the first ReplicaSet.
+Deployments describe the desired state of pods.
+
+Deployment object really creates a ReplicaSet object to manage the pods
+(specific version), while user acrually interacts with Deployments object. This
+allows the latter to perform a rolling upgrade by creating a second ReplicaSet
+object and increase the number of upgraded Pods in the second ReplicaSet while
+it decreases the number in the first ReplicaSet.
+
+Designed for stateless applications, like web front end, that don't store data
+or application state to a persistent storage.
+
+Changes in yaml config file automatically trigger rollign updates (?). You can
+pause, resume and check status of this behaviour.
+```shell
+> kubectl rollout [pause|resume|status] deployment [DEPLOYMENT_NAME]
+```
+
+Delete deployment with `kubectl delete deployment [DEPLOYMENT_NAME]`.
+
+##### Yaml example
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+	name: my-app
+spec:
+	replicas: 3
+	template:
+		metadata:
+			labels:
+				app: my-app
+		spec:
+			containers:
+			- name: my-app
+			  image: gcr.io/demo/my-app:1.0
+			  ports:
+			  - containerPort: 8080
+```
+
+##### Creation
+
+3 ways to create deployment:
+1. declaratively via yaml file:
+```shell
+> kubectl apply -f [DEPLOYMENT_FILE]
+```
+2. imperatively using `kubectl run` command:
+```shell
+> kubectl run [DEPLOYMENT_NAME] \
+			--image [IMAGE]:[TAG]
+			--replicas 3
+			--labels [KEY]:[VALUE]
+			--port 8080
+			--generator deployment/apps.v1 # api version to be used
+			--save-config # saves the yaml config for future use
+```
+3. GKE workloads menu in GCP Console (also can view resulting yaml config file)
+
+##### Inspection
+
+```shell
+> kubectl get deployment [DEPLOYMENT_NAME]
+> kubectl describe deployment [DEPLOYMENT_NAME]
+```
+
+Save deployment configuration:
+```shell
+> kubectl get deployment [DEPLOYMENT_NAME] -o yaml > this.yaml
+```
+
+##### Scaling
+
+```shell
+> kubectl scale deployment [DEPLOYMENT_NAME] -replicas=5 # manual scaling
+> kubectl autoscale deployment [DEPLOYMENT_NAME] \
+				--min=5 \
+				--max=15 \
+				--cpu-percent=75 # autoscale based on cpu threshold
+```
+
+Autoscaling creates `horizontal pod autoscaler` object. Autoscaling has a
+thrashing problem, that is when the target metric changes frequently, which
+results in frequent up/down scaling. Use
+`--horizontal-pod-autoscaler-downscale-delay` flag to control this behavior (by
+specifying a wait period before next down scale; default is 5 minute delay.
+
+##### Updating
+
+1. `kubectl apply -f [DEPLOYMENT_NAME]` with updated config file
+2. `kubectl set` command - can change pod template, specifications for
+deployment (image, resources, selector values)
+```shell
+> kubectl set image deployment [DEPLOYMENT_NAME] [IMAGE] [IMAGE]:[TAG]
+```
+3. `kubectl edit deployment` command, which opens specification file in vim and
+applies changes once you save and exit
+4. GCP Console
+
+Strategies:
++ rampt strategy - neww Pods are launched in new ReplicaSet, then old ones are
+deleted; ensures availability, but doesn't provide control of traffic to old and
+new instances.
++ rolling update strategy provides `maxUnavailable` and `maxSurge` fields to
+control number of unavailable pods and number of concurrenty pods in a new
+ReplicaSet; both can be specified by a number of pods or percentage (percentage
+is taken from the total number - old and new pods)
+```yaml
+[...]
+kind: deployment
+spec:
+	replicas: 10
+	strategy:
+		type: RollingUpdate
+		rollingUpdate:
+			maxSurge: 5
+			maxUnavailable: 30%
+[...]
+```
+`minReady` - wait until Pod is considered available (defaults to 0),
+`progressDeadlineSeconds` - wait period before deployment reporst that it has
+failed to progress
++ blue/green deployment creates completely new delpoyment and ReplicaSet of an
+application also changing the app's version; traffic can be redirected using
+kubernetes services; good for testing, disadvantage in doubled resources
++ canary deployment is based on blue/green, but traffic is shifted gradually to
+a new version; this is achived by avoiding specifying app's version and just by
+creating pods of a new version
++ `Recreate` strategy simply deletes old pods before creating new ones (good
+when clean break is needed)
+
+Rolling back is done using `kubectl rollout undo deployment [DEPLOYMENT_NAME]`
+command. It would simply rollout to a previos version. Use revision number
+(`--to-revision=2` flag) to specify a revision to roll back. To expect changes
+use `kubectl rollout history deployment [DEPLOYMENT_NAME] --revision=2` command.
+By default last 10 ReplicaSets details are retained, can be changed in revison
+history limit under deployment specification.
+
+A deployment's rollout is triggered if and only if the deployment's Pod template
+(that is, .spec.template) is changed, for example, if the labels or container
+images of the template are updated. Other updates, such as scaling the
+deployment, do not trigger a rollout.
 
 ---
 
@@ -195,6 +334,45 @@ within this cluster. This is the default type.
 at a specific port number.
 + LoadBalancer: Exposes the service externally, using a load balancing service
 provided by a cloud provider.
+
+Example:
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 60000
+    targetPort: 80
+```
+
+```shell
+> kubectl apply -f [SERVICE_FILE] # deploy service
+> kubectl get service [SERVICE_NAME] # view service
+```
+
+`sessionAffinity` field can be used to ensure all subsequent connection go to
+the same pod (usefull for canary deployment):
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 60000
+    targetPort: 80
+```
 
 ## kubectl
 
