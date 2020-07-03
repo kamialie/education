@@ -1,6 +1,6 @@
 # Kubernetes
 
-## Contents
+# Contents
 
 + [General](#general)
 	+ [namaspace](#namespace)
@@ -13,7 +13,7 @@
 + [kubectl](#kubectl)
 + [Additional notes](#additional-notes)
 
-## General
+# General
 
 Containers are isolated user spaces per running application code. The user
 space is all the code that resides above the kernel, and includes the
@@ -67,7 +67,7 @@ ADM can automate some of the initial cluster setup, GKE takes the responsibility
 of managing and provisioning nodes, creating them and recreating when needed. In
 GKE master node is abstracted away for customer and is not included in billing.
 
-### Namespace
+## Namespace
 
 Namespaces can abstract single physical layer into multiple clusters. They
 provide scope for naming resources like pods, controllers and deployments. User
@@ -81,14 +81,14 @@ kubectl command (can be viewed explicitly)
 Can be applied for resource in command line or manifest file, while first option
 is preferred for manifest file to be more flexible.
 
-## Objects
+# Objects
 
 Everything in Kubernetes is represented by an object with state and attributes
 that user can change. Each object has two elements: object spec (desired state)
 and object state (current state). All Kubernetes objects are identified by a
 unique name(set by user) and a unique identifier(set by Kubernetes).
 
-### Pod
+## Pod
 
 Pod is the smallest deployable object (not
 container). Pod embodies the environment where container lives, which can hold
@@ -99,7 +99,7 @@ also communicate through localhost).
 
 ---
 
-### Controller
+## Controller
 
 Manages state of pods. Good choice for long-living software components.
 
@@ -113,14 +113,14 @@ Examples:
 
 ---
 
-#### ReplicaSet
+### ReplicaSet
 
 ReplicaSet controller ensures that a population of Pods, all identical to one
 another, are running at the same time.
 
 ---
 
-#### Deployment
+### Deployment
 
 Deployments describe the desired state of pods.
 
@@ -141,28 +141,28 @@ pause, resume and check status of this behaviour.
 
 Delete deployment with `kubectl delete deployment [DEPLOYMENT_NAME]`.
 
-##### Yaml example
+#### Yaml example
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-	name: my-app
+  name: my-app
 spec:
-	replicas: 3
-	template:
-		metadata:
-			labels:
-				app: my-app
-		spec:
-			containers:
-			- name: my-app
-			  image: gcr.io/demo/my-app:1.0
-			  ports:
-			  - containerPort: 8080
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-app
+        image: gcr.io/demo/my-app:1.0
+        ports:
+        - containerPort: 8080
 ```
 
-##### Creation
+#### Creation
 
 3 ways to create deployment:
 1. declaratively via yaml file:
@@ -181,7 +181,7 @@ spec:
 ```
 3. GKE workloads menu in GCP Console (also can view resulting yaml config file)
 
-##### Inspection
+#### Inspection
 
 ```shell
 > kubectl get deployment [DEPLOYMENT_NAME]
@@ -193,7 +193,7 @@ Save deployment configuration:
 > kubectl get deployment [DEPLOYMENT_NAME] -o yaml > this.yaml
 ```
 
-##### Scaling
+#### Scaling
 
 ```shell
 > kubectl scale deployment [DEPLOYMENT_NAME] -replicas=5 # manual scaling
@@ -209,7 +209,7 @@ results in frequent up/down scaling. Use
 `--horizontal-pod-autoscaler-downscale-delay` flag to control this behavior (by
 specifying a wait period before next down scale; default is 5 minute delay.
 
-##### Updating
+#### Updating
 
 1. `kubectl apply -f [DEPLOYMENT_NAME]` with updated config file
 2. `kubectl set` command - can change pod template, specifications for
@@ -233,12 +233,12 @@ is taken from the total number - old and new pods)
 [...]
 kind: deployment
 spec:
-	replicas: 10
-	strategy:
-		type: RollingUpdate
-		rollingUpdate:
-			maxSurge: 5
-			maxUnavailable: 30%
+  replicas: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 5
+      maxUnavailable: 30%
 [...]
 ```
 `minReady` - wait until Pod is considered available (defaults to 0),
@@ -267,7 +267,7 @@ deployment, do not trigger a rollout.
 
 ---
 
-#### Replication
+### Replication
 
 Replication Controllers perform a similar role to the combination of ReplicaSets
 and Deployments, but their use is no longer recommended. Deployments provide a
@@ -275,7 +275,7 @@ helpful "front end" to ReplicaSets.
 
 ---
 
-#### StatefulSet
+### StatefulSet
 
 Better choice for applications that maintain local state. Unlike Deployment,
 Pods in StatefulSet have persistent identities with stable network identity and
@@ -283,7 +283,7 @@ persistent disk storage.
 
 ---
 
-#### DaemonSet
+### DaemonSet
 
 Good choice to run certain Pods on all the nodes within the cluster or on a
 selection of nodes. DaemonSet ensures that a specific Pod is always running on
@@ -296,13 +296,13 @@ the cluster.
 
 ---
 
-#### Job
+### Job
 
 The Job controller creates one or more Pods required to run a task. When the
 task is completed, Job will then terminate all those Pods. A related controller
 is CronJob, which runs Pods on a time-based schedule.
 
-## Manifest file
+# Manifest file
 
 File describing objects that you Kubernetes to create and maintain. Can be json
 or yamn format.
@@ -314,9 +314,9 @@ Required fields:
 (key-value pair that can be tagged during or after creating)
 + `spec`
 
-## Volumes
+# Volumes
 
-## Services
+# Services
 
 Services provide durable endpoints to Pods. It is a static IP address that
 represents a service or a function (you can group several Pods into one that
@@ -374,7 +374,7 @@ spec:
     targetPort: 80
 ```
 
-## kubectl
+# kubectl
 
 First `kubectl` should be configured to be able to access the cluster. Congig
 file resides at $HOME/.kube/config, which contains cluster names and credentials
@@ -401,7 +401,7 @@ source <(kubectl completion bash)
 + flags - additional behavior (`-o=yaml` - output in yaml format, `-o=wide` -
 get additional columns of information)
 
-### Examples
+## Examples
 
 ```shell
 > kubectl top nodes # info on nodes status
@@ -409,7 +409,7 @@ get additional columns of information)
 > kubectl apply -f ./new-nginx-pod.yaml # apply manifest file and start a container
 ```
 
-### Introspection
+## Introspection
 
 Commands to view info about kubernetes objects.
 
@@ -431,7 +431,7 @@ pod; use `-c` flag to specify container
 container; contains both stdout and stderr
 
 
-## Additional notes
+# Additional notes
 
 + https://cloud.google.com/kubernetes-engine/
 + `gcloud container clusters create $my_cluster --num-nodes 3 --zone $my_zone
