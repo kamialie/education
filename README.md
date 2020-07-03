@@ -7,6 +7,8 @@
 + [Objects](#objects)
 	+ [Controller](#controller)
 		+ [Deployment](#deployment)
+		+ [Job](#job)
+		+ [CronJob](#cronjob)
 + [Manifest file](#manifest-file)
 + [Volumes](#volumes)
 + [Services](#services)
@@ -302,6 +304,125 @@ The Job controller creates one or more Pods required to run a task. When the
 task is completed, Job will then terminate all those Pods. A related controller
 is CronJob, which runs Pods on a time-based schedule.
 
+Job controller tracks the task completion and recreates pod if run was not
+successful. Removes all pods upon completion.
+
+`activeDeadlineSeconds` option can be used to specify an active deadline period
+fot the job to finish. Has precedence over `backoffLimit` option.
+
++ inspection
+```shell
+> kubectl describe job [JOB_NAME]
+> kubectl get pod -l [job-name=my-app-name] # label selector
+> kubectl scale job [JOB_NAME] --replicas [VALUE] # scale job
+```
++ deletion
+```shell
+> kubectl delete -f [JOB_FILE]
+> kubectl delete job [JOB_NAME] # all pods are deleted
+> kubectl delete job [JOB_NAME] --cascade false # retain job pods
+```
+
+#### Non-parallel
+
+Creates only one pod at a time; job is completed when pod terminates
+successfully or, if completion counter is defined, when the required number of
+completions is performed.
+
+Non-parallel job example:
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  template:
+    spec:
+	  containers:
+	  - name: pi
+	    image: perl
+		command: ["perl", "Mbignum=bpi", "-wle", "print bpi(2000)"]
+	  # can also be specified as onFailure which would restart container, in
+	  # this case new Pod is created upon failure
+	  restartPolicy: never
+  # number of retries after which Job is considered to have failed entirely,
+  # defaults to 6
+  backoffLimit: 4
+```
+
+```shell
+> kubectl run pi	--image perl \
+					--restart Never -- perl -Mbignum -wle 'print bpi(2000)'
+```
+
+#### Parallel
+
+Parallel job can launch multiple pods to run the same task. There are 2 types of
+parallel jobs - fixed task completion count and the other which processes a work
+queue.
+
+Work queue is created by leaving `completions` field empty. Job comtroller
+launches specified number of pod simultaneously and waits until one of them
+signals successfull completion. Then it stops and removes all pods.
+
+Parallel job example:
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  completions: 3
+  parallelism: 2
+  template:
+    spec:
+[...]
+```
+
+---
+
+### CronJob
+
+Kubernetes object that creates job in repeatable manner to a defined schedule.
+
+By default looks at the time a job was scheduled and when failed atttempts reach
+100 an error is logged and no more jobs are scheduled.
+
+Depending on how frequently jobs are scheduled and how long it takes ti finish a
+job, CronJob might end up executing more than one job concurrenlty.
+`concurrencyPolicy` option is used to control that behavior. Available options
+are `Allow`,`Forbid`, `Replace`.
+
+Kubernetes retains number of successful and failued jobs in history, which is by
+default 3 and 1 respectively. Options `successfulJobsHistoryLimit` and
+`failedJobsHistoryLimit` may be used to control this behaviour.
+
+Example:
+````yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: my-app-job
+spec:
+  schedule: "*/1 * * * *"
+  startingDeadlineSeconds: 3600 # optional, check later
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobtemplate:
+    spec:
+	  template:
+	    spec:
+[...]
+```
+
+Actions:
+```shell
+> kubectl apply -f [FILE]
+> kubectl describe cronjob [NAME]
+> kubectl delete cronjob [NAME]
+```
+
 # Manifest file
 
 File describing objects that you Kubernetes to create and maintain. Can be json
@@ -376,7 +497,7 @@ spec:
 
 # kubectl
 
-First `kubectl` should be configured to be able to access the cluster. Congig
+First `kubectl` should be configured to be able to access the cluster. Config
 file resides at $HOME/.kube/config, which contains cluster names and credentials
 to access them. `kubectl config view` to view config file.  The kubeconfig file
 can contain information for many clusters. The currently active context (the
