@@ -10,6 +10,8 @@
 		+ [Job](#job)
 		+ [CronJob](#cronjob)
 + [Manifest file](#manifest-file)
++ [Management](#management)
+	+ [Scaling](#slaling)
 + [Volumes](#volumes)
 + [Services](#services)
 + [kubectl](#kubectl)
@@ -434,6 +436,85 @@ Required fields:
 + `metadata` - identifies the object with `name` and optionally `labels`
 (key-value pair that can be tagged during or after creating)
 + `spec`
+
+# Management
+
+Node pool is a subset of nodes within cluster that have same configuration. Node
+pool uses NodeConfig specification. Default node pool is created upon cluster
+creation. Later, custom node pools can be added.
+
+## Scaling
+
+Each node has a Kubernetes node label, which is node pool it belongs to. In GCP
+Console node pool size represents number of nodes withtin a zone (that is
+increase from 3 to 6 in dual-zone node pool will result in 12 total nodes).
+
+Downscaling does not differentiate between nodes running pods and those that do
+not (terminates randomly). Thus, if pods aren't managed by replication
+controller, they won't be restarted.
+
+Scale cluster using `gcloud` command:
+```shell
+> gcloud container clusters resize [PROJECT_NAME]	--node-pool [NODE_POOL_NAME] \
+													--size 6
+```
+
+gcloud commands for autoscaling:
+```shell
+# create a cluster with autoscaling enabled
+> gcloud container clusters create [CLUSTER_NAME]	--num-nodes 30 \
+													--enable-autoscaling \
+													--min-nodes 15 \
+													--max-nodes 50 \
+													[--zone COMPUTE_ZONE]
+# add a node pool with autoscaling enabled
+> gcloud container node-pools create [POOL_NAME]	--cluster [CLUSTER_NAME] \
+													--enable-autoscaling \
+													--min-nodes 15 \
+													--max-nodes 50 \
+													[--zone COMPUTE_ZONE]
+# enable autoscaling for an existing node pool
+> gcloud container clusters update [CLUSTER_NAME]	--enable-autoscaling \
+													--min-nodes 1 \
+													--max-nodes 10 \
+													--zone COMPUTE_ZONE \
+													--node-pool [POOL_NAME]
+# disable autoscaling for an existing node pool
+> gcloud container clusters update [CLUSTER_NAME]	--no-enable-autoscaling \
+													--node-pool [POOL_NAME] \
+													[--zone [COMPUTE_ZONE] \
+													--project [PROJECT_ID]]
+```
+
+Get info on horizontal autoscalar:
+```shell
+> kubectl get hp
+> kubectl describe horizontalpodautoscaler [DEPLOYMENT]
+> kubectl get horizontalpodautoscaler [DEPLOYMENT] -o yaml
+```
+
+
+
+## Downscaling
+
+GKE auto-scalar can scale down unless any of  below conditions are true:
++ scale up event is pending (if scale up event happens during scale down
+process, latter is not executed)
++ pod is not managed by controller
++ pod has local storage
++ pod is restricted by constraint rules (such as running on any other node)
++ pod that has `safe-to-evict` annotation set to false (direct setting at pod
+level that tells auto-scalar that pod can not be evicted)
++ pod has restrictive PodDisruptionBudget (can specify number of controller
+replicas that must be available at any time)
++ node has `scale-down-disabled` annotation set to true
+
+For each of the remaining nodes auto-scalar adds up total CPU and memory for
+pods. If total is less that 50% it starts monitoring that node for the next 10
+minutes. If total remains less that 50%, it is deleted.
+
+Some of the node pools can be scaled down to zero, while cluster is required to
+have at least one node to run system pods.
 
 # Volumes
 
