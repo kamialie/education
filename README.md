@@ -12,6 +12,8 @@
 + [Manifest file](#manifest-file)
 + [Management](#management)
 	+ [Scaling](#slaling)
+	+ [Placement](#placement)
+	+ [Helm](#helm)
 + [Volumes](#volumes)
 + [Services](#services)
 + [kubectl](#kubectl)
@@ -312,6 +314,9 @@ successful. Removes all pods upon completion.
 `activeDeadlineSeconds` option can be used to specify an active deadline period
 fot the job to finish. Has precedence over `backoffLimit` option.
 
+Failed pods are recreated with an exponentially increasing delay: 10, 20, 40...
+seconds, to a maximum of 6 minutes.
+
 + inspection
 ```shell
 > kubectl describe job [JOB_NAME]
@@ -366,6 +371,10 @@ queue.
 Work queue is created by leaving `completions` field empty. Job comtroller
 launches specified number of pod simultaneously and waits until one of them
 signals successfull completion. Then it stops and removes all pods.
+
+In a situation of a job with both completion and parallelism options set, the
+controller won't start new containers if the remaining number of completions is
+less that parallelism value.
 
 Parallel job example:
 ```yaml
@@ -453,6 +462,9 @@ Downscaling does not differentiate between nodes running pods and those that do
 not (terminates randomly). Thus, if pods aren't managed by replication
 controller, they won't be restarted.
 
+GKE auto-scalar adds a node when scheduler can not schedule a pod due to
+resource constraints.
+
 Scale cluster using `gcloud` command:
 ```shell
 > gcloud container clusters resize [PROJECT_NAME]	--node-pool [NODE_POOL_NAME] \
@@ -493,9 +505,10 @@ Get info on horizontal autoscalar:
 > kubectl get horizontalpodautoscaler [DEPLOYMENT] -o yaml
 ```
 
-
-
 ## Downscaling
+
+GKE auto-scalar may delete a node if it is underutilized and running Pods can be
+run on another node.
 
 GKE auto-scalar can scale down unless any of  below conditions are true:
 + scale up event is pending (if scale up event happens during scale down
@@ -515,6 +528,153 @@ minutes. If total remains less that 50%, it is deleted.
 
 Some of the node pools can be scaled down to zero, while cluster is required to
 have at least one node to run system pods.
+
+## Placement
+
+In Kubernetes placement can be controlled by labels and tains on nodes, and node
+affinity rules and toleration in deployment specification.
+
+When creating pods, you can optionally specify CPU and RAM each container needs,
+so that scheduler can make better decision on where to run it.
+
+For a pod to run on a specific node, that node must match all the labels present
+under the nodes selector field in a pod. Node selector is a pod specification
+field that specifies one or more labels. If label on a node has changed, it
+doesn't affect running pods. Node selector is only used during pod scheduling.
+Some node labels are assigned automatically by kubernetes.
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    env: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+	imagePullPolicy: IfNotPresent
+  nodeSelector:
+    beta.kubernetes.io/arch=amd64
+[...]
+
+apiVersion: v1
+kind: Node
+metadata:
+  name: node1
+  labels:
+    beta.kubernetes.io/arch=amd64
+[...]
+```
+
+Affinity and anti-affinity can be viewed as preferences over hard requirements.
+It is possible to specify either `nodeAffinity` or `podAffinity`. Affinity is
+denoted either by `requiredDuringSchedulingIgnoredDuringExecution` (hard
+requirement) or `preferredDuringSchedulingIgnoredDuringExuction` (preference).
+
+Required example:
+```yaml
+apiVersion: v1
+kind: Pod
+[...]
+spec:
+  affinity:
+    nodeAffinity:
+	  requiredDuringSchedulingIgnoredDuringExecution:
+	    nodeSelectorTerms:
+		  - matchExpression:
+		    - key: accelerator-type
+			operator: In
+			values:
+			  - gpu
+			  - tpu
+```
+Multiple `matchExpression` can be specified, which all should be matched
+(logical AND). Operator choices - `notIn`, `exists`, `.notExists`, `gt` (greater
+that), `lt` (less that).
+
+Preference example:
+```yaml
+apiVersion: v1
+kind: Pod
+[...]
+spec:
+  affinity:
+    nodeAffinity:
+	  preferredDuringSchedulingIgnoredDuringExuction:
+	    - weight: 1
+	    preference:
+		  - matchExpression:
+		    - key: accelerator-type
+			operator: In
+			values:
+			  - gpu
+			  - tpu
+```
+Weight ranges from 1 to 100 (100 being closest to requirement, but is still a
+preference).
+
+Pod anti-affinity example(checked against already running pods):
+```yaml
+apiVersion: v1
+kind: Pod
+[...]
+spec:
+  affinity:
+    podAntiAffinity:
+	  preferredDuringSchedulingIgnoredDuringExuction:
+	    - weight: 100
+	    podAffinityTerm::
+		  labelSelector:
+		    - matchExpression:
+		      - key: app
+			  operator: In
+			  values:
+			    - webserver
+		  topologyKey: failure-domain.beta.kubernetes.io/zone
+```
+`topologyKey` can be used to set rules at a higher level than just nodes, for
+example, zone or region. Example above sets affinity sets preferens not to be
+scheduled in the same zone as a pod running webserver.
+
+By contrast to affinity, taints are used on nodes that affect whole cluster. To
+taint a node a command below is used (multiple taints can be applied, running
+pods can be evicted):
+```shell
+> kubectl taint nodes node1 key=value:NoSchedule
+```
+
+A toleration is a mechanism that allows a Pod to counteract the effect of a
+taint that would otherwise prevent the Pod from being scheduled or continue to
+run on at node. When operator is `equal`, the `value` must also be equal, while
+`exists` operator requires only `key` and `effect` must match for toleration to
+apply.
+
+```yaml
+tolerations:
+- key: "key"
+ operator: "Equal"
+ value: "value"
+ effect: "NoSchedule"
+
+tolerations:
+- key: "key"
+ operator: "Exists"
+ effect: "NoSchedule"
+```
+
+# Helm
+
+Open-source package manager for Kubernetes (in the same way as `apt-get` for
+Linux). It operates with `charts` that are Kubernetes objects and packages
+(easily created, version, shared and published). Charts manage the deployment of
+complex application like what parameters are needed for the to work, for
+example, how many instances are needed or resource constraints should be used.
+
+Helm consists of command line client `helm` and server `tiller`, which runs
+within Kubernetes cluster and interracts with Kubernetes api-server.
+
 
 # Volumes
 
