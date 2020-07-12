@@ -1,11 +1,20 @@
 # C++
 
+[online compiler](https://gcc.godbolt.org/) to try out new features (new standar
+that has not yet appeared on public distributed compilers or compile for
+different platform.
+
 # Contents
 
 + [General](#general)
 + [Variables and data types](#variables-and-data-types)
++ [Containers](#containers)
+	+ [vector](#vector)
+	+ [map](#map)
+	+ [set](#set)
 + [Flows](#flows)
 + [Libraries](#libraries)
++ [Functions](#functions)
 
 # General
 
@@ -95,28 +104,6 @@ bool status = false;
 
 String can also be compared with `==`, `!=`, `>`, `<` operators.
 
-### Vector
-
-```c++
-#include <vector>
-
-vector<int> nums = {1, 2, 3};
-cout << nums.size()
-```
-
----
-
-### Map
-
-```c++
-#include <map>
-
-map<string, int> n_to_v;
-n_to_v["one"] = 1;
-n_to_v["two"] = 2;
-cout << "number is" << n_to_v["two"];
-```
-
 ---
 
 ### Struct
@@ -135,6 +122,146 @@ staff.push_back({'Jack', 22});
 staff.push_back({'Io', 15});
 cout << "Io's age is " << staff[1].age;
 ```
+
+# Containers
+
+## Vector
+
+```c++
+#include <vector>
+#include <string>
+using namespace std;
+
+// print contents of vector by passing constant reference
+void PrintVector(conts vector<string>& v) {
+	for (string s : v) {
+		cout << s << endl;
+	}
+}
+
+int main(void) {
+	vector<int> v1; // initialize empty vector
+	vector<int> v2(2); // initialize vector of size 2
+	vector<int> nums = {1, 2, 3}; // initialize in place
+	
+	// iterate over elements by reference and write to them
+	vector<string> v3;
+	for (string& s: v3) {
+		cin >> s;
+	}
+	PrintVector(v3);
+
+	// add elements
+	v1.push_back(3);
+
+	// get size of vector
+	cout << v1.size() << endl;
+
+	// access elements of vector
+	v1[0] += 1;
+
+	// initialize vector with default elements
+	vector<bool> v3(10, false);
+
+	// resize existing vector
+	v3.resize(15);
+
+	// resize existing vector and initialize its elements
+	v3.assign(15, true);
+
+	// clear vector
+	v3.clear()
+
+	// insert elements to the end from a range
+	nums.insert(end(nums), begin(nums), end(nums));
+}
+```
+
+## Map
+
+```c++
+#include <map>
+#include <iostream>
+
+void PrintMap(const map<string, int>& m) {
+	for (auto item : m) {
+		cout << item.first << ": " << item.second << endl;
+	}
+}
+
+int main() {
+	map<string, int> n_to_v;
+	n_to_v["one"] = 1;
+	n_to_v["two"] = 2;
+	cout << "number is" << n_to_v["two"];
+	
+	// remove key-value pair by passing key to erase method
+	n_to_v.erase("one");
+	return 0;
+}
+```
+
+Keys inside map are sorted, thus, for loop iterates over sorted list.
+
+When user tries to access the key first time, compiler already creates a
+key-value pair with the default value. For example, when one creates a
+`map<string, int>` to count words, the following cycle is sufficient:
+```c++
+vector<string> words;
+map<string, int> counter;
+for (const auto& word : words) {
+	++counter[word];
+}
+```
+
+In standard 17, there is a new syntax for iterating over map:
+```c++
+map<string, int> m = {{"one" : 1}, {"two" : 2}};
+for (const auto& [key, value] : m) {
+	cout << key << ": " << value << endl;
+}
+```
+
+## Set
+
+```c++
+#include <set>
+#include <vector>
+
+void PrintSet(const set<string>& s) {
+	for (auto item : s) {
+		cout << item << endl;
+	}
+}
+
+int main() {
+	set<string> s;
+
+	// adding elements
+	s.insert("some_text");
+	s.insert("another");
+
+	PrintSet(s);
+
+	// remove elements
+	s.erase("another");
+	
+	// check if elements exists
+	if (s.count("this_text") == 1) {
+		cout << "this_text_exists" << endl;
+	}
+
+	// create set from existing vector
+	vector<string> v = {"a", "b", "a"};
+	set<string> s1(begin(v), end(v));
+	return 0;
+}
+```
+
+The order of elements are sorted alphabetically by default. Set doesn't fail on
+adding the same element, but it won't be actually added.
+
+Set can be compared, just like vectors and maps.
 
 # Flows
 
@@ -236,8 +363,6 @@ cin >> x >> y;
 
 ## string
 
-## vector
-
 ## map
 
 ```c++
@@ -262,3 +387,94 @@ Sort elements:
 vector<int> nums = {1, 5, 2, 5, 3};
 sort(begin(nums), end(nums));
 ```
+
+## chrono
+
+Allows user to work with timing periods.
+
+Example on clocking parts of program execution:
+```c++
+#include <chrono>
+using namespace std;
+using namespace std:chrono;
+
+void SomeFunction(int x);
+
+int main(void) {
+	auto start = steady_clock::now();
+	SomeFunction(1);
+	auto finish = steady_clock::now();
+	cout << "duration "
+		<< duration_cast<milliseconds>(finish - start).count() << ms;
+	return 0;
+}
+```
+
+# Functions
+
+Function's return type defaults to `int`, while `void` means nothing. It is
+allowed to have multiple functions of the same name (overloading). `void` in
+parameter list indicated no parameters; every parameter has to have a type in
+front of it.
+
+`return;` can be placed in void function; implicitly executed within void
+function's body. Result of void function can't be assigned to a variable, thus,
+only acceptable invocation is `VoidFunction();`.
+
+Global variable is the one declared outside any function, thus, acceptable by
+all functions declared in the same source file after variable declaration;
+functions can modify it (called side effect).
+
+Passing parameters:
++ by value doesn't change actual parameter's value, as the later
+only provides the value. Container passed by value result in sending deep copy.
+
++ by reference:
+```c++
+void function(int& parameter);
+```
+every modification made into a formal parameter will affect actual parameter;
+corresponding actual parameter must be a variable - cant be expression or other
+function invocation result
++ 'C language' way of passing by reference - pass pointer to a variable
+
+`const` keyword can be used to declare that parameter won't be changed. Useful
+when passing parameter by reference:
+```c++
+void function(const int& parameter);
+```
+This also allows passing function invocation as actual parameter. `const` also
+extends to the element of containers, so one can't modify characters in the
+vector of strings.
+
+Default parameters
+    > default parameter declaration:
+        type function (type parameter = value){} - default is used when actual
+            parameter is ommitted
+    > non-default parameters must be coded first
+    > parameters are assigned in the same order as they appear - thus cant assign
+        default value for first and explicit value for the second
+
+Inline functions
+    > each function's code has to be supplemented with two elements:
+        - prologue - implicitly executed before the function; transfers
+            parameters from the invoker's code to function's stack
+        - epilogue - implicitly executed after the function; transfers the
+            result of the function and clears the stack
+    > inline function - is written by compiler on every invocation (speeds up
+        the program, good for short functions); can put inline either before or
+        after type, in definition or declaration or both
+
+Overloading
+    > same name can be used for multiple functions, but must be distiguishable to
+        the compiler:
+        - number of parameters
+        - parameter's types
+    > return type isn't taken into account
+    > 1.0 is literal of type double, thus if two overloading functions have int
+        and float, compiler can't promote double to float (more precision to
+        less one) and will cause a compilation error (won't find the best candidate)
+    > ternary ? operator:
+        expr1 ? expr2 : expr3 - 1 is evaluated, if result is non-zero 2 is returned,
+            otherwise 3
+
