@@ -15,7 +15,10 @@
 	+ [Placement](#placement)
 	+ [Helm](#helm)
 + [Volumes](#volumes)
-+ [Services](#services)
++ [Networking](#networking)
+	+ [Services](#services)
+	+ [Ingress](#ingress)
+	+ [Security](#security)
 + [kubectl](#kubectl)
 + [Additional notes](#additional-notes)
 
@@ -96,12 +99,12 @@ unique name(set by user) and a unique identifier(set by Kubernetes).
 
 ## Pod
 
-Pod is the smallest deployable object (not
-container). Pod embodies the environment where container lives, which can hold
-one or more containers. If there are several containers in a pod, they share all
-resources like networking and storage. Kubernetes assigns unique IP address to a
-pod, which containers inside share among each other (containers in a pod can
-also communicate through localhost).
+Pod is the smallest deployable object (not container). Pod embodies the
+environment where container lives, which can hold one or more containers. If
+there are several containers in a pod, they share all resources like networking
+and storage. Kubernetes assigns unique IP address to a pod, which containers
+inside share among each other (containers in a pod can also communicate through
+localhost).
 
 ---
 
@@ -678,24 +681,106 @@ within Kubernetes cluster and interracts with Kubernetes api-server.
 
 # Volumes
 
-# Services
+
+# Networking
+
+Each pod in a cluster has a unique IP address.
+
+VPC native GKE clusters automatically create an alias IP range to reserve
+approximately 4000 IP addresses for cluster-wide services that you may create
+late. VPC-native GKE cluster also creates a separate alias IP range for your
+pods with a /14 block, which is further divided among nodes by /24 blocks
+(that's around 1000 nodes with 100 pods on each).
+
+## Services
 
 Services provide durable endpoints to Pods. It is a static IP address that
 represents a service or a function (you can group several Pods into one that
 provide same service). Thus, dynamically created Pods can have persistent
 endpoint for other services to communicate with. By default, the master assigns
 a virtual IP address also known as a cluster IP to the service from internal IP
-tables. With GKE, this is assigned from the clusters VPC network.
+tables. With GKE, this is assigned from the clusters VPC network (specifically
+reserved to services).
 
-To get service quickly by asking Kubernetes to expose a deployment.
+A Kubernetes service is an object that creates a dynamic collection of IP
+addresses called end points that belong to pods matching the services labeled
+selector.
 
-3 primary types of services:
-+ ClusterIP: Exposes the service on an IP address that is only accessible from
-within this cluster. This is the default type.
-+ NodePort: Exposes the service on the IP address of each node in the cluster,
-at a specific port number.
-+ LoadBalancer: Exposes the service externally, using a load balancing service
-provided by a cloud provider.
+To get service quickly ask Kubernetes to expose a deployment.
+
+### Service discovery
+
+Services can be discovered through pod's environment variables, Kubernetes DNS
+and istio.
+
+Environment variables are added only at the time of pod's creation and are not
+updated later on. This forces user to recreate a pod, if service is created or
+changed after pod's creation.
+
+In Kubernetes DNS has an option add-on, while Google Kubernetes Engine has it
+preinstalled (kube-dns). Kube-dns is automatically creates set of DNS records
+for any new services and Kubernetes is configured to use it for DNS resolutions.
+Pods in the same namespace can use service's short name, while pods in other
+namespaces use FQDM.
+
+Open-source service mesh istio is infrastructure layer that is configurable for
+micro-services applications. Istio is a service mesh to aid in service
+discovery, control, and visibility in your micro-services deployments.
+
+---
+
+### Types of services
+
+`ClusterIP` exposes the service on an IP address that is only accessible from
+within this cluster. This is the default type (not specifying type of service
+defaults to `ClusterIP`). If service is created before corresponding pods, they
+get hostname and IP address as environment variables.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  type: ClusterIP
+  selector:
+    app: Backend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 9367
+```
+
+`NodePort` exposes the service on the IP address of each node in the cluster,
+at a specific port number, making it available outside the cluster. Built on top
+of `ClusterIP` service. `nodeport` option is set automatically from the range
+30000 to 32767 or can be specified by user if falls within range.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  type: NodePort
+  selector:
+    app: Backend
+  ports:
+  - protocol: TCP
+    nodePort: 30100
+    port: 80
+    targetPort: 9367
+```
+
+`LoadBalancer` exposes the service externally, using a load balancing service
+provided by a cloud provider or add-on. Builds on the `ClusterIP` service.
+
+With GKE it is implemented using GCP's network Load Balancer. GCP will assign
+assign static IP address to load balancer and it will further direct traffic to
+nodes (random). `kube-proxy` will choose random pod, which may reside on a
+different node to ensure even balance (this is default). Respond will take same
+route back. Use `externalTrafficPolicy: Local` option to disable this behaviour
+and enforce `kube-proxy` to direct traffic to local pods.
 
 Example:
 ```yaml
@@ -705,11 +790,12 @@ metadata:
   name: nginx
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
   selector:
     app: nginx
   ports:
   - protocol: TCP
-    port: 60000
+    port: 80
     targetPort: 80
 ```
 
@@ -734,6 +820,155 @@ spec:
   - protocol: TCP
     port: 60000
     targetPort: 80
+```
+
+## Ingress
+
+Ingress resource Operates one layer higher than resources (service for
+services). In fact it is a collection of rules that direct external traffic to a
+set of services inside a cluster. Delivers traffic to either `NodePort` or
+`LoadBalancer` service.
+
+In GKE's Kubernetes' ingress resources are implemented using Cloud Load
+Balancer.
+
+Simple example:
+```yaml
+apiVersion: extenstions/v1beta
+kind: Ingress
+metadata:
+  name: test-ingress
+spec:
+  backend:
+    serviceName: demo
+    servicePort: 80
+```
+
+Example belows introduces host and path resolutions that ingress can you to
+direct traffic to different locations (that is multiple hostnames for the same
+IP address). Traffic that did not match any rules will be directed to default
+backend, which user can customize as well.
+```yaml
+apiVersion: extenstions/v1beta
+kind: Ingress
+metadata:
+  name: test-ingress
+spec:
+  rules:
+  - host: demo1.example.com
+    http:
+	  paths:
+	  - path: /examplepath
+        backend:
+          serviceName: demo
+          servicePort: 80
+  - host: lab.user.com
+    http:
+	  paths:
+	  - path: /labpath
+        backend:
+          serviceName: lab1
+          servicePort: 80
+```
+
+```shell
+# update ingress
+> kubectl edit ingress [NAME]
+# or by completely replacing configuration
+> kubectl replace -f [FILE]
+```
+
+## Container-native load balancing
+
+GKE also provides Network Endpoint Groups data model that represents IP to pod
+endpoints. Requires GKE cluster to operate in VPC-native mode. Connection is
+made directly from load balancer to pods.
+
+## Security
+
+Network policy is a set of pod-level firewall rules restricting access to other
+pods and services.
+
+By default network policy is disabled in GKE. In order to enabled it one must
+have at least 2 nodes of n1-standard-1 or higher configuration. Must be applied
+at the creation time, otherwise nodes must be restarted.
+
+```shell
+# enabling at the time of cluster creation
+> gcloud container clusters create [NAME] --enable-network policy
+
+# two-step process for an existing cluster
+> gcloud container clusters update [NAME] --update-addones-NetworkPolicy=ENABLED
+> gcloud container clusters update [NAME] --enable-network policy
+```
+
+If `podSelector` isn't supplied, network policy is applied to all pods in the
+namespace. If no `policyType` is specified, default is `Ingress`. `Ingress` -
+incoming traffic, `Egress` - outcoming traffic. `Ingress` can specify source by
+`ipBlock`, `namespaceSelector` or `podSelector`.
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: demo-network-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+	  role: demo-app
+  policyType:
+  - Ingress
+  - Engress
+  igress:
+  - from:
+    - ipBlock:
+	  cidr: 172.17.0.0./16
+	  except:
+	  - 172.17.1.0/24
+	- namespaceSelector:
+	    matchLabels:
+		  project: myproject
+	- podSelector:
+	    matchLabels:
+		  role: frontend
+    ports:
+	- protocol: TCP
+	  port: 6345
+  egress:
+  - to:
+    - ipBlock:
+	  cidr: 10.0.0.0/24
+	ports:
+	- protocol: TCP
+	  port: 5978
+```
+
+Default network policies:
+```yaml
+[...]
+metadata:
+  name: default-deny-incoming
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+[...]
+metadata:
+  name: default-deny-outgoing
+spec:
+  podSelector: {}
+  policyTypes:
+  - Engress
+[...]
+metadata:
+  name: allow-all-incoming
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  igress:
+  - {}
+[...]
 ```
 
 # kubectl
