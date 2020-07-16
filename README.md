@@ -290,6 +290,54 @@ Better choice for applications that maintain local state. Unlike Deployment,
 Pods in StatefulSet have persistent identities with stable network identity and
 persistent disk storage.
 
+Each pod maintains a persitent identity and has an ordinal index with a relevant
+pod name, stable hostname, and stably identified storage. Ordinal index is just
+a unique sequential number given for each pod representing the order in
+sequence of pods. Deployment, scaling and updates are performed based on this
+index. For example, second pod waits until first one is ready and running before
+it is deployed. Scaling and updates happen is reverse order. Can be changed in
+pod management policy, where `OrderedReady` is default and can be switched to
+`Parallel`. Each pod has it's own unique PVC, which uses `ReadWriteOnce` access
+mode.
+
+`StatefulSet` require a service to control their networking. Example below
+specifies headless service with no load balancing by `clusterIP: None` option.
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service
+  labels:
+    app: demo
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app: demo
+```
+
+`StatefulSet` manifest:
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: demo-statefulset
+spec:
+  selector:
+    matchLabel:
+	  app: demo
+  serviceName: demo-service
+  replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+	  labels:
+	    app: demo
+```
+
 ---
 
 ### DaemonSet
@@ -348,13 +396,13 @@ metadata:
 spec:
   template:
     spec:
-	  containers:
-	  - name: pi
-	    image: perl
-		command: ["perl", "Mbignum=bpi", "-wle", "print bpi(2000)"]
-	  # can also be specified as onFailure which would restart container, in
-	  # this case new Pod is created upon failure
-	  restartPolicy: never
+      containers:
+      - name: pi
+        image: perl
+        command: ["perl", "Mbignum=bpi", "-wle", "print bpi(2000)"]
+      # can also be specified as onFailure which would restart container, in
+      # this case new Pod is created upon failure
+      restartPolicy: never
   # number of retries after which Job is considered to have failed entirely,
   # defaults to 6
   backoffLimit: 4
@@ -412,7 +460,7 @@ default 3 and 1 respectively. Options `successfulJobsHistoryLimit` and
 `failedJobsHistoryLimit` may be used to control this behaviour.
 
 Example:
-````yaml
+```yaml
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -425,8 +473,8 @@ spec:
   failedJobsHistoryLimit: 1
   jobtemplate:
     spec:
-	  template:
-	    spec:
+      template:
+        spec:
 [...]
 ```
 
@@ -681,6 +729,300 @@ within Kubernetes cluster and interracts with Kubernetes api-server.
 
 # Volumes
 
+Kubernetes provides storage abstraction as volumes and persistent volumes.
+Volumes is a method by which storage is attached to pods (not containers).
+
+Example with NFS volume:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web
+spec:
+  containers:
+  - name: web
+    image: nginx
+	volumeMounts:
+	- mountPath: /mnt/vol
+	  name: nfs
+  volumes:
+  - name: nfs
+    server: 10.9.2.1
+    path: "/"
+    readOnly: false
+```
+
+Example with gce persistent disk(old way, requires "hard coded" specifications
+inside Pod manifest:
+```yaml
+[...]
+volumes:
+- name: pd-volume
+  gcePersistentDisk:
+    pdName: demo-disk
+	fsType: ext4
+```
+
+```shell
+# create compute engine persistent disk
+> gcloud compute disk create --size=100GB --zone=us-central1-a demo-disk
+```
+
+## Volume types
+
+### emptyDir
+
+Simply empty directory that pods can use to read and write to. It is created
+when a pod is assigned to a node, and deleted when pod is removed from a node
+for any reason. Kubernetes creates `emptyDir` volume from a node's local disk or
+using a memory band file system.
+
+---
+
+### ConfigMap
+
+Provides a way to inject application configuration data into pods. Can be
+referenced in a volume.
+
+Used to store config files, command line arguments, environment variables, port
+number, etc.
+
+Kubelet periodically syncs with ConfigMaps to keep ConfigMap volume update. Data
+is updated even if it is already connected to a pod (matter of seconds-minutes).
+
+ConfigMap from command line:
+```shell
+# create
+> kubectl create configmap [NAME] [DATA]
+> kubectl create configmap [NAME] --from-file=[KEY_NAME]=[FILE_PATH]
+# examples
+> kubectl create configmap demo --from-literal=lab.difficulty=easy
+> kubectl create configmap demo --from-file=demo/color.properties
+> cat demo/color.properties
+color.good=green
+color.bad=red
+# see details
+> kubectl describe configmaps demo
+```
+
+ConfigMap manifest:
+```yaml
+apiVersion: v1
+data:
+  color.properties: |-
+    color.good=green
+	color.bad=red
+kind: ConfigMap
+metadata:
+  name: demo
+```
+
+Containers can refer to ConfigMaps in 3 ways:
++ container environment variable
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod
+spec:
+  containers:
+  - name: test-container
+    image: nginx
+	env:
+	- name: VARIABLE_DEMO
+	  valueFrom:
+	    configMapRef:
+		  name: demo
+		  key: lab.difficulty
+```
++ in pod commands
++ by creating a volume
+```yaml
+[...]
+kind: Pod
+metadata:
+  name: demo-pod
+spec:
+  containers:
+  - name: test-container
+    image: nginx
+	volumeMounts:
+	- name: config-volume
+	  mountPath: /etc/config
+  volumes:
+  - name: config-volume
+    configMap:
+	  name: demo
+```
+
+---
+
+### Secrets
+
+Similar to `ConfigMap`, but used to store sensitive data.
+
+Files should have single entries. File names will serve as keys, while content
+will be its value. Command-line creating is similar to `ConfigMaps`.
+
+Kubelet syncs Secret volumes just as `ConfigMap` volumes.
+
+Values are passed as base64 encoded strings:
+```shell
+> echo -n "admin" | base64
+> echo -n "password" | base64
+```
+
+Example manifest file that uses encoded earlier strings:
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: demo-secret
+type: Opaque
+data:
+  username: YWRtaW4=
+  password: cGFzc3dvcmQ=
+```
+
+Types of secrets:
++ Generic - creating secrets from files, directories or literal values
++ TLS - private-public encryption key pair; pass Kubernetes public key
+certificate encoded in PEM format, and also supply the private key of that
+certificate
++ Docker registry - can be used to pass credential to a private docker registry
+to be able to pull images
+
+Env var manifest example:
+```
+[...]
+kind: Pod
+spec:
+  containers:
+  - name: mycontainer
+    image: nginx
+	env:
+	  - name: SECRET_USERNAME
+	    valueFrom:
+		  secretKeyRef:
+		    name: demo-secret
+			key: username
+```
+
+Volume manifest example:
+```
+kind: Pod
+spec:
+  containers:
+  - name: mycontainer
+    image: nginx
+	volumeMounts:
+	- name: storagesecret
+	  mountPath: "/etc/sup"
+	  readOnly: true
+  volumes:
+  - name: storagesecret
+    secret: 
+	  secretName: demo-secret
+```
+
+---
+
+### downwoardAPI
+
+Provides downwoard API data to apps. It is a way container learns about it's
+environment.
+
+---
+
+### PersistentVolume
+
+Persistent volume abstractions has 2 components: `PersistentVolume` and
+`PersistentVolumeClaim`. `PersistentVolume` is a durable and persistent storage
+resources managed at the cluster level. `PersistentVolumeClaims` are request and
+claims made by pods to use `PersistentVolumes`. There you specify volume size,
+access mode, and storage class (storage characteristics). If claim matches a
+volume, then claim is bound to that volume and pod can consume that resource.
+
+Persistent volume manifest:
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pd-volume
+spec:
+  storageClassName: "standard"
+  capacity:
+    storage: 100G
+  accessModes:
+  - ReadWriteOnce
+  gcePersistentDisk:
+    pdName: demo-disk
+	fsType: ext4
+```
+
+Persistent volume clain manifest:
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pd-volume-claim
+spec:
+  storageClassName: "standard"
+  capacity:
+    storage: 100G
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+	  storage: 100G
+  persistentVolumeReclaimPolicy: Retain
+```
+
+Pod manifest using persistent volume claim:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod
+spec:
+  containers:
+  - name: demo-container
+    image: ...
+	volumeMounts:
+	- mountPath: /demo-pod
+	  name: pd-volume
+  volumes:
+  - name: pd-volume
+    PersistentVolumeClaim:
+	  claimName: pd-volume-claim
+```
+
+In order to claim to be successful storage class and access mode must match. If
+no match can be found, Kubernetes will try to allocate one dymanically.
+
+GKE has a default "standard" storage class that uses Compute Engine standard
+Persistent Disk. In GKE PVC with no defined storage class will use "standard"
+one.
+
+By default, delering PVC will also delete the provisioned PV, unless
+`persistentVolumeReclaimPolicy: Retain` is specified in PVC.
+
+Access modes:
++ `ReadWriteOnce` - mounts as read/write to a single node
++ `ReadOnlyMany` - read-only to many nodes
++ `ReadWriteMany` - read/write to many nodes (GCP persitent disk do not support
+this mode)
+
+Storage class example manifest file:
+```yaml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: "ssd"
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: ssd
+```
 
 # Networking
 
