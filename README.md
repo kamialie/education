@@ -1313,6 +1313,14 @@ spec:
 [...]
 ```
 
+## Load balancing objects in GKE
+
+| Kubernetes object | GKE implementation		| Typical usage scenario	|
+|-------------------|---------------------------|---------------------------|
+| ClusterIP			| GKE networking			| cluster-internal apps and microservices |
+| LoadBalancer		| GCP network load balancer	| application front end		|
+| Ingress (backed by a NodePort) | GCP HTTP(S) load balancer	| application front end (plus Cloud Armor, Identoty-Aware Proxy |
+
 # kubectl
 
 First `kubectl` should be configured to be able to access the cluster. Config
