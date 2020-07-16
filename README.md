@@ -327,15 +327,15 @@ metadata:
 spec:
   selector:
     matchLabel:
-	  app: demo
+      app: demo
   serviceName: demo-service
   replicas: 3
   updateStrategy:
     type: RollingUpdate
   template:
     metadata:
-	  labels:
-	    app: demo
+      labels:
+        app: demo
 ```
 
 ---
@@ -409,8 +409,7 @@ spec:
 ```
 
 ```shell
-> kubectl run pi	--image perl \
-					--restart Never -- perl -Mbignum -wle 'print bpi(2000)'
+> kubectl run pi  --image perl --restart Never -- perl -Mbignum -wle 'print bpi(2000)'
 ```
 
 #### Parallel
@@ -518,35 +517,35 @@ resource constraints.
 
 Scale cluster using `gcloud` command:
 ```shell
-> gcloud container clusters resize [PROJECT_NAME]	--node-pool [NODE_POOL_NAME] \
-													--size 6
+> gcloud container clusters resize [PROJECT_NAME] --node-pool [NODE_POOL_NAME] \
+							--size 6
 ```
 
 gcloud commands for autoscaling:
 ```shell
 # create a cluster with autoscaling enabled
 > gcloud container clusters create [CLUSTER_NAME]	--num-nodes 30 \
-													--enable-autoscaling \
-													--min-nodes 15 \
-													--max-nodes 50 \
-													[--zone COMPUTE_ZONE]
+							--enable-autoscaling \
+							--min-nodes 15 \
+							--max-nodes 50 \
+							[--zone COMPUTE_ZONE]
 # add a node pool with autoscaling enabled
 > gcloud container node-pools create [POOL_NAME]	--cluster [CLUSTER_NAME] \
-													--enable-autoscaling \
-													--min-nodes 15 \
-													--max-nodes 50 \
-													[--zone COMPUTE_ZONE]
+							--enable-autoscaling \
+							--min-nodes 15 \
+							--max-nodes 50 \
+							[--zone COMPUTE_ZONE]
 # enable autoscaling for an existing node pool
 > gcloud container clusters update [CLUSTER_NAME]	--enable-autoscaling \
-													--min-nodes 1 \
-													--max-nodes 10 \
-													--zone COMPUTE_ZONE \
-													--node-pool [POOL_NAME]
+							--min-nodes 1 \
+							--max-nodes 10 \
+							--zone COMPUTE_ZONE \
+							--node-pool [POOL_NAME]
 # disable autoscaling for an existing node pool
 > gcloud container clusters update [CLUSTER_NAME]	--no-enable-autoscaling \
-													--node-pool [POOL_NAME] \
-													[--zone [COMPUTE_ZONE] \
-													--project [PROJECT_ID]]
+							--node-pool [POOL_NAME] \
+							[--zone [COMPUTE_ZONE] \
+							--project [PROJECT_ID]]
 ```
 
 Get info on horizontal autoscalar:
@@ -605,7 +604,7 @@ spec:
   containers:
   - name: nginx
     image: nginx
-	imagePullPolicy: IfNotPresent
+    imagePullPolicy: IfNotPresent
   nodeSelector:
     beta.kubernetes.io/arch=amd64
 [...]
@@ -632,14 +631,14 @@ kind: Pod
 spec:
   affinity:
     nodeAffinity:
-	  requiredDuringSchedulingIgnoredDuringExecution:
-	    nodeSelectorTerms:
-		  - matchExpression:
-		    - key: accelerator-type
-			operator: In
-			values:
-			  - gpu
-			  - tpu
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpression:
+            - key: accelerator-type
+            operator: In
+            values:
+              - gpu
+              - tpu
 ```
 Multiple `matchExpression` can be specified, which all should be matched
 (logical AND). Operator choices - `notIn`, `exists`, `.notExists`, `gt` (greater
@@ -653,15 +652,15 @@ kind: Pod
 spec:
   affinity:
     nodeAffinity:
-	  preferredDuringSchedulingIgnoredDuringExuction:
-	    - weight: 1
-	    preference:
-		  - matchExpression:
-		    - key: accelerator-type
-			operator: In
-			values:
-			  - gpu
-			  - tpu
+      preferredDuringSchedulingIgnoredDuringExuction:
+        - weight: 1
+        preference:
+          - matchExpression:
+            - key: accelerator-type
+            operator: In
+            values:
+              - gpu
+              - tpu
 ```
 Weight ranges from 1 to 100 (100 being closest to requirement, but is still a
 preference).
@@ -674,16 +673,16 @@ kind: Pod
 spec:
   affinity:
     podAntiAffinity:
-	  preferredDuringSchedulingIgnoredDuringExuction:
-	    - weight: 100
-	    podAffinityTerm::
-		  labelSelector:
-		    - matchExpression:
-		      - key: app
-			  operator: In
-			  values:
-			    - webserver
-		  topologyKey: failure-domain.beta.kubernetes.io/zone
+      preferredDuringSchedulingIgnoredDuringExuction:
+        - weight: 100
+        podAffinityTerm::
+          labelSelector:
+            - matchExpression:
+              - key: app
+              operator: In
+              values:
+                - webserver
+          topologyKey: failure-domain.beta.kubernetes.io/zone
 ```
 `topologyKey` can be used to set rules at a higher level than just nodes, for
 example, zone or region. Example above sets affinity sets preferens not to be
@@ -742,9 +741,9 @@ spec:
   containers:
   - name: web
     image: nginx
-	volumeMounts:
-	- mountPath: /mnt/vol
-	  name: nfs
+    volumeMounts:
+    - mountPath: /mnt/vol
+      name: nfs
   volumes:
   - name: nfs
     server: 10.9.2.1
@@ -760,7 +759,7 @@ volumes:
 - name: pd-volume
   gcePersistentDisk:
     pdName: demo-disk
-	fsType: ext4
+    fsType: ext4
 ```
 
 ```shell
@@ -811,7 +810,7 @@ apiVersion: v1
 data:
   color.properties: |-
     color.good=green
-	color.bad=red
+    color.bad=red
 kind: ConfigMap
 metadata:
   name: demo
@@ -828,12 +827,12 @@ spec:
   containers:
   - name: test-container
     image: nginx
-	env:
-	- name: VARIABLE_DEMO
-	  valueFrom:
-	    configMapRef:
-		  name: demo
-		  key: lab.difficulty
+    env:
+    - name: VARIABLE_DEMO
+      valueFrom:
+        configMapRef:
+          name: demo
+          key: lab.difficulty
 ```
 + in pod commands
 + by creating a volume
@@ -846,13 +845,13 @@ spec:
   containers:
   - name: test-container
     image: nginx
-	volumeMounts:
-	- name: config-volume
-	  mountPath: /etc/config
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config
   volumes:
   - name: config-volume
     configMap:
-	  name: demo
+      name: demo
 ```
 
 ---
@@ -957,7 +956,7 @@ spec:
   - ReadWriteOnce
   gcePersistentDisk:
     pdName: demo-disk
-	fsType: ext4
+    fsType: ext4
 ```
 
 Persistent volume clain manifest:
@@ -974,7 +973,7 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-	  storage: 100G
+      storage: 100G
   persistentVolumeReclaimPolicy: Retain
 ```
 
@@ -988,13 +987,13 @@ spec:
   containers:
   - name: demo-container
     image: ...
-	volumeMounts:
-	- mountPath: /demo-pod
-	  name: pd-volume
+    volumeMounts:
+    - mountPath: /demo-pod
+      name: pd-volume
   volumes:
   - name: pd-volume
     PersistentVolumeClaim:
-	  claimName: pd-volume-claim
+      claimName: pd-volume-claim
 ```
 
 In order to claim to be successful storage class and access mode must match. If
@@ -1199,15 +1198,15 @@ spec:
   rules:
   - host: demo1.example.com
     http:
-	  paths:
-	  - path: /examplepath
+      paths:
+      - path: /examplepath
         backend:
           serviceName: demo
           servicePort: 80
   - host: lab.user.com
     http:
-	  paths:
-	  - path: /labpath
+      paths:
+      - path: /labpath
         backend:
           serviceName: lab1
           servicePort: 80
@@ -1257,32 +1256,32 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-	  role: demo-app
+      role: demo-app
   policyType:
   - Ingress
   - Engress
   igress:
   - from:
     - ipBlock:
-	  cidr: 172.17.0.0./16
-	  except:
-	  - 172.17.1.0/24
-	- namespaceSelector:
-	    matchLabels:
-		  project: myproject
-	- podSelector:
-	    matchLabels:
-		  role: frontend
+      cidr: 172.17.0.0./16
+      except:
+      - 172.17.1.0/24
+    - namespaceSelector:
+      matchLabels:
+        project: myproject
+    - podSelector:
+      matchLabels:
+        role: frontend
     ports:
-	- protocol: TCP
-	  port: 6345
+    - protocol: TCP
+      port: 6345
   egress:
   - to:
     - ipBlock:
-	  cidr: 10.0.0.0/24
-	ports:
-	- protocol: TCP
-	  port: 5978
+      cidr: 10.0.0.0/24
+    ports:
+    - protocol: TCP
+      port: 5978
 ```
 
 Default network policies:
