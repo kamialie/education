@@ -1,8 +1,8 @@
 # C++
 
-[online compiler](https://gcc.godbolt.org/) to try out new features (new standar
-that has not yet appeared on public distributed compilers or compile for
-different platform.
+[online compiler](https://gcc.godbolt.org/) to try out new features (new
+standard that has not yet appeared on public distributed compilers or compile
+for different platform)
 
 # Contents
 
@@ -14,6 +14,9 @@ different platform.
 	+ [set](#set)
 + [Flows](#flows)
 + [Libraries](#libraries)
+	+ [iostream](#iostream)
+	+ [algorithm](#algorithm)
+	+ [chrono](#chrono)
 + [Functions](#functions)
 
 # General
@@ -78,6 +81,7 @@ std::cout << x;
 int x{};
 std::cin >> x;
 ```
++ minimize variable visibility
 
 Initializing multiple variables, valid examples:
 ```c++
@@ -108,20 +112,69 @@ String can also be compared with `==`, `!=`, `>`, `<` operators.
 
 ### Struct
 
-```c+++
+```c++
 #include <vector>
 #include <string>
 
-Struct Person {
-	string name;
-	int age;
-}
+// can set default values for structures
+struct Person {
+	string name = "Name";
+	int age = 0;
+};
 
 vector<Person> staff;
 staff.push_back({'Jack', 22});
 staff.push_back({'Io', 15});
 cout << "Io's age is " << staff[1].age;
 ```
+
+---
+
+### Class
+
+```c+++
+class Route {
+	public:
+		// default constructor - user tells compiler it still wants to create
+		// empty object (with no constructor at all, compiler was adding
+		// default)
+		Route() {}
+		// constructor
+		Route(const string& source, const string& destination) {
+			//some initialization
+		}
+		// destructor
+		~Route() {
+			cout << "I'm erased" << endl;
+		}
+		// const method (tells compiler it won't change anything in the object
+		string GetSource() const {
+			return source;
+		}
+	private:
+		string source;
+};
+
+void PrintRoute(const Route& route) {
+	cout << route.GetSource << endl;
+}
+
+// anywhere where class is declared (return type, parameter type, container
+// type) object if this class can be created on-the-fly by specifying its
+// constructor arguments (or non for default) between curly braces
+PrintRoute({});
+PrintRoute({"pointA", "pointB"});
+vector<Route> routes;
+routes.push_back({"pointA", "pointB"});
+```
+
+When some function sets its paramater as const reference to an object, then all
+methods it is going to use must be declared as `const` in the class declaration.
+
+Object of a class is destroyed as soon as it gets out of its scope: if/else
+block, while/for iteration, function call (object as parameter). In the case
+when function returns an object of the class and it is not saved, it is
+destroyed right after return from that function.
 
 # Containers
 
@@ -293,7 +346,9 @@ do {
 ## for loop
 
 Iterate over all elements of a container(must specify the type of inner
-elements):
+elements). Can add `const` and `&` (for passing elements by reference),
+otherwise for takes a copy of an element.
+
 ```c++
 string x = "abcd";
 vector<int> nums = {1, 2, 3};
@@ -305,6 +360,9 @@ for (int c : nums) {
 }
 for (auto c : nums) {
 	cout << c << ",";
+}
+for (int i : {0, 1}) [
+	cout << i << endl;
 }
 ```
 
@@ -361,31 +419,53 @@ cin >> x >> y;
     > float value representation can be switched between fixed and scientific
         by manipulators: fixed, scientific; default - automatic
 
-## string
-
-## map
-
-```c++
-map<string, int> a = {{"one", 1}, {"two", 2}};
-
-for (auto i : a) {
-	cout << i.first << " " < i.second << endl;
-}
-```
-
 ## algorithm
 
-Count number of elements in a container:
-```c++
-vector<int> nums = {1, 5, 2, 5, 3};
-quantity = count(begin(nums), end(nums), 5);
-cout << "found " << quantity << " fives";
-```
+Algorithm library contains functions to work with containers, like `min`, `max`,
+and `sort`. The only requirement for listed functions is to have a `less than`
+operator to the underlying data type.
 
-Sort elements:
+A lot of functions take range as parameters, where built-in `begin()` and
+`end()` can be used.
+
 ```c++
-vector<int> nums = {1, 5, 2, 5, 3};
-sort(begin(nums), end(nums));
+#include <algorithm>
+
+bool Gt2 (int x) {
+	if (x > 2) {
+		return true;
+	}
+	return false;
+}
+
+int main() {
+	vector<int> nums = {1, 5, 2, 5, 3};
+
+	// sort elements:
+	sort(begin(nums), end(nums));
+
+	// count number of elements in a container:
+	int quantity = count(begin(nums), end(nums), 5);
+	cout << "found " << quantity << " fives";
+
+	// count if argument satisfies the condition
+	// custom function should return boolean
+	quantity = count_if(begin(nums), end(nums), Gt2);
+	cout << "found " << quantity << " greater than 2";
+
+	int thr = 0;
+	cin >> thr;
+	// same as previous using lambda function
+	// square brackets are used to pass variable from the context
+	// lambda function is called, inside its bode
+	quantity = count_if(begin(nums), end(nums), [thr](int x) {
+		if (x > thr) {
+			return true;
+		}
+		return false;
+	});
+	return 0;
+}
 ```
 
 ## chrono
