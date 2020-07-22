@@ -13,11 +13,14 @@ for different platform)
 	+ [map](#map)
 	+ [set](#set)
 + [Flows](#flows)
++ [Streams](#streams)
+	+ [Stream manipulator](#manipulator)
 + [Libraries](#libraries)
 	+ [iostream](#iostream)
 	+ [algorithm](#algorithm)
 	+ [chrono](#chrono)
 + [Functions](#functions)
++ [Exceptions](#exceptions)
 
 # General
 
@@ -175,6 +178,59 @@ Object of a class is destroyed as soon as it gets out of its scope: if/else
 block, while/for iteration, function call (object as parameter). In the case
 when function returns an object of the class and it is not saved, it is
 destroyed right after return from that function.
+
+`explicit` keyword before constructor forces user to explicitly call object's
+constuctor, instead of short syntax:
+```c++
+struct Day {
+	int value;
+	explicit Day(int new_value) {
+		value = new_value;
+	}
+}
+
+struct Month {
+	int value;
+	explicit Month(int new_value) {
+		value = new_value;
+	}
+}
+
+struct Year {
+	int value;
+	explicit Year(int new_value) {
+		value = new_value;
+	}
+}
+
+struct Date {
+	int day;
+	int month;
+	int year;
+
+	Date(Day new_day, Month new_month, Year new_year) {
+		day = new_day;
+		month = new_month;
+		year = new_year;
+	}
+}
+
+int main() {
+	// works
+	Date date = {Day(10), Month(11), Year(2012)};
+	// doesn't work because of explicit keyword
+	Date another_date = {{11}, {10}, {2011}};
+	return 0;
+}
+```
+
+## Overloading operator for sorting algorithms
+
+```c++
+bool operator<(const Obj& lhs, const Obj& rhs) {
+	// custom logic
+}
+```
 
 # Containers
 
@@ -366,6 +422,124 @@ for (int i : {0, 1}) [
 }
 ```
 
+# Streams
+
+Three base classes that make up all functions and other classes that work with
+reading or writing to streams: `istream`, `ostream`, `iostream`.
+
+To work with file stream include `<fstream>` module:
++ `ifstream` - reading from files (inherits from `istream`)
++ `ofstream` - writing to files (inherits from `ostream`)
++ `fstream` - reading/writing to/from files (inherits from `iostream`)
+
+Reading from file example (`ifstream` costructor takes file path as constructor
+argument; getline return reference to the stream, which can be casted to
+boolean, false will indicate that EOF has been reached; `getline` takes optional
+3rd parameter - delimiter, which is new line by default):
+```c++
+#include <iostream>
+#include <fstream>
+#include <string>
+
+int main() {
+	ifstream input("/path/to/file");
+	string line;
+	// checking if file stream was successfully opened
+	// another way to do the same:
+	// if (input)
+	if (input.is_open()) {
+		while (getline(input, line)) {
+			cout << line << endl;
+		}
+	} else {
+		cout << "error!" << endl;
+	}
+	return 0;
+}
+```
+
+Writing to file example (`ofstream` constructor takes optional second argument
+parameter to indicate writing mode - `ios::app` will open file in append mode):
+```c++
+#include <fstream>
+
+int main() {
+	ofstream output("/path/to/file");
+	output << "hello" << endl;
+	return 0;
+}
+```
+
+To skip symbols in file use `ignore(number)` method on `ofstream` object, which
+takes integer to indicate how many elements to skip.
+
+## Manipulator
+
+Manipulator switches the stream to work on a different mode. To work with
+stream manipulator add `<iomanip>` module.
+
+Available modes:
++ `setw(positive_integer)` - set the field width, take integer as parameter
++ `setfill(symbol)` - set sign to fill the free space set by `setw`
++ `left` - force left side allignment
++ `setprecision(positive_integer)` - set number of digits after dot for floats
++ `fixed` - force printing whole double instead of scientific notation, defaults
+to 6 digits; `scientific` - scientific notation, default is set automatically
++ `hex` - changes stream to work in hexadecimal mode (`dec` is default, `oct` -
+octal)
++ `setbase(positive_integer)` - directrly sets the base
+
+Example:
+```c++
+#include <iomanip>
+#include <iostream>
+
+int main() {
+	cout << setw(10);
+	cout << "a" << endl;
+	return 0;
+}
+```
+
+## Read/Write operator overloading
+
+```c+++
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+
+struct Duration {
+	int hour;
+	int min;
+
+	Duration (int h = 0, int m = 0) {
+		hour = h;
+		min = m;
+	}
+}
+
+istream& operator>>(istream& stream, Duration& duration) {
+	stream >> duration.hour;
+	stream.ignore(1);
+	stream >> duration.min;
+	return stream;
+}
+
+ostream& opeator<<(ostream& stream, const Duration& duration) {
+	stream << setfill('0)';
+	stream << setw(2) << duration.hour << ':' << setw(2) << duration.min;
+	return stream;
+}
+
+int main() {
+	stringstream dur_ss("1:50");
+	Duration duration;
+	dur_ss >> duration;
+	cout << duration << endl;
+	return 0;
+}
+```
+
 # Libraries
 
 ## iostream
@@ -401,23 +575,6 @@ int x, y;
 cin >> x >> y;
 ```
 
-    > manipulator - switches the stream to work on a different mode (function
-        that changes one of the output stream's properties - basefield)
-        - hex - changes th stream to hexadecimal mode:
-            cout << "number is hex << hex << byte
-        starts its work from the point it was placed at and continues even after
-        the end of the cout statement - finishes ony with another manipulator
-        canceling  its action; manipulator name may be in conflict with variable,
-        may be fixed with namespace
-    > dec (as in decimal) is a default manipulator, oct (as in octal) switches
-        to octal
-    > setbase(positive_integer) - manipulator, which directly instructs the
-        stream on what base to use (three cases before were special cases);
-        requires header file iomanip (special cases do not)
-        #include <iomanip>
-        cout << stebase(16) << number;
-    > float value representation can be switched between fixed and scientific
-        by manipulators: fixed, scientific; default - automatic
 
 ## algorithm
 
@@ -558,3 +715,33 @@ Overloading
         expr1 ? expr2 : expr3 - 1 is evaluated, if result is non-zero 2 is returned,
             otherwise 3
 
+# Exceptions
+
+Exceptions have a base class `exception` that can be used to catch any
+exceptions. Its `what()` method can be used to retrieve a message, if it has
+one.
+
+```c++
+// throw general exception
+void SomeFunction() {
+	if (condition) {
+		throw exception();
+	}
+}
+
+// throw exception with a message
+void SomeFunction() {
+	if (condition) {
+		string msg = "description";
+		throw runtime_error(msg);
+	}
+}
+
+int main() {
+	try {
+		SomeFunction();
+	} catch (exception& ex) {
+		cout << ex.what();
+	}
+}
+```
