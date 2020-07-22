@@ -135,7 +135,7 @@ cout << "Io's age is " << staff[1].age;
 
 ### Class
 
-```c+++
+```c++
 class Route {
 	public:
 		// default constructor - user tells compiler it still wants to create
@@ -503,7 +503,7 @@ int main() {
 
 ## Read/Write operator overloading
 
-```c+++
+```c++
 #include <iostream>
 #include <sstream>
 #include <iomanip>
