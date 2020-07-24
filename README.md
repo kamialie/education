@@ -20,6 +20,8 @@
 	+ [Ingress](#ingress)
 	+ [Security](#security)
 + [kubectl](#kubectl)
++ [Access control and security](#access-control-and-security)
++ [Authentication and authorization](#authentication-and-authorization)
 + [Additional notes](#additional-notes)
 
 # General
@@ -1376,6 +1378,262 @@ pod; use `-c` flag to specify container
 + `kubectl logs [POD_NAME]` - view logs of a pod; use `-c` flag to specify
 container; contains both stdout and stderr
 
+
+# Access control and security
+
+## Authentication and authorization
+
+Kubernetes provides two types of users: normal user and service account. Normal
+users are managed outside Kubernetes, while service accounts are created by
+Kubernetes itself to provide identity for processes in pods to intereact with
+Kubernetes cluster. Each namespace has default service account.
+
+After successful authentication, there are two main ways to authorize what an
+account can do: Cloud IAM and RBAC (Kubernetes roles-base access control). Cloud
+IAM is access control system to use cloud resources and perform operations on
+project and cluster levels (outside cluster - view and change configuration of
+Kubernetes cluster). RBAC provides permission inside cluster at the cluster and
+namespace levels (view and change Kubernetes objects).
+
+API server listens for remote requests on HTTPS port and all requests must be
+authenticated before it's acted upon. API server provides 3 methods for
+authentication: OpenID connect tokens, x509 client certs and basic
+authentication using static passwords. While OpenID is preferred method, last
+two are disabled by default in GKE.
+
+## Cloud IAM
+
+Cloud IAM access controls defines 3 elements: who (identity, user), what (set of
+permissions) and which (which resources policy applies to). GCP permissions are
+grouped into roles based on common user flows. Permissions can't be individually
+assigned to members. Instead, members are assigned roles.
+
+Permissions consist of an abbreviated name for a GCP surface, a kind of GCP
+resource, and a verb. For example, `compute.instances.get`.
+
+A Cloud IAM policy is a list of bindings, and in each binding a set of members
+is bound to one or more roles. The IAM policy in turn can be attached to a
+specific resource, a project, a project folder, or a whole organization
+(organized hierarchically from organization - lower levels inherit from top).
+There's no way to grant a permission at a higher level in the hierarchy and then
+take it away below.
+
+Roles:
++ primitive - can be used to grand global, project-level access to resources
+	+ Viewer - read-only access
+	+ Editor - Viewer permissions plus able to modify existing resources
+	+ Ownder - Editor permissions plus able to manage roles and permissions and
+	set up project billing
++ predifined - GKE Cloud IAM roles
+	+ Viewer - read-only access
+	+ Developer - full controll of all resources within cluster
+	+ Admin - full access to clusters and Kubernetes resources within clusters
+	+ Cluster Admin - create, delete, update and view clusters, but no access to
+	reasources within cluster
+	+ Host Service Agent User - manage network resource in shared VPC (intendent
+	for service accounts)
++ custom - user defined set of permissions tied to a custom role
+
+## RBAC
+
+Built on 3 base elements: subject (who - users or processes that can make
+requests to Kubernetes API), which (resources - API objects such as pods,
+deployments..), what (verbs, operations such as get, watch, create).
+
+Elements are connected together using 2 RBAC API objects: Roles (connect API
+resources and verbs) and RoleBidnings (connect Roles to subjects). Both can be
+applied on a cluster or namespace level.
+
+RBAC has Roles (defined at namespace level) and ClusterRoles (define at cluster
+level).
+
+`get`, `list` and `watch` are often used together to provide read-only access.
+`patch` and `update` are also usually used together as a unit.
+
+Only `get`, `update`, `delete` and `patch` can be used on named resources.
+
+Role example (can specify only one namespace for role):
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: demo-role
+rules:
+  - apiGroups: [""]
+    resource: ["pods"]
+	# can also specify resources by names
+	# resourceNames: ["demo-pod"]
+	verbs: ["get", "list", "watch"]
+```
+
+ClusterRole example (no need to specify namespace):
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: demo-role
+rules:
+  - apiGroups: [""]
+    resource: ["pods"]
+	verbs: ["get", "list", "watch"]
+```
+
+### Attaching roles to RoleBindings
+
+Subjects can be users, groups or service accounts.
+
+Account can be either Google account, GCP Service Account, or Kubernetes Service
+Account.
+
+`ClusterRoleBinding` does not need namespace field and can only refer to
+`ClusterRole`, not `Role`.
+
+RBAC can not be assigned to Google groups, but rather to Kubernetes groups.
+
+To check if a resource is associated with a namespace or defined at cluster
+level:
+```shell
+$ kubectl api-resources
+```
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: defalt
+  name: demo-rolebinding
+subjects:
+- kind: User
+  name: "user@example.com"
+  apiGroup: rbac.authorization.k8s.io/v1
+- kind: Group
+  name: "Developers"
+  apiGroup: rbac.authorization.k8s.io/v1
+- kind: Group
+  name: system.serviceaccounts
+  apiGroup: rbac.authorization.k8s.io/v1
+# all service accounts in qa namespace
+- kind: Group
+  name: system.serviceaccounts:qa
+  apiGroup: rbac.authorization.k8s.io/v1
+- kind: ServiceAccount
+  name: default
+  namespace: kube-system
+roleRef:
+  kind: Role
+  name: demo-role
+  apiGroup: rbac.authorization.k8s.io/v1
+```
+
+## Kubernetes control plane security
+
+GKE manages cluster root Certificate Authority (CA) outside the cluster. Every
+cluster has its own CA. Certificates issued by CA are used to secure network
+communications (TLS and SSH).
+
+Node creating involves shared secret injection that is further required for the
+node to submit certificate signing request.
+
+Certificate rotation starts by creating a new IP address for the master
+alongside its old IP address. Then certificate is issued to the control plane.
+API server will not be available at this time. After master is reconfigured,
+nodes are automatically updated with new IP of master. Nodes automatically get
+upgraded as well. If rotation is not completed manually, GKE automatically
+completes it after 7 days.
+
+To manually do the process, rotate master IP address (since it requires to
+rotate certificates as well):
+```shell
+$ gcloud container clusters update [NAME] --start-credential-rotation
+$ gcloud container clusters update [NAME] --complete-credential-rotation
+$ gcloud container clusters update [NAME] --start-ip-rotation
+$ gcloud container clusters update [NAME] --complete-ip-rotation
+```
+
+To restrict access to credentials at nodes:
++ configure Cloud IAM service account for the node with minimal permissions 
++ omit using `compute.instances.get` permission through service account, compute
+instance admin role, or any custom roles
+
+[Kubernetes Control Plan
+security](https://cloud.google.com/kubernetes-engine/docs/concepts/control-plane-security)
+
+[Protecting cluster
+metadata](https://cloud.google.com/kubernetes-engine/docs/how-to/protecting-cluster-metadata)
+
+## Pod security
+
+By default containers inside pod that will allow privilege elevation, and can
+access host file system and network. This can be configured with `security
+context`.
+
+Security context is defined in pod specification and applied to all containers
+in a pod (enforced by container runtime):
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: some-name
+spec:
+  securityContext:
+    runAsUser: 1000
+	fsGroup: 2000
+[...]
+```
+
+Pod security policy can be used to abstract it away from pod specifications. It
+consists of pod security object and admission controller. Object is a set of
+restrictions, rules and defaults, and is defined just like security context.
+Rules are applied when a pod is created or updated.The pod security policy
+controller is an admission controller that validates or modifies requests to
+create or update pods against one or more security policies.
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-psp
+spec:
+  privileged: false
+  allowPrivilegeEscalation: false
+  volumes:
+    - 'configMap'
+    - 'emptyDir'
+	- 'projected'
+  hostNetwork: false
+  hostIPC: false
+  hostPID: false
+  runAsUser:
+    rule: 'mustRunAsNonRoot'
+  seLinux:
+    rule: 'runAsAny'
+  readOnlyRootFileSystem: false
+```
+
+After security policy is created it needs to be authorized (can be done using
+rbac). Then user role binding to bind `clusterRole` to users or groups.
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: psp-clusterrole
+groups:
+- apiGroups:
+  - policy
+  resources:
+  - podsecuritypolicies
+  resourceNames:
+  - demo-psp
+  verbs:
+  - use
+```
+
+Pod security policy controller also needs to be enabled (after security policies
+are created). It is disabled by default.
+```shell
+$ gcloud container clusters update [NAME] --enable-pod-security-policy
+```
 
 # Additional notes
 
