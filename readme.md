@@ -8,6 +8,7 @@ for different platform)
 
 + [General](#general)
 + [Variables and data types](#variables-and-data-types)
+	+ [tuple](#tuple)
 + [Containers](#containers)
 	+ [vector](#vector)
 	+ [map](#map)
@@ -96,6 +97,11 @@ int e{5}, f{5};
 Assigning containers like strings and vector perform deep copying, that is
 contents of the containers rather than pointer to container.
 
+Integer values can be split by single quotes for better readability:
+```c++
+int big_number = 2'000'000'000;
+```
+
 ## Data types
 
 Common types:
@@ -110,6 +116,39 @@ bool status = false;
 ```
 
 String can also be compared with `==`, `!=`, `>`, `<` operators.
+
+Integer (and all related type like size\_t) size depends on CPU architecture.
+Integer related types:
+```c++
+int a;
+unsigned int b;
+size_t c; // methods returning sizes (fe for containers) return this type
+```
+
+Classic types that came from c (same with 8, 16, and 64):
+```c++
+#include <cstdint>
+int32_t d; // always 32 bit
+uint32_t e; // unsigned always 32 bit
+```
+
+Get limits for particular type:
+```c++
+#include <limits>
+#incldue <iostream>
+
+cout << numeric_limits<int>::min() << endl; // or substitute by max()
+```
+
+When performing operation on variables of different types, any types smaller
+than int are casted into int, smaller variable is casted to bigger. When both
+types have same size, but different signs, signed variable is casted to
+unsigned. When expression has more than two variables, evalutaion goes from left
+to right, saving intermediate results, so casting is done separately for each
+pair.
+
+Any numbers are assumed to be `int` by default. To indicate that a number is
+`unsigned int` add `u` suffix - `1u`.
 
 ---
 
@@ -223,6 +262,108 @@ int main() {
 	return 0;
 }
 ```
+
+---
+
+### Enum
+
+Enum objects can be compared to each other, thus be used as keys in a map. Are
+not implicitly converted to int, which avoids the mistake of putting wrong
+arguments. Can be used as function parameter, return type, etc.
+
+By default values start from zero; user can set custom values to each in
+declaration.
+
+```c++
+enum class RequestType {
+  ADD,
+  REMOVE,
+  NEGATE
+};
+
+RequestType::ADD;
+```
+
+---
+
+### Tuple
+
+```c++
+#include <tuple>
+#include <string>
+#include <iostream>
+
+struct someStruct {
+	int i;
+	string str;
+	bool b;
+}
+
+int main() {
+	tuple<int, string, bool> t1(1, "some", false);
+	// from std 17, it is not required to list elements' types
+	tuple super_t(5, "yes", true);
+
+	auto t2 = make_tuple(3, "oops", true);
+
+	someStruct s = {2, "other", true};
+	auto t2 = tie(s.i, s.str, s.b);
+
+	// super weird way to reference element in tuple
+	cout << get<1>(t2) << endl;
+
+	return 0;
+}
+```
+
+`make_tuple` function can be used to make tuple from values.
+
+`tie` function can be used to generate tuple. It actually binds references to
+values together, so it's arguments should be saved somewhere beforehand.
+
+Tuples can be used to return multiple values from functions. To increase
+readability function's return can be assinged to `tie` function, which would
+take already existing variables as its parameters:
+```c++
+#include <tuple>
+#include <iostream>
+
+tuple<bool, int> SomeFunction();
+
+int main() {
+	bool b;
+	int n;
+
+	tie(b, n) = SomeFunction();
+	cout << b << " " << n << endl;
+
+	// structured bindings
+	auto [b1, n1] = SomeFunction();
+	cout << b1 << " " << n1 << endl;
+	return 0;
+```
+
+---
+
+### Pair
+
+```c++
+#include <utility>
+#include <string>
+#include <iostream>
+
+int main() {
+	pair<int, string> p(1, "here");
+
+	auto p1 = make_pair(2, "three");
+
+	cout << p.first << " " << p.second << endl;
+	return 0;
+}
+```
+
+Pair can only contain two values. Same as with tuple, from c++17 elements' types
+can be avoided.
 
 ## Overloading operator for sorting algorithms
 
@@ -419,6 +560,38 @@ for (auto c : nums) {
 }
 for (int i : {0, 1}) [
 	cout << i << endl;
+}
+```
+
+## switch
+
+Case block do not require brackets, however, if variable is declared inside case
+block, it is required to have brackets. `default` case works as `else` - if not
+other option was satisfied.
+
+```c++
+void ProcessRequest(
+    set<int>& numbers,
+    RequestType request_type,
+    int request_data) {
+  switch (request_type) {
+  case RequestType::ADD:
+    numbers.insert(request_data);
+    break;
+  case RequestType::REMOVE:
+    numbers.erase(request_data);
+    break;
+  case RequestType::NEGATE: {  // brackets are required
+    bool contains = numbers.count(request_data) == 1;
+    if (contains) {
+      numbers.erase(request_data);
+      numbers.insert(-request_data);
+    }
+    break;
+  }
+  default:
+    cout << "Unknown request" << endl;
+  }
 }
 ```
 
@@ -714,6 +887,42 @@ Overloading
     > ternary ? operator:
         expr1 ? expr2 : expr3 - 1 is evaluated, if result is non-zero 2 is returned,
             otherwise 3
+## Template functions
+
+Template function let's user not to specify parameters to reduce code duplicate,
+when the only thing different is the type of arguments, but the body of functon
+is the same.
+
+In the example below function works both for ints and doubles, and any type that
+supports multiplication by itself (in this context `class` may be used as well
+as `typename`):
+```c++
+template <typename T>
+T Sqrt(T arg) {
+	return arg * arg;
+}
+```
+
+Template operator for pair to be used with function above:
+```c++
+template <typename First, typename second>
+pair<First, Second> operator * (const pair<First, Second& p1,
+								const pair<First, Second>& p2) {
+	First f = p1.first * p2.first;
+	Second s = p1.second * p2.second;
+	return make_pair(f, s);;
+}
+```
+
+Sometimes compiler can't make the decision of what type is to be used with
+template, and there is a way to specify it on function call:
+```c++
+int main() {
+	cout << max<int>(1, 2.5) << endl;
+	cout << max<double>(1, 0.5) << endl;
+	return 0;
+}
+```
 
 # Exceptions
 
