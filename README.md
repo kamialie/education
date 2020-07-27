@@ -1357,6 +1357,15 @@ get additional columns of information)
 > kubectl apply -f ./new-nginx-pod.yaml # apply manifest file and start a container
 ```
 
+## Logs
+
+```shell
+$ kubectl logs [POD_NAME]
+```
+
++ `--tail=[NUMBER]` - limit output to the last 20 lines
++ `--since=3h` - limit output based on time limit
+
 ## Introspection
 
 Commands to view info about kubernetes objects.
@@ -1633,6 +1642,52 @@ Pod security policy controller also needs to be enabled (after security policies
 are created). It is disabled by default.
 ```shell
 $ gcloud container clusters update [NAME] --enable-pod-security-policy
+```
+
+# Logging and monitoring
+
+## Probes
+
+Probes let you run custom health checks of containers. Health checks are
+performed as liveness and readiness probes. With a liveness probe, Kubernetes
+checks to see whether the container is running.  If the liveness pro fails and
+if the restart policy is set to always or on failure, cubelet will restart the
+container.  With the readiness probe, Kubernetes checks whether the container is
+ready to accept requests.  If a readiness probe fails, the pods IP addresses
+removed from all service endpoints by the endpoint controller.
+
+Probes can be defined using 3 types of handlers; command, HTTP, and TCP.
+
+If command exic code is zero, it is considered healthy:
+```yaml
+[...]
+spec:
+  containers:
+  - name: liveness
+    livenessProbe:
+	  exec:
+	    command:
+		- cat
+		- /tmp/ready
+```
+
+If HTTP GET request returns a code range from 200 to 400, it is considers
+healthy:
+```yaml
+[...]
+livenessProbe:
+  httpGet:
+    path: /healthz
+	port: 8080
+```
+
+kubelet attempts to set a tcp connection; if it is established, container is
+considered healthy:
+```yaml
+[...]
+livenessProbe:
+  tcpSocket:
+	port: 8080
 ```
 
 # Additional notes
