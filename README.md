@@ -1351,20 +1351,18 @@ get additional columns of information)
 
 ## Examples
 
+`explain` commands shows built-in documentation on
+Kubernetes objects and their properties.
+```shell
+$ kubectl explain pods
+$ kubectl explain pods.spec.containers
+```
+
 ```shell
 > kubectl top nodes # info on nodes status
 > kubectl cp ~/test.html $my_nginx_pod:/usr/share/nginx/html/test.html # copy files
 > kubectl apply -f ./new-nginx-pod.yaml # apply manifest file and start a container
 ```
-
-## Logs
-
-```shell
-$ kubectl logs [POD_NAME]
-```
-
-+ `--tail=[NUMBER]` - limit output to the last 20 lines
-+ `--since=3h` - limit output based on time limit
 
 ## Introspection
 
@@ -1386,6 +1384,8 @@ pod; use `-c` flag to specify container
 	+ `kubectl exec -ti [POD_NAME] -- /bin/bash` - get interactive shell
 + `kubectl logs [POD_NAME]` - view logs of a pod; use `-c` flag to specify
 container; contains both stdout and stderr
+	+ `--tail=[NUMBER]` - limit output to the last 20 lines
+	+ `--since=3h` - limit output based on time limit
 
 
 # Access control and security
