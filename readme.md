@@ -22,6 +22,7 @@ for different platform)
 	+ [chrono](#chrono)
 + [Functions](#functions)
 + [Exceptions](#exceptions)
++ [Testing](#testing)
 
 # General
 
@@ -46,6 +47,9 @@ initialization
 level
 + `-Werror` - gcc/g++ flag to treat warnings as errors
 
+Other use cases:
++ `-E` - perform only preproccessing
+
 ## Comments
 
 Multiline comments (cannot be nested):
@@ -61,6 +65,30 @@ Proper use of comments
 + inside the library, program, or function level describe how
 + at the statement level describe why
 + show why one decision was made over the other
+
+## Using
+
+Substitute repeating variable type with a custom name:
+```c++
+#include <string>
+#include <set>
+#include <map>
+
+using namespace std;
+using CustomName = map<string, set<string>>;
+
+int main() {
+	CustomName var;
+	return 0;
+}
+```
+
+## Header files
+
+To protect header file from double inclusion add the following line at the top:
+```c++
+#pragma once
+```
 
 
 # Variables and data types
@@ -952,5 +980,23 @@ int main() {
 	} catch (exception& ex) {
 		cout << ex.what();
 	}
+}
+```
+
+# Testing
+
+Ready-to-use C++ unit testing frameworks: Google Test, CxxTest, Boost Test
+Library.
+
+`assert` function is used to unit-test a given function (include `cassert`
+module). If expression evaluates to false, assert raises exception, otherwise
+does nothing.
+
+```c++
+#include <cassert>
+
+int main() {
+	assert(Sum(3, 2) == 5);
+	return 0;
 }
 ```
