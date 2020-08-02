@@ -4,6 +4,8 @@
 standard that has not yet appeared on public distributed compilers or compile
 for different platform)
 
+[cpp reference](https://en.cppreference.com/w/)
+
 # Contents
 
 + [General](#general)
@@ -403,6 +405,46 @@ bool operator<(const Obj& lhs, const Obj& rhs) {
 
 # Containers
 
+Many algorithms that work with containers accept iterators. Most common are
+`begin(container)` and `end(container)`. First is a reference to the firs
+element of container, while second is a reference to the next element after
+last, thus, invalid (can not be dereferenced). Iterator can be used to iterate
+over elements of container:
+```c++
+vector<string> s = {"a", "b", "c"};
+for (auto it = begin(s); it < end(s); it++) {
+	cout << *s << " ";
+}
+```
+
+`begin(s)` and `s.begin()` do the same thing.
+
+`begin()` and `end()` return object of type `[container]::iterator`, for example
+`vector<string>::iterator`.
+
+`rbegin()` and `rend()` (r for reverse) return reverse iterators, thus iterating
+from `rbegin()` to `end()` results in reverse sequence. These functions return
+object of type `[container]::reverse_iterator`. Can be used to sort in
+descending order, find last element, instead of first, etc.
+
+`back_inserter(container)` is a special iterator that can be used with
+algorithms to avoid setting size of resulting container beforehand, as this
+iterator performs push\_back to container. Those containers that do not have
+push\_back method, use `inserter()` (takes two arguments: container and iterator
+where to insert) iterator, which performs insert. These iterators can not be
+used to reference elemenets and iterate over elements.
+
+`next(iterator)` and `prev(iterator)`  return next/previous iterator.
+
+Iterator categories (in cpp reference):
++ Input - any containers
++ Forward, Bidir - any containers (but could be modifying container, thus, can't
+be used on set and map - check documentation)
++ Random - vector and string
++ Output - vector, string, back\_inserter, inserter
+
+[some info on iterators](https://en.cppreference.com/w/cpp/named_req/Iterator)
+
 ## Vector
 
 ```c++
@@ -454,6 +496,12 @@ int main(void) {
 	nums.insert(end(nums), begin(nums), end(nums));
 }
 ```
+
+Common methods(`it` - iterator):
++ `insert(it, range_begin, range_end)` - insert range [range\_begin, range\_end]
+before `it`
++ `insert(it, count, value)` - insert `value` `count` times before `it`
++ `insert(it, {1, 2, 3})` - insert 1, 2, 3 before it
 
 ## Map
 
@@ -781,7 +829,7 @@ cin >> x >> y;
 
 Algorithm library contains functions to work with containers, like `min`, `max`,
 and `sort`. The only requirement for listed functions is to have a `less than`
-operator to the underlying data type.
+operator for the underlying data type.
 
 A lot of functions take range as parameters, where built-in `begin()` and
 `end()` can be used.
@@ -825,6 +873,49 @@ int main() {
 	return 0;
 }
 ```
+
+Many algorithms that work with containers return an iterator, that can further
+be used with `erase` mathod to get rid of filtered items. This iterator happens
+to be the end, as alrogithm rearranged elements in a container, so that
+unsatisfied elements appear at the end:
+```c++
+vector<string> v = {"Python", "C", "C++", "Java", "C#"};;
+// remove_if algorithm does not really remove elements, but rather rearranges
+// elements, so that to be removed elements are placed at the end and it
+// iterator would be the beginning of that range
+auto it = remove_if(begin(v), end(v),
+	[](const string& lang) {
+		return lang[0] == 'C';
+});
+v.erase(it, end(v));
+
+// or
+// unique "removes" repeating elements that go one after another
+auto unique(begin(v), end(v));
+v.erase(it, end(v));
+```
+
+Many algorithms like `remove()` can not be used on sets, because it does not
+allow rearrange of its elements.
+
+`min_element()` and `max_element` return iterator which is further dereferenced
+(or return `end()` for empty container). `minmax_element()` returns pair of
+iterators.
+
+`all_of` takes range and custom function and returns true or false; thus, can be
+used on set.
+
+`partition()` takes range as first two arguments, and condition (lambda
+function) as third and rearranges elements so that elements, which satisfied the
+condition, appear at the beginning of vector. Returns border iterator, which is
+the first element that does not satisfy the condition.
+
+`copy_if()` takes range of container as first two arguments, begin iterator of
+new container and condition as last one, to copy over elements that satisfy the
+condition. Returns iterator to the last element in new container. New container
+should have enough space (size) to hold elements.
+
+`set_intersection()`
 
 ## chrono
 
