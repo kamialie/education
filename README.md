@@ -30,6 +30,7 @@
 + [Troubleshooting](#troubleshooting)
 + [Email](#email)
 + [PDF](#pdf)
++ [Modules and packages](#modules-and-packages)
 
 ## Data structures
 
@@ -492,3 +493,52 @@ report_chart = Drawing()
 report_chart.add(report_pie)
 report.build([report_title, report_table])
 ```
+
+# Modules and packages
+
+When modules are imported they are first fully executed. To avoid module to be
+executed on import, use `__main__` pattern:
+
+```python
+name = "John"
+
+def main():
+	print(name)
+
+if __name__ == "__main__":
+	main()
+```
+
+Name of the module is always available in `__name__` variable, which is
+`__main__` when it is executed.
+
+Packages let you organize modules hierarchically. `__init__.py` file is needed,
+so python treats directory as a package/subpackage; it can do some
+initialization or be empty:
+
+```
+package/
+	__init__.py
+	subpackage1/
+		__init__.py
+		file1.py
+		file2.py
+	subpackage2/
+		__init__.py
+		file3.py
+		file4.py
+```
+
+```python
+from package import *
+```
+can be used to import all subpackages and their contents (bad practice),
+`__all__` can be used to specify which subpackages to import, when such
+operation is executed(when specifying modules, avoid extensions):
+
+```python3
+__all__ = ["subpackage1", "subpackage2"]
+```
+
+Modules can also be imported relatively using `.` and `..`, meaning current and
+parent packages respectively.
