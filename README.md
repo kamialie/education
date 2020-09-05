@@ -1156,43 +1156,43 @@ Possible scenario of `find` use is to make incremental backups based on timestam
 
 Create an archive from directory with specified name:
 ```shell
-$> tar cf name.tar directory
+$ tar cf name.tar directory
 ```
 
 List the contents of the archive:
 ```shell
-$> tar tf name.tar
+$ tar tf name.tar
 ```
 
 Extract the contents of the archive:
 ```shell
-$> tar xf name.tar
+$ tar xf name.tar
 ```
 
 Extract single file from archive (multiple pathnames can be specified):
 ```shell
-$> tar xf name.tar pathname
+$ tar xf name.tar pathname
 ```
 
 Extracting files with wildcard (GNU version):
 ```shell
-$> tar xf name.tar --wildcards 'home/dir/some-*/file-A'
+$ tar xf name.tar --wildcards 'home/dir/some-*/file-A'
 ```
 
 `tar` in conjunction with `find`:
 ```shell
-$> find some_dir -name 'file-A' exec tar rf name.tar '{}' '+'
+$ find some_dir -name 'file-A' exec tar rf name.tar '{}' '+'
 ```
 
 `tar` from stdin (simplified version on second line considering gzip and bzip2 direct support in GNU tar and `--files-from` option substituted by `-T`::
 ```shell
-$> find some_dir -name 'file-A' | tar cf - --files-from=- | gzip > name.tgz
-$> find some_dir -name 'file-A' | tar czf name.tgz -T  -
+$ find some_dir -name 'file-A' | tar cf - --files-from=- | gzip > name.tgz
+$ find some_dir -name 'file-A' | tar czf name.tgz -T  -
 ```
 
 transfer files over network from remote machine:
 ```shell
-$> ssh remote-sys 'tar cf - Documents | tar xf -
+$ ssh remote-sys 'tar cf - Documents | tar xf -
 ```
 
 ---
@@ -1234,7 +1234,7 @@ Same as gzip, but achieves higher compression at the cost of speed using differe
 ## zip
 
 ```shell
-> zip [options] zipfile file...
+$ zip [options] zipfile file...
 ```
 
 Both a compression and archiver tool. Unlike `tar`, if existing archive is
@@ -1252,33 +1252,80 @@ are more preferred in Linux.
 Basic run (`-r` option is for recursive behaviour, extension is added
 automatically, here added for clarity):
 ```shell
-> zip -r playground.zip playground
+$ zip -r playground.zip playground
 ```
 
 Extract contents with `unzip`:
 ```shell
-> unzip playground.zip
+$ unzip playground.zip
 ```
 
 Output contents of an archive and selectively extract file:
 ```shell
-> unzip -l playground.zip
+$ unzip -l playground.zip
 > unzip playground.zip playground/dir1/some_file
 ```
 
 Provide list of files via standard input:
 ```shell
-> find playground -name "file-A" | zip -@ file-A.zip
+$ find playground -name "file-A" | zip -@ file-A.zip
 ```
 
 Pass contents via standard input:
 ```shell
-> ls -l /etc/ | zip ls-etc.zip -
+$ ls -l /etc/ | zip ls-etc.zip -
 ```
 
 Show contents of an archive in standard output:
 ```shell
-> unzip -p ls-etc.zip | less
+$ unzip -p ls-etc.zip | less
+```
+
+## rsync
+
+```shell
+$ rsync [options] source destination
+```
+
+Unix tool for synchronizing both local and remote directotries *rsync
+remote-update protocol*.
+
+Source and destination can be one of the following:
++ local file or directory
++ remote fiel or directory in the form `[user@]host:path`
++ rsync server specified with a URI of `rsync://[user@]host[:port]/path`
+
+When source is a directory and specified without a trailing slash, directory
+itself is copied to the destination. If trailing slash is added, contents of
+source are synced to the destination.
+
+### Examples
+
+Synchronize local directories(`-a` - for archiving — causes recursion and
+preservation of file attributes, `-v` - verbose):
+```shell
+$ rsync -av dir1 dir2
+```
+
+Synchronize contents of dir1 to dir2
+```shell
+$ rsync -av dir1/ dir2
+```
+
+Also remove contents that may have existed in destination and no longer present
+in source:
+```shell
+$ rsync -av --delete dir1 dir2
+```
+
+`rsync` over network:
+```shell
+$ rsync -av --delete --rsh=ssh /home remote-sys:/backup
+```
+
+`rsync` from *rsync server* (`archive.linux.duke.edu` - name of the server):
+```shell
+$ rsync -av –delete rsync://archive.linux.duke.edu/fedora/linux/development/rawhide/Everything/x86_64/os/ fedora-devel
 ```
 
 ---
