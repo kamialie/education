@@ -1105,6 +1105,7 @@ Options control the scope of a **find** search. Most commonly used:
 ## Extra resources
 
 + **locate**, **updatedb**, **find** and **xargs** programs are part of GNU Project's *findutils* package, [on-line documentation](http://www.gnu.org/software/findutils/)
++ [delete directories](https://unix.stackexchange.com/questions/89925/how-to-delete-directories-based-on-find-output)
 
 ---
 
@@ -1298,6 +1299,15 @@ Source and destination can be one of the following:
 When source is a directory and specified without a trailing slash, directory
 itself is copied to the destination. If trailing slash is added, contents of
 source are synced to the destination.
+
+### Options
+
+| Option	| Long Option					| Description	|
+|-----------|-------------------------------|---------------|
+|			| --exclude file ...			|  exclude
+
+[exclude files](https://linuxize.com/post/how-to-exclude-files-and-directories-with-rsync/)
+[rsync over custom ssh port](https://stackoverflow.com/questions/4549945/is-it-possible-to-specify-a-different-ssh-port-when-using-rsync)
 
 ### Examples
 
