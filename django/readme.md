@@ -27,4 +27,23 @@ $ pip install Django
 
 # Important files
 
+Simple layout:
+```
+project/
+|--app
+    |- ...
+	|- models.py		# Model
+	|- views.py			# Controller
+	|- templates/
+	       |- index.html
+|--project/
+	|- ...
+	|- settings.py
+	|- urls.py			# Controller
+|__templates
+       |-index.html
+```
+
 ## setting.py
+
+## urls.py
