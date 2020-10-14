@@ -20,12 +20,12 @@ constraints as well)
 
 log in with credentials:
 ```shell
-mysql -u root -p
+$ mysql -u root -p
 ```
 
 show databases:
 ```sql
-show databases;
+mysql> show databases;
 ```
 
 # Resources
