@@ -19,7 +19,7 @@ constraints as well)
 # MySQL cli
 
 log in with credentials:
-```shell
+```bash
 $ mysql -u root -p
 ```
 
