@@ -759,6 +759,9 @@ Network, volume and service definitions are applied to each container respective
 
 Use **up** to set up and start services the first time, **run** for "one-off" tasks, **start** for restarting previously created containers.
 
+[docker compose file for different
+environments](https://docs.docker.com/compose/extends/)
+
 ### Commands
 
 **docker-compose**
