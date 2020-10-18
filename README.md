@@ -119,7 +119,7 @@ inserts a row to the table
 
 + **UPDATE** ... **SET** ... **WHERE** ...
 ```sql
-UPDATE Users SET name='Kamil' WHERE email='hello@gmail.com'
+UPDATE Users SET name='Kamil' WHERE email='hello@gmail.com';
 ```
 updates field in rows that satisfy the condition set by **WHERE** clause
 
@@ -127,7 +127,7 @@ updates field in rows that satisfy the condition set by **WHERE** clause
 
 + **DELETE FROM** ... **WHERE** ...
 ```sql
-FROM Users WHERE email='hello@gmail.com'
+DELETE FROM Users WHERE email='hello@gmail.com';
 ```
 deteles a row that meets the criteria
 
@@ -139,9 +139,9 @@ SELECT * FROM Users WHERE email='hello@gmail.com'
 ```
 reads and outputs data from specified table, which also satisfies **WHERE** clause, `*` means all rows
 
-+ **SELECT** [] **FROM** [] **JOIN** [] **ON**
++ **SELECT** ... **FROM** ... **JOIN** ... **ON**
 ```sql
-SELECT Album.title,Artist.name FROM Album JOIN Artist ON Album.artist_id=Artist.artist_id
+SELECT Album.title,Artist.name FROM Album JOIN Artist ON Album.artist_id=Artist.artist_id;
 ```
 **JOIN** puts together two tables, creating long rows with all possible
 combintaions, while **ON** filters out only those, where primary key and
@@ -150,29 +150,29 @@ foreign key match.
 **SELECT** command has also other features like **ORDER BY** to output result
 in different form:
 ```sql
-mysql> SELECT * FROM Users ORDER BY email;
+SELECT * FROM Users ORDER BY email;
 ```
 
 Another example with wildcard matching (`%` means some letters):
 ```sql
-mysql> SELECT * FROM Users WHERE name LIKE '%e%';
+SELECT * FROM Users WHERE name LIKE '%e%';
 ```
 
 Limit the output of **SELECT**(can take a form of just number of entries or
 starting row and number of entries; row numbering starts from 0):
 ```sql
-mysql> SELECT * FROM Users ORDER BY email DESC LIMIT 2;
-mysql> SELECT * FROM Users ORDER BY email LIMIT 1,2;
+SELECT * FROM Users ORDER BY email DESC LIMIT 2;
+SELECT * FROM Users ORDER BY email LIMIT 1,2;
 ```
 
 Get number of rows instead of actual rows using COUNT function:
 ```sql
-mysql> SELECT COUNT(*) FROM Users ORDER BY email;
+SELECT COUNT(*) FROM Users ORDER BY email;
 ```
 
 ---
 
-Taking **DELETE FROM** command as the example, the first part of which works as
+Taking **DELETE FROM** command as an example, the first part of which works as
 a loop that would delete everything if not restricted by **WHERE** statement,
 which works like an `if` statement.
 
@@ -244,7 +244,7 @@ CREATE TABLE Users (
 	email VARCHAR(128),
 	PRIMARY KEY(user_id),
 	INDEX(emal)
-)
+);
 ```
 
 **PRIMARY KEY** statement tell db that this field is going to be used a lot,
@@ -259,7 +259,7 @@ with exact matches or prefix lookups, generally HASH or BTREE
 If forgot to specify on table creation, can still add it later (you can specify
 what to use, but rather let database decide):
 ```sql
-ALTER TABLE Users ADD INDEX (email) USING BTREE
+ALTER TABLE Users ADD INDEX (email) USING BTREE;
 ```
 
 3 types of keys:
