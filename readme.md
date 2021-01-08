@@ -589,6 +589,47 @@ adding the same element, but it won't be actually added.
 
 Set can be compared, just like vectors and maps.
 
+## Deque
+
+```c++
+#include <deque>
+```
+
+Deque provides fast insert and erase from top and back with `d.push_back(x)`,
+`d.pop_back()`, `d.push_front(x)` and `d.pop_front()` methods. Elements are
+also accessible by index.
+
+## Queue
+
+```c++
+#include <queue>
+```
+
+Queue has limited functionality and offers only `q.push(x)`, `q.pop()`,
+`q.front()`, `q.back()`, `q.size()`, `q.empty()` methods.
+
+## Stack
+
+```c++
+#include <stack>
+```
+
+Stack offers `s.push(x)`, `s.pop()`, `s.top()`, `s.size()` and `s.empty()`
+methods.
+
+## Operations on containers
+
+| Action	| Unsorted vector	| Sorted vector	| map or set	|
+|-----------|-------------------|---------------|---------------|
+| check existance	| `find` function	| `binary\_search` function	| `count` method	|
+| check existance and find first satisfying element	| `find` function | `lower\_bound` functions andh checking if element equals return value	| `find` method	|
+| find first element equal or greater than | `find\_if` function	| `lower\_bound` function	| `lower\_bound` method	|
+| find first element greater that	| `find\_if` function	| `upper\_bound` function	| `upper\_bound` method	|
+| count elements |  `count` function	| `equal\_range` function and calculating the range between return values	| `count` method	|
+| cycle through elements	| cycle with `find` function	| `equal\_range` function and cyle from left to right iterator | `find` method	|
+
+`next(it)` - is a fancy way for `it + 1`
+
 # Flows
 
 [Alternative logical operators available in standard
