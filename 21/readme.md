@@ -353,3 +353,12 @@ int	main() {
 	return 0;
 }
 ```
+
+## comments on exercises
+
+Can not initialize an array of objects if class has paramaterized constuctor.
+In that case use setter.
+
+Bonus in ex02 - declaring attribute as `mutable` lets you modify it in `const`
+method without compilation errors, [more
+info](https://habr.com/ru/company/infopulse/blog/341264/)
