@@ -362,3 +362,6 @@ In that case use setter.
 Bonus in ex02 - declaring attribute as `mutable` lets you modify it in `const`
 method without compilation errors, [more
 info](https://habr.com/ru/company/infopulse/blog/341264/)
+
+Error handling when entering character instead of integer -
+https://stackoverflow.com/questions/2407771/c-character-to-int
