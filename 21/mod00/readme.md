@@ -354,7 +354,7 @@ int	main() {
 }
 ```
 
-## comments on exercises
+# comments on exercises
 
 Can not initialize an array of objects if class has paramaterized constuctor.
 In that case use setter.
