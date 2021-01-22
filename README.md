@@ -1,90 +1,208 @@
-## General links
+# Terraform 🛕
 
-- Ed suggestions:
-  + https://ru.wikipedia.org/wiki/Model-View-ViewModel
-  + https://ru.wikipedia.org/wiki/Команда\_(шаблон\_проектирования)
-  + https://ru.wikipedia.org/wiki/Реактивное\_программирование 
-  + https://ru.wikipedia.org/wiki/Design_Patterns
-  + https://ru.wikipedia.org/wiki/GRASP
-  + https://habr.com/ru/post/348286/
-  + https://ru.m.wikipedia.org/wiki/SOLID\_(объектно-ориентированное\_программирование)
+Terraform files can be in terraform or in json format (including var files).
 
-- education sources:
-  + https://tproger.ru/curriculum/devops/
-  + https://www.codewars.com/users/g964
-  + https://www.youtube.com/channel/UCZ-sv20iKVXtQVR4epbmz8A/featured
+## Installation
 
-- interesting articles:
-  + https://habr.com/post/270009/
-  + Markdown
-    * https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
-    * https://daringfireball.net/projects/markdown/syntax
-    * https://help.github.com/en/categories/writing-on-github
-    * https://enterprise.github.com/downloads/en/markdown-cheatsheet.pdf
-  + Computer hardware
-    * https://nsu.ru/xmlui/bitstream/handle/nsu/9054/tanenbaum_AC.pdf
-  + Computer science
-    * https://github.com/ossu/computer-science
++ mac via Homebrew
+```shell
+$ brew tap hashicorp/tap
+$ brew install brew install hashicorp/tap/terraform
+```
 
-- fun stuff:
-  + https://medium.com/game-dev-channel/что-можно-уместить-в-4-килобайта-bcd99daf4d9
-  + http://www.braingames.ru/
-  + https://www.youtube.com/watch?v=0ZGbIKd0XrM
-  + https://stackoverflow.com/questions/40082346/how-to-check-if-a-file-exists-in-a-shell-script
-  + https://xkcd.com/571/ - commis
-  + https://register.ubisoft.com/rabbids-coding/en-US - learning game from Ubisoft
-  + https://requestbin.com/ - check url requests
+Autocomplete for bash or zsh (run, then open new session):
+```shell
+$ terraform -install-autocomplete
+```
 
-- Google:
-	+ [google linux vm](https://cloud.google.com/compute/docs/quickstart-linux)
-	+ [create instance template](https://cloud.google.com/compute/docs/instances/create-vm-from-instance-template)
-	+ [google cloud sdk](https://cloud.google.com/sdk/docs)
-	+ [create load balancer on google cloud](https://geekflare.com/gcp-load-balancer/)
-	+ [terraform with gcp](https://cloud.google.com/community/tutorials/getting-started-on-gcp-with-terraform)
+## First run
 
-- cybersecurity related
-  + https://hackerone.com/reports/403417
-  + https://store.steampowered.com/app/605230/Grey_Hack/
-  + https://www.hacker101.com/resources#2
-  + Начинаете решать CTF или лабы (https://www.hackthebox.eu/), понимаете чего именно Вам не хватает (Python, Crypto, Java, ...) и тогда ищите материал. 
-Искать можно в классической/академической литературе, либо в предыдущих решениях аналогичных задач (writeups/райтапы), например, тут https://ctftime.org/writeups
-Для чтения перед сном вполне сгодится журнал Хакер ( https://t.me/xakep_ru / https://t.me/hacker_frei )
-  + https://m.habr.com/ru/company/mailru/blog/282700/
-  + CTF(21school):
-    * http://kmb.ufoctf.ru/
-    * https://proglib.io/p/capture-the-flag/
-    * https://vk.com/spbctf
-    * https://www.hackthebox.eu/
-    * https://ctftime.org/
-    * https://training.hackerdom.ru/
-    * http://forkbomb.ru/
+```terraform
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 2.70"
+    }
+  }
+}
 
-- OS:
-  + https://en.wikipedia.org/wiki/Andrew_S.\_Tanenbaum
+provider "aws" {
+  profile = "default"
+  region  = "us-west-2"
+}
 
-- AI:
-  + https://habr.com/ru/post/305578/
-  + VisionLab:
-    * http://shorturl.at/qrz39
-    * https://stepik.org/course/67/promo#toc
-    * https://habr.com/en/company/ods/blog/322626/
-    * https://www.udacity.com/course/deep-learning-pytorch--ud188
-    * https://dlcourse.ai
-    * https://course.fast.ai
-    * http://cs231n.stanford.edu
-    * https://habr.com/company/piter/blog/346358/ 
+resource "aws_instance" "example" {
+  ami           = "ami-830c94e3"
+  instance_type = "t2.micro"
+}
+```
 
-- Job related:
-  + https://guides.hexlet.io/how-to-create-a-resume/?utm_source=vk.com&utm_medium=social&utm_campaign=3-poleznyh-gayda-ot-hexlet-dlya-teh--kto
-  + https://guides.hexlet.io/how-to-prepare-for-interview/?utm_source=vk.com&utm_medium=social&utm_campaign=3-poleznyh-gayda-ot-hexlet-dlya-teh--kto
-  + https://guides.hexlet.io/how-to-pass-the-interview/?utm_source=vk.com&utm_medium=social&utm_campaign=3-poleznyh-gayda-ot-hexlet-dlya-teh--kto
-  + https://ru.hexlet.io/challenges/intro_to_programming_fizzbuzz
-  + https://ru.wikipedia.org/wiki/Экстремальное\_программирование
-  + https://ru.hexlet.io/pages/recommended-books
-  + https://github.com/Hexlet/ru-test-assignments
-  + https://ru.hexlet.io/projects
++ `terraform` block is used to provide list of providers to download from
+[Terraform registry](https://registry.terraform.io/).
+[More info](https://www.terraform.io/docs/configuration/provider-requirements.html)
++ `provider` block configures the named provider; explicit `default` will look
+at `~/.aws/credentials` file
++ `resource` block defines a piece of infrastructure; first argument is
+provider-specific resource type, while second is the resource name; [provider
+documentation](https://www.terraform.io/docs/providers/index.html) to help fill
+in required and optional fields for resource
 
-- English
-  + Lynne Truss
-	* "the girl's like spaghetti'
-	* "Eats, Shoots and Leaves"
+Then initialize the directory (that is download defined plugins for providers)
+with `terraform init`
+
+`terraform fmt` (fix formatting) and `terraform validate` (syntax, attributes,
+value types, etc) ensure config file is easy to read and is valid.
+
+`terraform apply` to create defined resources, upon creation `terraform.tfstate`
+file is created to reflect all properies of the resources to be able to further
+manage or destroy them (this file is shared for collaborative purposes).
+Inspect current state with `terraform show`. `terraform state` command (along
+with subcommands) is used for advanced state management,
+[docs](https://www.terraform.io/docs/commands/state/index.html).
+
+to change infrastructure make changes to tf file and run `terraform apply`,
+terraform will display what changes are going to be performed.
+
+`terraform destroy` to remove all resources defined in the configuration file
+
+## Variables
+
+All files ending with `.tf` in the current directory are loaded.
+
+variables.tf:
+```terraform
+variable "region" {
+	default = "us-east-2"
+}
+```
+
+In main configuration file access variables defined elsewhere with `var` prefix
+
+main.tf:
+```terraform
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 2.70"
+    }
+  }
+}
+
+provider "aws" {
+  profile = "default"
+  region  = var.region
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-830c94e3"
+  instance_type = "t2.micro"
+}
+```
+
+Provide variables from command line, to override default values:
+```shell
+$ terraform apply -var 'region=us-east-1'
+```
+
+To persist variables create a `terraform.tfvars` (terraform automatically loads
+`terraform.tfvars` and `*.auto.tfvars` files, anything else must be provided
+with `-var-file` flag); `terraform.tfvars`:
+```terraform
+region = "us-east-2"
+```
+
+Variables can also be loaded from environment variables (must be prefixed with
+`TF_VAR`, only string type varialbles):
+```shell
+$ export TF_VAR_region=us-east-2
+```
+
+If variables are not specified in any of the previous form, then terraform will
+ask to input those when you run it (UI).
+
+On other types of variables refer to
+[examples and docs](https://learn.hashicorp.com/tutorials/terraform/aws-variables?in=terraform/aws-get-started)
+
+## Output
+
+To show specific information upon `apply` or for later inspection via
+`terraform output {var}` use `output` block, which can be specified in any file
+
+outputs.tf:
+```terraform
+output "ip" {
+  value = aws_eip.ip.public_ip
+}
+```
+
+## Tricks
+
++ create multiple servers:
+```terraform
+resource "aws_instance" "example" {
+  count         = 3
+  ami           = "ami-830c94e3"
+  instance_type = "t2.micro"
+}
+```
+
++ dependency example (webserver):
+```terraform
+# user_data section is for bootsraping
+# don't leave whitespace in front
+resource "aws_instance" "webserver" {
+  ami                    = "ami-830c94e3"
+  instance_type          = "t2.micro"
+
+  vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
+
+  user_data	             = <<EOF
+#!/bin/bash
+yum -y update
+yum -y install httpd
+myip =`curl http://169.254.169.254/latest/meta-data/local-ipv4`
+echo "<h2>My webserver at $myip<h2>" > /var/www/html/index.html
+sudo service httpd start
+chkconfig httpd on
+EOF
+
+}
+
+resource "aws_security_group" "wb_sg" {
+  name          = "WebServer Security Group"
+
+  ingress {
+    from_port   = 80
+	to_port     = 80
+	protocol    = "tcp"
+	cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+	to_port     = 443
+	protocol    = "tcp"
+	cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  engress {
+    from_port   = 0
+	to_port     = 0
+	protocol    = "-1" # any
+	cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+```
+
++ using external static files (provide shell script from previous example):
+```terrafrom
+resource "aws_instance" "webserver" {
+  ami                    = "ami-830c94e3"
+  instance_type          = "t2.micro"
+
+  vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
+
+  user_data              = file("user_data.sh") # relative to this file
+```
