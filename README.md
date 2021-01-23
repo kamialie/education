@@ -2,6 +2,15 @@
 
 Terraform files can be in terraform or in json format (including var files).
 
+# Contents
+
++ [Installation](#installation)
++ [First run](#first-run)
++ [State](#state)
++ [Variables](#variables)
++ [Output](#output)
++ [Tricks](#tricks)
+
 ## Installation
 
 + mac via Homebrew
@@ -14,6 +23,8 @@ Autocomplete for bash or zsh (run, then open new session):
 ```shell
 $ terraform -install-autocomplete
 ```
+
+---
 
 ## First run
 
@@ -65,6 +76,24 @@ to change infrastructure make changes to tf file and run `terraform apply`,
 terraform will display what changes are going to be performed.
 
 `terraform destroy` to remove all resources defined in the configuration file
+
+---
+
+## State
+
+State can be inspected with `terraform state` command, which outputs the list
+of names of the resources, which could further be inspected with
+`terraform show {name_of_resource}` command. `show` command has a `-json`
+option, which outputs in corresponding format that can be used by other
+wrappers, like `jq`, for example, to run queries.
+
+Visual representation can be achived by using `terraform graph` command, which
+outputs infrastructure in DOT syntax, which can be pasted inserted info
+[webgraphviz](http://webgraphviz.com/) to output visual graph representation.
+
+[add about saving state to remote repo for team collaboration]
+
+---
 
 ## Variables
 
