@@ -119,7 +119,8 @@ All files ending with `.tf` in the current directory are loaded.
 variables.tf:
 ```terraform
 variable "region" {
-	default = "us-east-2"
+  type    = string # can be ommited
+  default = "us-east-2"
 }
 ```
 
@@ -147,6 +148,10 @@ resource "aws_instance" "example" {
 }
 ```
 
+Another way is to have `some_name.tfvars` file with just list of var = value
+and start main configuration file with contents of `variables.tf` file above
+without `default` section.
+
 Provide variables from command line, to override default values:
 ```shell
 $ terraform apply -var 'region=us-east-1'
@@ -170,6 +175,25 @@ ask to input those when you run it (UI).
 
 On other types of variables refer to
 [examples and docs](https://learn.hashicorp.com/tutorials/terraform/aws-variables?in=terraform/aws-get-started)
+
+### Data sources
+
+Snippet below will query amazon for ami owned by current user
+```terraform
+data "aws_ami" "webserver_ami" {
+  most_recent = true
+
+  owners = ["self"]
+  tags = {
+    Name   = "Webserver"
+	Deploy = "true"
+  }
+}
+
+resource "aws_instance" "web" {
+  ami = data.aws_ami.webserver_ami.id
+}
+```
 
 ---
 
@@ -207,7 +231,37 @@ resource "aws_instance" "example" {
 }
 ```
 
-+ dependency example (webserver):
++ refer to resource that has more than one instances
+```terraform
+resource "aws_eip_association" "prod_web" {
+  instance_id   = aws_instance.prod_web[0].id
+  # instance_id   = aws_instance.prod_web.0.id # also available dot syntax
+  allocation_id = aws_eip.prod_web.id
+}
+
+resource "aws_default_subnet" "default_az1" {
+  availability_zone = "us-east-1"
+}
+
+resource "aws_elb" "prod_web" {
+  name            = "prod-web"
+  instances       = aws_instance.prod_web[*].id
+  subnets         = [aws_default_subnet.default_az1.id]
+  security_groups = [aws_security_group.prod_web.id]
+
+  listener {
+    instance_port     = 80
+	instance_protocol = "http"
+    lb_port           = 80
+	lb_protocol       = "http"
+  }
+}
+
+```
+
+
++ dependency example (webserver); `from_port` and `to_port` are used to define
+a range, so if single port is appointed, both variables have the same value:
 ```terraform
 # user_data section is for bootsraping
 # don't leave whitespace in front
@@ -256,7 +310,7 @@ resource "aws_security_group" "wb_sg" {
 ```
 
 + using external static files (provide shell script from previous example):
-```terrafrom
+```terraform
 resource "aws_instance" "webserver" {
   ami                    = "ami-830c94e3"
   instance_type          = "t2.micro"
@@ -266,8 +320,22 @@ resource "aws_instance" "webserver" {
   user_data              = file("user_data.sh") # relative to this file
 ```
 
++ decouple `aws_eip` into `aws_eip_association`, so that first one becomes
+independent of instance:
+```terraform
+resource "aws_eip_association" "prod_web" {
+  instance_id   = aws_instance.prod_web.id
+  allocation_id = aws_eip.prod_web.id
+}
+
+resource "aws_eip" "prod_web" {
+  tags {
+    "Terraform" : "true"
+  }
+```
+
 + using external dymanic files:
-```terrafrom
+```terraform
 resource "aws_instance" "webserver" {
   ami                    = "ami-830c94e3"
   instance_type          = "t2.micro"
@@ -304,6 +372,9 @@ chkconfig httpd on
 infrastructure) use `terraform console` command, simply run `templatefile` with
 the same arguments to see the result; exit console with `exit`
 
++ best practice - add tag `Terraform` - `true` to any resource to easily
+distinguish terraform managed resource while in AWS UI
+
 ## AWS
 
 ### aws resources
@@ -314,3 +385,37 @@ create custrom vpc
 + `aws_security_group` - firewall configuration
 + `aws_instance` - ec2, virtual machine
 + `aws_eip` (elastic ip) - static ip address
++ `aws_elb` - load balancer
++ `aws_autoscaling_group`
+	```terraform
+	resource "aws_launch_template" "prod_web" {
+	  name_prefix   = "prod-web"
+	  image_id      = "ami-something"
+	  instance_type = "t2.micro"
+	}
+
+	resource "aws_autoscaling_group" "prod_web" {
+	  avalibility_zones = ["us-east-1"]
+	  desired_capacity  = 1
+	  max_size          = 1
+	  min_size          = 1
+
+	  launch_template {
+	    id      = aws_launch_template.prod_web.id
+		version = "$latest"
+	  }
+	  # usual tags format is not supported for asg
+	  # because it has also to assign to instances as well
+	  tag {
+	    key                 = "Terraform"
+		value               = "true"
+		propogate_at_launch = true
+	  }
+	}
+
+	resource "aws_autoscaling_attachment" "prod_web" {
+	  autoscaling_group_name = aws_autoscaling_group.prod_web.id
+	  elb                    = aws_elb.prod_web.id
+	}
+	```
+
