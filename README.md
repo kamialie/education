@@ -10,6 +10,9 @@ Terraform files can be in terraform or in json format (including var files).
 + [Output](#output)
 + [Variables](#variables)
 + [Meta arguments](#meta-arguments)
++ [Blocks](#blocks)
+	+ [lifecycle](#lifecycle)
+	+ [dynamic](#dynamic)
 + [Modules](#modules)
 + [Tricks](#tricks)
 + [AWS](#aws)
@@ -218,6 +221,52 @@ old one):
 Style conventions: first meta arguments, then single arguments, then block
 arguments, and last section is block meta arguments (all logical blocks are
 separated by empty line)
+
+---
+
+## Blocks
+
+Blocked used inside terraform resources
+
+---
+
+### lifecycle
+
++ `create_before_destroy` - change the order of resource update
++ `prevent_destroy` - absolutely prevent destroying the resource
++ `ignore_changes` - accepts list of properties that will be ignored to qualify
+for resource recreation
+
+```terraform
+resouce "aws_instance" "some" {
+  lifecycle {
+    create_before_destroy = true
+	ignore_changes = ["ami", "user_data"]
+  }
+}
+```
+
+---
+
+### dynamic
+
+Used to generate repeating blocks. Example below for multiple ports for ingress
+traffic in security group:
+```terraform
+resource "aws_security_group" "prod" {
+  name = "Dynamic security group"
+
+  dynamic "ingress" {
+    for_each = ["80", "443", "8080"]
+	content {
+	  from_port   = ingress.value
+	  to_port     = ingress.value
+	  protocol    = "tcp"
+	  cidr_blocks = ["0.0.0.0/0"]
+	}
+  }
+}
+```
 
 ---
 
