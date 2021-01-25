@@ -7,8 +7,8 @@ Terraform files can be in terraform or in json format (including var files).
 + [Installation](#installation)
 + [First run](#first-run)
 + [State](#state)
-+ [Variables](#variables)
 + [Output](#output)
++ [Variables](#variables)
 + [Meta arguments](#meta-arguments)
 + [Tricks](#tricks)
 + [AWS](#aws)
@@ -98,6 +98,20 @@ outputs infrastructure in DOT syntax, which can be pasted inserted info
 
 ---
 
+## Output
+
+To show specific information upon `apply` or for later inspection via
+`terraform output {var}` use `output` block, which can be specified in any file
+
+outputs.tf:
+```terraform
+output "ip" {
+  value = aws_eip.ip.public_ip
+}
+```
+
+---
+
 ## Variables
 
 All files ending with `.tf` in the current directory are loaded.
@@ -156,18 +170,6 @@ ask to input those when you run it (UI).
 
 On other types of variables refer to
 [examples and docs](https://learn.hashicorp.com/tutorials/terraform/aws-variables?in=terraform/aws-get-started)
-
-## Output
-
-To show specific information upon `apply` or for later inspection via
-`terraform output {var}` use `output` block, which can be specified in any file
-
-outputs.tf:
-```terraform
-output "ip" {
-  value = aws_eip.ip.public_ip
-}
-```
 
 ---
 
@@ -263,6 +265,44 @@ resource "aws_instance" "webserver" {
 
   user_data              = file("user_data.sh") # relative to this file
 ```
+
++ using external dymanic files:
+```terrafrom
+resource "aws_instance" "webserver" {
+  ami                    = "ami-830c94e3"
+  instance_type          = "t2.micro"
+
+  vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
+
+  # tpl is common convention for this type of files
+  # second argument is used for providing variables of various types
+  user_data              = templatefile("init.sh.tpl", {
+    name = "learner"
+	chapters = ["terraform", "aws", "that's it really"]
+  }))
+```
+
+external file:
+```shell
+#!/bin/bash
+yum -y update
+yum -y install httpd
+myip =`curl http://169.254.169.254/latest/meta-data/local-ipv4`
+echo "<h2>My webserver at $myip<h2>" > /var/www/html/index.html
+cat <<EOF > /var/www/html/index.html
+<h2>My name is ${name}</h2>
+Here is list of chapters already covered:<br>
+{% for chapter in chapters ~}
+- ${chapter}
+{% endfor ~}
+EOF
+sudo service httpd start
+chkconfig httpd on
+```
+
++ to check contents of generated dynamic file (before actually applying to
+infrastructure) use `terraform console` command, simply run `templatefile` with
+the same arguments to see the result; exit console with `exit`
 
 ## AWS
 
