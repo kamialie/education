@@ -412,6 +412,7 @@ resource "aws_instance" "webserver" {
   vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
 
   user_data              = file("user_data.sh") # relative to this file
+}
 ```
 
 + decouple `aws_eip` into `aws_eip_association`, so that first one becomes
@@ -499,6 +500,19 @@ created by you) use [data sources](https://www.terraform.io/docs/language/data-s
 		  }
 		}
 		```
++ `merge` functions is used to merge objects of the same type into one (for
+example, two maps - common tags from `variables.tf` and individual tag of the
+resource):
+```terraform
+resource "aws_instance" "webserver" {
+  ami                    = "ami-830c94e3"
+  instance_type          = "t2.micro"
+
+  vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
+
+  tags = merge(var.common_tags, { Name = "my instance" })
+}
+```
 
 ---
 
