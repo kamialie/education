@@ -9,7 +9,10 @@ Terraform files can be in terraform or in json format (including var files).
 + [State](#state)
 + [Variables](#variables)
 + [Output](#output)
++ [Meta arguments](#meta-arguments)
 + [Tricks](#tricks)
++ [AWS](#aws)
+	+ [aws resources](#aws-resources)
 
 ## Installation
 
@@ -166,6 +169,31 @@ output "ip" {
 }
 ```
 
+---
+
+## Meta arguments
+
+Meta arguments add logic to code intepretation by Terraform
+
++ single meta argument, for example, `count = 2` would create 2 instances
++ block meta argumenst, should go at the end of block definition (following
+example implements behaviour of first creating a resource, before destroying
+old one):
+
+	```terraform
+	resource "aws_instance" "one" {
+	  lifecycle {
+	    create_before_destroy = true
+	  }
+	}
+	```
+
+Style conventions: first meta arguments, then single arguments, then block
+arguments, and last section is block meta arguments (all logical blocks are
+separated by empty line)
+
+---
+
 ## Tricks
 
 + create multiple servers:
@@ -235,3 +263,14 @@ resource "aws_instance" "webserver" {
 
   user_data              = file("user_data.sh") # relative to this file
 ```
+
+## AWS
+
+### aws resources
+
++ `aws_s3_bucket` - storage
++ `aws_default_vpc` - special `default` vpc configuration, also possible to
+create custrom vpc
++ `aws_security_group` - firewall configuration
++ `aws_instance` - ec2, virtual machine
++ `aws_eip` (elastic ip) - static ip address
