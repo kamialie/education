@@ -10,8 +10,8 @@ Terraform files can be in terraform or in json format (including var files).
 + [Output](#output)
 + [Variables](#variables)
 + [Meta arguments](#meta-arguments)
-+ [Blocks](#blocks)
 	+ [lifecycle](#lifecycle)
++ [Expressions](#blocks)
 	+ [dynamic](#dynamic)
 + [Modules](#modules)
 + [Tricks](#tricks)
@@ -224,12 +224,6 @@ separated by empty line)
 
 ---
 
-## Blocks
-
-Blocked used inside terraform resources
-
----
-
 ### lifecycle
 
 + `create_before_destroy` - change the order of resource update
@@ -245,6 +239,25 @@ resouce "aws_instance" "some" {
   }
 }
 ```
+
+---
+
+### depends_on
+
+Accepts a list of resources that should be created before the current one.
+Should be considered last thing and contain good explained of why it was used.
+
+```terraform
+resouce "aws_instance" "some" {
+  depends_on = ["aws_instance.db"]
+}
+```
+
+---
+
+## Expressions
+
+Blocked used inside terraform resources
 
 ---
 
@@ -455,6 +468,39 @@ the same arguments to see the result; exit console with `exit`
 
 + best practice - add tag `Terraform` - `true` to any resource to easily
 distinguish terraform managed resource while in AWS UI
+
++ to get information from provider about various resource (not neccesary
+created by you) use [data sources](https://www.terraform.io/docs/language/data-sources/index.html).
+
+	```terraform
+	data "aws_availability_zones" "available" {}
+
+	output "aws_availability_zones" {
+	  value = data.aws_availability_zones.available.names
+	}
+	```
+	Other good aws data sources:
+	+ `aws_caller_identity`
+	+ `aws_vpc`
+	+ `aws_vpcs`
+	+ `aws_ami` - for automated instance creation, without looking up the exact
+	ami in particular zone; to find owner id go to Amazon AMIs page, public
+	images and insert ami (info will be in details), for value get the
+	unchanged part of the name followed by wildcard
+
+		```terraform
+		data "aws_ami" "latest_ubuntu" {
+		  owners = ["read-text-above-for-value"]
+		  most_recent = true
+
+		  filter {
+		    name = "name" # choose type of filter
+			values = ["read-text-above-for-value-*"]
+		  }
+		}
+		```
+
+---
 
 ## AWS
 
