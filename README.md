@@ -4,6 +4,7 @@
 
 + [EC2](#ec2)
 + [VPC](#vpc)
++ [Load balancing](#load-balancing)
 + [CLI](#cli)
 
 ## EC2
@@ -122,7 +123,12 @@ private subnet to direct traffic to NAT gateway.
 
 Security groups allows al outbound traffic by default. Rules are only
 permissive. SG are stateful (response traffic for outbound request is always
-allowed, regardless of inbound rules).
+allowed, regardless of inbound rules). Good practice to maintain separate
+security group for SSH access. `time out` response most likely means it is
+a security group issue, while `connection refused` means it is an application
+issue. Other security groups can be referenced as a source when setting a
+security group - that means instances that have that security group attached
+are authorized to access newly created security group.
 
 Network ACL (Access Control List) - optional security for VPC that acts like
 firewall for one or more subnets. Sits between subnet and route table. `Star`
@@ -138,6 +144,37 @@ for blacklisting traffic.
 
 
 Elastic IP has associated costs if it is not attached to a resource.
+
+---
+
+## Load balancing
+
+Provides:
++ spread load
++ expose single point of access
++ handle failures (healthcheck)
++ ssl termination (talks https to clients and http to backend)
++ enforce stickiness cookies
++ separate public from privatee traffic
+
+types:
++ Classic LB (2009, v1)
++ Application LB (2016, v2)
++ Network LB (2017, v2)
+
+Application LB (layer 7) allows to load balance multiple HTTP applications across
+machines (target groups) or multiple applications on the same  machine
+(containers). Load balancing can be done based on route or hostname in URL.
+Great for microservices and container-based application. ALB supports HTTP/S and
+websocket protocols. Applications don't see real IP of the client, it is rather
+inserted as a X-Forwarded-For header.
+
+Network LB (layer 4) forwards TCP traffic, support for elastic IP, highest
+performance.
+
+Load balancers (any type) have a static host name (do not resolve underlying IP).
+LB 503 error indicates capacity issue or no registered targets. At connection
+error check security groups.
 
 ---
 
