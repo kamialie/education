@@ -29,9 +29,9 @@ Terraform files can be in terraform or in json format (including var files).
 
 Autocomplete for bash or zsh (run, then open new session):
 
-	```shell
-	$ terraform -install-autocomplete
-	```
+```shell
+$ terraform -install-autocomplete
+```
 
 ---
 
