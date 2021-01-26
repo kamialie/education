@@ -2,10 +2,25 @@
 
 # Contents
 
++ [AMI](#ami)
 + [EC2](#ec2)
 + [VPC](#vpc)
 + [Load balancing](#load-balancing)
 + [CLI](#cli)
+
+## AMI
+
+Components:
++ Users - create, manage users, allow and deny access to resources
++ Groups - divide users into groups and apply common rules
++ Roles - set of permissions for making AWS service requests; are not
+associated with users or groups, but rather assumed by trusted entities like
+users, applications or AWS services (for example, EC2)
++ Policies - documents that explicitly lists permissions; can be assigned to
+user, group, role, or resource; in case of conflicting policies the least
+access is preferred
+
+---
 
 ## EC2
 
