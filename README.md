@@ -1,5 +1,13 @@
 # AWS
 
+# Contents
+
++ [EC2](#ec2)
++ [VPC](#vpc)
++ [CLI](#cli)
+
+## EC2
+
 EC2 (Elastic Compute Cloud) - virtual machine manager (same as Google Cloud Engine)
 EBS (Block Store) - persistent storage volumes
 Elastic IP - static IPs assigned to dynamic cloud computing
@@ -52,7 +60,7 @@ Interfaces to EC2:
 + SDK
 + REST API
 
-## CloudWatch agent
+### CloudWatch agent
 
 [quickstart](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html)
 
@@ -65,7 +73,75 @@ start the agent:
 $ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s
 ```
 
-## AWS CLI
+---
+
+## VPC
+
+Virtual Private Cloud
+
+AWS default VPCs have /16 (65536 hosts) subnet mask. Default subnets have /20 (4096 hosts) mask.
+
+VPC can span multiple availability zones, but subnet is always mapped to a single one.
+
+VPC peering is enabling resources from one VPC to communicate with another VPC.
+Possible between account too. Must not have overlaping IP ranges and must be
+located in the same region.
+
+Classless Inter-Domain Roiting (CIDR) is simply an IP range.
+
+Subnets are required to launch resources on the VPC.
+
+Internaet gateway requirements:
++ internet gateway must be attached to VPC
++ instances must have either public or elastic IP
++ subnet route table must point to the internet gateway
++ network access control and security groups rules must be configured to allow
+in/out traffic
+
+Every subnet must be associated with a route table (only one); route table can
+have multiple subnets associated with it.
+
+Every subnet must be associated with an ACL, if not, it is associated with
+default ACL. Again, subnet can be associated with only one ACL, while one
+ACL can have multiple subnets associated with it.
+
+---
+
+### NAT
+
+NAT device is used to provide internet access to resources in private subnet
+(but prevent internet from initiating access).
++ NAT gateway (recommended)
++ NAT instance (runs as an instance in your subnet)
+
+NAT gateway must be launch in public subnet (to have internet access) and have
+an elastic IP (can be selected at launch time). Then update route table of
+private subnet to direct traffic to NAT gateway.
+
+---
+
+Security groups allows al outbound traffic by default. Rules are only
+permissive. SG are stateful (response traffic for outbound request is always
+allowed, regardless of inbound rules).
+
+Network ACL (Access Control List) - optional security for VPC that acts like
+firewall for one or more subnets. Sits between subnet and route table. `Star`
+(asterics) rule means if traffic doesn't match any other rule, it is denied;
+this rule can not be removed. ACL is a list of numbered rules, which are
+applied from lowest to highest (recommended increment is 100, so that there is
+space for other rules to add later); when lower number rules is matching, it is
+immediately applied, regardless of higher numbered rules. ACL us stateless -
+responses for outbound traffic are subject to inbound rules.
+
+It is recommended to use security groups for white-listing traffice and ACLs
+for blacklisting traffic.
+
+
+Elastic IP has associated costs if it is not attached to a resource.
+
+---
+
+## CLI
 
 [docs](https://docs.aws.amazon.com/cli/index.html)
 
