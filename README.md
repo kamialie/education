@@ -21,15 +21,17 @@ Terraform files can be in terraform or in json format (including var files).
 ## Installation
 
 + mac via Homebrew
-```shell
-$ brew tap hashicorp/tap
-$ brew install brew install hashicorp/tap/terraform
-```
+
+	```shell
+	$ brew tap hashicorp/tap
+	$ brew install brew install hashicorp/tap/terraform
+	```
 
 Autocomplete for bash or zsh (run, then open new session):
-```shell
-$ terraform -install-autocomplete
-```
+
+	```shell
+	$ terraform -install-autocomplete
+	```
 
 ---
 
@@ -180,6 +182,21 @@ ask to input those when you run it (UI).
 On other types of variables refer to
 [examples and docs](https://learn.hashicorp.com/tutorials/terraform/aws-variables?in=terraform/aws-get-started)
 
+Added in 0.13 version - variable validation
+```terraform
+variable "var" {
+  type    = string
+  default = "eu-east-1"
+
+  validation {
+    condition     = substr(var.region, 0, 3) == "eu-"
+	error_message = "Please, enter EU region"
+  }
+}
+```
+
+---
+
 ### Data sources
 
 Snippet below will query amazon for ami owned by current user
@@ -312,156 +329,187 @@ module "web_server" {
 }
 ```
 
+Added in 0.13 - `depends_on` clause for modules and module cycles:
+```terraform
+variable "vpc_settings" {
+  default {
+    prod = "10.10.0.0/16"
+    dev = "10.20.0.0/16"
+  }
+}
+
+# default aws value for vpc_cidr will be used
+module "some" {
+  count  = 2
+  source = "./path/to/module"
+  env      = "demo-${count.index + 1}"
+}
+
+module "other" {
+  for_each = var.vpc_settings
+  source   = "./path/to/module"
+  env      = each.key
+  vpc_cidr = each.value
+}
+```
+
 ---
 
 ## Tricks
 
 + create multiple servers:
-```terraform
-resource "aws_instance" "example" {
-  count         = 3
-  ami           = "ami-830c94e3"
-  instance_type = "t2.micro"
-}
-```
+
+	```terraform
+	resource "aws_instance" "example" {
+	  count         = 3
+	  ami           = "ami-830c94e3"
+	  instance_type = "t2.micro"
+	}
+	```
 
 + refer to resource that has more than one instances
-```terraform
-resource "aws_eip_association" "prod_web" {
-  instance_id   = aws_instance.prod_web[0].id
-  # instance_id   = aws_instance.prod_web.0.id # also available dot syntax
-  allocation_id = aws_eip.prod_web.id
-}
 
-resource "aws_default_subnet" "default_az1" {
-  availability_zone = "us-east-1"
-}
+	```terraform
+	resource "aws_eip_association" "prod_web" {
+	  instance_id   = aws_instance.prod_web[0].id
+	  # instance_id   = aws_instance.prod_web.0.id # also available dot syntax
+	  allocation_id = aws_eip.prod_web.id
+	}
 
-resource "aws_elb" "prod_web" {
-  name            = "prod-web"
-  instances       = aws_instance.prod_web[*].id
-  subnets         = [aws_default_subnet.default_az1.id]
-  security_groups = [aws_security_group.prod_web.id]
+	resource "aws_default_subnet" "default_az1" {
+	  availability_zone = "us-east-1"
+	}
 
-  listener {
-    instance_port     = 80
-	instance_protocol = "http"
-    lb_port           = 80
-	lb_protocol       = "http"
-  }
-}
+	resource "aws_elb" "prod_web" {
+	  name            = "prod-web"
+	  instances       = aws_instance.prod_web[*].id
+	  subnets         = [aws_default_subnet.default_az1.id]
+	  security_groups = [aws_security_group.prod_web.id]
 
-```
+	  listener {
+		instance_port     = 80
+		instance_protocol = "http"
+		lb_port           = 80
+		lb_protocol       = "http"
+	  }
+	}
+
+	```
 
 
 + dependency example (webserver); `from_port` and `to_port` are used to define
 a range, so if single port is appointed, both variables have the same value:
-```terraform
-# user_data section is for bootsraping
-# don't leave whitespace in front
-resource "aws_instance" "webserver" {
-  ami                    = "ami-830c94e3"
-  instance_type          = "t2.micro"
 
-  vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
+	```terraform
+	# user_data section is for bootsraping
+	# don't leave whitespace in front
+	resource "aws_instance" "webserver" {
+	  ami                    = "ami-830c94e3"
+	  instance_type          = "t2.micro"
 
-  user_data	             = <<EOF
-#!/bin/bash
-yum -y update
-yum -y install httpd
-myip =`curl http://169.254.169.254/latest/meta-data/local-ipv4`
-echo "<h2>My webserver at $myip<h2>" > /var/www/html/index.html
-sudo service httpd start
-chkconfig httpd on
-EOF
+	  vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
 
-}
+	  user_data	             = <<EOF
+	#!/bin/bash
+	yum -y update
+	yum -y install httpd
+	myip =`curl http://169.254.169.254/latest/meta-data/local-ipv4`
+	echo "<h2>My webserver at $myip<h2>" > /var/www/html/index.html
+	sudo service httpd start
+	chkconfig httpd on
+	EOF
 
-resource "aws_security_group" "wb_sg" {
-  name          = "WebServer Security Group"
+	}
 
-  ingress {
-    from_port   = 80
-	to_port     = 80
-	protocol    = "tcp"
-	cidr_blocks = ["0.0.0.0/0"]
-  }
+	resource "aws_security_group" "wb_sg" {
+	  name          = "WebServer Security Group"
 
-  ingress {
-    from_port   = 443
-	to_port     = 443
-	protocol    = "tcp"
-	cidr_blocks = ["0.0.0.0/0"]
-  }
+	  ingress {
+		from_port   = 80
+		to_port     = 80
+		protocol    = "tcp"
+		cidr_blocks = ["0.0.0.0/0"]
+	  }
 
-  engress {
-    from_port   = 0
-	to_port     = 0
-	protocol    = "-1" # any
-	cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-```
+	  ingress {
+		from_port   = 443
+		to_port     = 443
+		protocol    = "tcp"
+		cidr_blocks = ["0.0.0.0/0"]
+	  }
+
+	  engress {
+		from_port   = 0
+		to_port     = 0
+		protocol    = "-1" # any
+		cidr_blocks = ["0.0.0.0/0"]
+	  }
+	}
+	```
 
 + using external static files (provide shell script from previous example):
-```terraform
-resource "aws_instance" "webserver" {
-  ami                    = "ami-830c94e3"
-  instance_type          = "t2.micro"
 
-  vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
+	```terraform
+	resource "aws_instance" "webserver" {
+	  ami                    = "ami-830c94e3"
+	  instance_type          = "t2.micro"
 
-  user_data              = file("user_data.sh") # relative to this file
-}
-```
+	  vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
+
+	  user_data              = file("user_data.sh") # relative to this file
+	}
+	```
 
 + decouple `aws_eip` into `aws_eip_association`, so that first one becomes
 independent of instance:
-```terraform
-resource "aws_eip_association" "prod_web" {
-  instance_id   = aws_instance.prod_web.id
-  allocation_id = aws_eip.prod_web.id
-}
 
-resource "aws_eip" "prod_web" {
-  tags {
-    "Terraform" : "true"
-  }
-```
+	```terraform
+	resource "aws_eip_association" "prod_web" {
+	  instance_id   = aws_instance.prod_web.id
+	  allocation_id = aws_eip.prod_web.id
+	}
+
+	resource "aws_eip" "prod_web" {
+	  tags {
+		"Terraform" : "true"
+	  }
+	```
 
 + using external dymanic files:
-```terraform
-resource "aws_instance" "webserver" {
-  ami                    = "ami-830c94e3"
-  instance_type          = "t2.micro"
 
-  vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
+	```terraform
+	resource "aws_instance" "webserver" {
+	  ami                    = "ami-830c94e3"
+	  instance_type          = "t2.micro"
 
-  # tpl is common convention for this type of files
-  # second argument is used for providing variables of various types
-  user_data              = templatefile("init.sh.tpl", {
-    name = "learner"
-	chapters = ["terraform", "aws", "that's it really"]
-  }))
-```
+	  vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
+
+	  # tpl is common convention for this type of files
+	  # second argument is used for providing variables of various types
+	  user_data              = templatefile("init.sh.tpl", {
+		name = "learner"
+		chapters = ["terraform", "aws", "that's it really"]
+	  }))
+	```
 
 external file:
-```shell
-#!/bin/bash
-yum -y update
-yum -y install httpd
-myip =`curl http://169.254.169.254/latest/meta-data/local-ipv4`
-echo "<h2>My webserver at $myip<h2>" > /var/www/html/index.html
-cat <<EOF > /var/www/html/index.html
-<h2>My name is ${name}</h2>
-Here is list of chapters already covered:<br>
-{% for chapter in chapters ~}
-- ${chapter}
-{% endfor ~}
-EOF
-sudo service httpd start
-chkconfig httpd on
-```
+
+	```shell
+	#!/bin/bash
+	yum -y update
+	yum -y install httpd
+	myip =`curl http://169.254.169.254/latest/meta-data/local-ipv4`
+	echo "<h2>My webserver at $myip<h2>" > /var/www/html/index.html
+	cat <<EOF > /var/www/html/index.html
+	<h2>My name is ${name}</h2>
+	Here is list of chapters already covered:<br>
+	{% for chapter in chapters ~}
+	- ${chapter}
+	{% endfor ~}
+	EOF
+	sudo service httpd start
+	chkconfig httpd on
+	```
 
 + to check contents of generated dynamic file (before actually applying to
 infrastructure) use `terraform console` command, simply run `templatefile` with
@@ -503,16 +551,17 @@ created by you) use [data sources](https://www.terraform.io/docs/language/data-s
 + `merge` functions is used to merge objects of the same type into one (for
 example, two maps - common tags from `variables.tf` and individual tag of the
 resource):
-```terraform
-resource "aws_instance" "webserver" {
-  ami                    = "ami-830c94e3"
-  instance_type          = "t2.micro"
 
-  vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
+	```terraform
+	resource "aws_instance" "webserver" {
+	  ami                    = "ami-830c94e3"
+	  instance_type          = "t2.micro"
 
-  tags = merge(var.common_tags, { Name = "my instance" })
-}
-```
+	  vpc_security_group_ids = [aws.security_group.wb_sg.id] # dependency
+
+	  tags = merge(var.common_tags, { Name = "my instance" })
+	}
+	```
 
 ---
 
