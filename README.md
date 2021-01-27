@@ -14,6 +14,7 @@ Terraform files can be in terraform or in json format (including var files).
 + [Expressions](#blocks)
 	+ [dynamic](#dynamic)
 + [Modules](#modules)
++ [Remote](#remote)
 + [Tricks](#tricks)
 + [AWS](#aws)
 	+ [aws resources](#aws-resources)
@@ -120,12 +121,45 @@ output "ip" {
 
 ## Variables
 
+Significance order from least:
++ default
++ environment value (with `TF_VAR` prefix)
++ `terraform.tfvars`, `terraform.tfvars.json` or `*.auto.tfvars`
++ command line
+
+Variable types:
++ string
++ number (integer and fractional)
++ boolean
++ list
++ set (like list, but unordered)
++ map (values must be of the same type)
++ object (like a struct in C; value can be of any type)
++ tuple (similar to object, but stricter conversion rules)
+
+Complex example:
+```terraform
+variable "ec2_setting" {
+  type = map(object({instance_type=string, monitoring=bool}))
+  default = {
+    "DEV" = {
+	  instance_type = "t2.micro",
+	  monitoring = false
+	},
+    "QA" = {
+	  instance_type = "t2.micro",
+	  monitoring = true
+	}
+  }
+}
+```
+
 All files ending with `.tf` in the current directory are loaded.
 
 variables.tf:
 ```terraform
 variable "region" {
-  type    = string # can be ommited
+  type    = string # can be ommited, because it's a default
   default = "us-east-2"
 }
 ```
@@ -351,6 +385,38 @@ module "other" {
   env      = each.key
   vpc_cidr = each.value
 }
+```
+
+---
+
+## Remote
+
+`terraform apply` creates two files:
++ `terraform.tfstate.lock.info` - used to prevent 2 instances to execute and
+apply operation simulteneously
++ `terraform.tfstate` - mapping between resources in configuration and actual
+resources
+
+Remote state store (these two files) is called backend. For AWS storage option
+terraform uses S3 (for state) and DynamoDB (for locking data).
+
+Setting up remote configuration (all the data is sensitive, so best to pass
+through command line):
+```terraform
+terraform {
+  backend "s3" {
+  }
+}
+```
+
+```shell
+$ terraform init \
+	-backend-config="bucket=bucket_name" \
+	-backend-config="key=path/to/file" \
+	-backend-config="region=us-east-2" \
+	-backend-config="dynamodb_table=table_name" \
+	-backend-config="access_key=value" \
+	-backend-config="secret_key=value" \
 ```
 
 ---
