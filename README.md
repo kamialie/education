@@ -117,6 +117,14 @@ output "ip" {
 }
 ```
 
+To access output values from the module, first, they should be exposed by the
+module, and second, should be accessed by root module:
+```terraform
+output "dns" {
+  value = module.module_name.output_variable
+}
+```
+
 ---
 
 ## Variables
