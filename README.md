@@ -61,17 +61,22 @@ Kubernetes control plane components:
 + kube-APIserver - accepts commands to view or change the state of cluster (user
 interracts with it via `kubectl` command); also authenticates commands and
 manages admission control
-+ etcd - cluster's database; stores cluster's state, configuration and dynamic
-data
++ [etcd](https://etcd.io/) - cluster's database; stores cluster's state,
+configuration and dynamic data
 + kube-scheduler - schedules pods into nodes; discovers policies, hardware and
 software to assign node to a pod by simply writing it in pod object.
 + kube-controller-manager - continuously monitors cluster's state through
 kube-APIserver and applies changes if they are needed
 + kube-cloud-manager - manages controllers that interact with underlying cloud
 providers
+
+Kubernetes worker node components:
++ container runtime (which actually handles container lifecycle) - kubernetes
+supports Docker(which uses [containerd](https://containerd.io/)),
+[CRI-O](https://cri-o.io/), [frakti](https://github.com/kubernetes/frakti#frakti)
 + kubelet (runs on nodes) - kubernetes agent that kube-APIserver talks to
 + kube-proxy (runs on nodes) - provides network connectivity among pods in a
-cluster
+cluster; maintains all networking rules
 
 Kubernetes doesn't create nodes nor it handles failed nodes. Open-source Kuber
 ADM can automate some of the initial cluster setup, GKE takes the responsibility
