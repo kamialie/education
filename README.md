@@ -18,9 +18,11 @@
 
 ## Hot keys
 
+Abbreviation:
+
 + <> tags refer to user input:
-	- <number> - insert number consisting [0-9]
-	- <symbol> - alphanumber symbol
+	- `<number>` - insert number consisting [0-9]
+	- `<symbol>` - alphanumber symbol
 + [argument | argument] - or, choose one of the options enclosed in square brackets
 
 ### File/buffer manipulaton:
@@ -59,9 +61,14 @@
 
 Open multiple file as follows:
 ```bash
-vim file1 file2 file3
+$ vim file1 file2 file3
 ```
-Than enables `:n` and `:N` commands, go to the next/previous respectivly
+Then navigate with `:n` and `:N` commands, to go to the next/previous respectivly
+
+Open file at particular line (plust actually executes any vim command):
+```shell
+$ vim file +<i>
+```
 
 
 ### Insert mode enter
@@ -119,6 +126,7 @@ Press while in normal mode:
 + `[r] <letter>` - replace letter under cursor
 + `[R]` - enter replace mode, every typed character deletes existing one
 + `[v]` - enter visual mode
++ `[Shift][v]` - enter visual line mode
 + `[Ctrl][v]` - enter visual block mode
 + `[C]` - erase from cursor till end of line and enter insert mode
 + `[cc]` - erase current line and enter insert mode
@@ -140,7 +148,8 @@ Press while in normal mode:
 	* `[[k] | [arrow up]]` - current and line above
 + `[:]<start>[,]<end>[[y] | [d]]` - copy or cut line between lines start and end (included); you can also copy/cut till label - just create a label somewhere, then use `[y][`]<label>`
 + `[p]` - paste line under cursor
-+ `[P]` - paste line before cursor
++ `[Shift][p]` - paste line before cursor (`[g][Shift][p]` - paste before
+cursor and move to the next line)
 + `[x]` - cut character under cursor
 + `[“]<letter>[command]` - specify the buffer for the command
 	* `[\_]` - underscore, empty buffer
@@ -152,10 +161,13 @@ Press while in normal mode:
 	* `[Ctrl][r][a]` - insert text from dot register (dot register holds last modification you made in insert mode
 + `[J]` - append line below to the current (physically move it)
 
+Use of registers - `["][any lower or upper case letter][command]` will copy to
+or paste from that register
+
 
 ### Search and substitution
 
-+ `[*]` -  go to next occurence of the word under cursor; also highlights all occureneces \*
++ `[\*]` -  go to next occurence of the word under cursor; also highlights all occureneces \*
 + `[/]<text>` - got to the first character of first occurence of text in file starting from cursor location
 	* `[\c]` - turn on ignore case search for just one search
 	* `[n]` - go to next occurence
