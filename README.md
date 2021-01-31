@@ -51,17 +51,17 @@ EC2 tenancy:
 Elastic IP - that is static IP that can be attached to any vm (don't pay if
 attached to a running instance??)
 
-Termination protectiona - toggle in `Actions->Instance settings->Change
- Termination Protection` that disables the confirmation button on termination
+Termination protection - toggle in `Actions->Instance settings->Change
+Termination Protection` that disables the confirmation button on termination
 command (extra layer, bla-bla).
 
-Metadata is accessable from inside in the following url(can also appent
+Metadata is accessable from inside in the following url(can also append
 individial tag to access the value):
 ```shell
 $ curl http://169.254.169.254/latest/meta-data/
 ```
 
-`User data section` of `3. Configure instance` can be used to run command on
+`User data section` of `3. Configure instance` can be used to run commands on
 start-up
 
 CloudWatch - provides EC2 monitoring
