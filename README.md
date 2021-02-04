@@ -533,6 +533,8 @@ Kernel initializes its own activities as processes and launches program *init*, 
 		| RSS	| Resident Set Size, amount of physical memory (RAM) the precess is using in kilobytes	|
 		| START	| Time when process has started; over 24 the date is used								|
 
+	+ `ef` - find out
+
 + `top` - continuously updating (default 3 seconds) display of system processes in order of process activity.
 System summary contains the following info:
 
