@@ -277,5 +277,4 @@ ALTER TABLE Users ADD INDEX (email) USING BTREE;
 
 + https://textbooks.opensuny.org/the-missing-link-an-introduction-to-web-development-and-programming/
 + https://en.wikipedia.org/wiki/B-tree
-+ [docker image of web admin for different types of
-databases](https://hub.docker.com/_/adminer)
++ [docker image of web admin for different types of databases](https://hub.docker.com/_/adminer)
